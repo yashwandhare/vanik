@@ -6,11 +6,12 @@ from uuid import UUID, uuid4
 import pytest  # type: ignore[import-not-found, unused-ignore]
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
-from sqlalchemy import inspect, text, update
+from sqlalchemy import func, inspect, select, text, update
 from sqlalchemy.exc import DBAPIError
+from sqlalchemy.orm import Session
 
 from app.core.config import Settings
-from app.db.models import AuditEvent
+from app.db.models import AuditEvent, Inventory, Product, SellerProfile
 from app.db.session import create_database_engine
 from app.main import create_app
 
@@ -38,7 +39,14 @@ def test_real_postgres_connection_and_schema() -> None:
             "agents",
             "agent_keys",
             "events",
+            "products",
+            "seller_profiles",
+            "inventory",
         } <= tables
+        with Session(engine) as db:
+            assert db.scalar(select(func.count()).select_from(Product)) == 40
+            assert db.scalar(select(func.count()).select_from(SellerProfile)) == 4
+            assert db.scalar(select(func.count()).select_from(Inventory)) == 160
     finally:
         engine.dispose()
 

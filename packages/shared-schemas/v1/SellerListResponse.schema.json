@@ -1,0 +1,176 @@
+{
+  "$defs": {
+    "Pagination": {
+      "additionalProperties": false,
+      "properties": {
+        "limit": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        },
+        "total": {
+          "minimum": 0,
+          "title": "Total",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "limit",
+        "offset",
+        "total"
+      ],
+      "title": "Pagination",
+      "type": "object"
+    },
+    "SellerAgentSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "format": "uuid",
+          "title": "Agent Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "strategy_profile": {
+          "title": "Strategy Profile",
+          "type": "string"
+        }
+      },
+      "required": [
+        "agent_id",
+        "name",
+        "strategy_profile",
+        "status"
+      ],
+      "title": "SellerAgentSummary",
+      "type": "object"
+    },
+    "SellerSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "agents": {
+          "items": {
+            "$ref": "#/$defs/SellerAgentSummary"
+          },
+          "title": "Agents",
+          "type": "array"
+        },
+        "available_sku_count": {
+          "minimum": 0,
+          "title": "Available Sku Count",
+          "type": "integer"
+        },
+        "coverage": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Coverage",
+          "type": "array"
+        },
+        "credit_days": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Credit Days",
+          "type": "array"
+        },
+        "delivery_days": {
+          "minimum": 1,
+          "title": "Delivery Days",
+          "type": "integer"
+        },
+        "evidence_is_simulated": {
+          "title": "Evidence Is Simulated",
+          "type": "boolean"
+        },
+        "principal_id": {
+          "format": "uuid",
+          "title": "Principal Id",
+          "type": "string"
+        },
+        "reliability_evidence_count": {
+          "minimum": 0,
+          "title": "Reliability Evidence Count",
+          "type": "integer"
+        },
+        "reliability_score": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reliability Score"
+        },
+        "trade_name": {
+          "title": "Trade Name",
+          "type": "string"
+        },
+        "verification_status": {
+          "$ref": "#/$defs/VerificationStatus"
+        }
+      },
+      "required": [
+        "principal_id",
+        "trade_name",
+        "verification_status",
+        "coverage",
+        "delivery_days",
+        "credit_days",
+        "available_sku_count",
+        "reliability_evidence_count",
+        "evidence_is_simulated",
+        "agents"
+      ],
+      "title": "SellerSummary",
+      "type": "object"
+    },
+    "VerificationStatus": {
+      "enum": [
+        "not_submitted",
+        "pending",
+        "demo_verified",
+        "rejected"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/SellerListResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/SellerSummary"
+      },
+      "title": "Items",
+      "type": "array"
+    },
+    "pagination": {
+      "$ref": "#/$defs/Pagination"
+    }
+  },
+  "required": [
+    "items",
+    "pagination"
+  ],
+  "title": "SellerListResponse",
+  "type": "object"
+}

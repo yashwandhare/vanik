@@ -1,5 +1,6 @@
 import json
 from datetime import UTC, datetime
+from decimal import Decimal
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
@@ -7,9 +8,11 @@ from sqlalchemy import (
     CheckConstraint,
     DateTime,
     ForeignKey,
+    ForeignKeyConstraint,
     Index,
     Integer,
     LargeBinary,
+    Numeric,
     String,
     UniqueConstraint,
     Uuid,
@@ -161,6 +164,7 @@ class PrincipalMember(Base):
 class Agent(Base):
     __tablename__ = "agents"
     __table_args__ = (
+        UniqueConstraint("principal_id", "id", name="uq_agents_principal_id_id"),
         CheckConstraint("role IN ('buyer', 'seller')", name="role"),
         CheckConstraint("status IN ('active', 'paused', 'revoked')", name="status"),
         CheckConstraint("passport_version >= 1", name="passport_version"),
@@ -239,6 +243,80 @@ class AuditEvent(Base):
     entity_id: Mapped[UUID] = mapped_column(Uuid)
     payload: Mapped[dict[str, object]] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utc_now, server_default=func.now()
+    )
+
+
+class Product(Base):
+    __tablename__ = "products"
+    __table_args__ = (
+        CheckConstraint("benchmark_price > 0", name="benchmark_price"),
+        Index("ix_products_category_active", "category", "active"),
+    )
+
+    id: Mapped[UUID] = mapped_column(Uuid, primary_key=True, default=uuid4)
+    sku: Mapped[str] = mapped_column(String(40), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(160))
+    category: Mapped[str] = mapped_column(String(40))
+    unit: Mapped[str] = mapped_column(String(32))
+    benchmark_price: Mapped[Decimal] = mapped_column(Numeric(12, 2))
+    attributes: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    active: Mapped[bool] = mapped_column(default=True)
+
+
+class SellerProfile(Base):
+    __tablename__ = "seller_profiles"
+    __table_args__ = (
+        CheckConstraint("delivery_days >= 1", name="delivery_days"),
+        CheckConstraint("reliability_evidence_count >= 0", name="reliability_evidence_count"),
+        CheckConstraint(
+            "reliability_score IS NULL OR reliability_evidence_count > 0", name="rating_evidence"
+        ),
+        CheckConstraint(
+            "reliability_score IS NULL OR (reliability_score >= 0 AND reliability_score <= 1)",
+            name="reliability_score",
+        ),
+    )
+
+    principal_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("principals.id", ondelete="CASCADE"), primary_key=True
+    )
+    coverage: Mapped[list[str]] = mapped_column(JSON)
+    delivery_days: Mapped[int] = mapped_column(Integer)
+    credit_days: Mapped[list[int]] = mapped_column(JSON)
+    public_policies: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    reliability_score: Mapped[Decimal | None] = mapped_column(Numeric(5, 4))
+    reliability_evidence_count: Mapped[int] = mapped_column(Integer, default=0)
+    evidence_is_simulated: Mapped[bool] = mapped_column(default=True)
+
+
+class Inventory(Base):
+    __tablename__ = "inventory"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["principal_id", "agent_id"],
+            ["agents.principal_id", "agents.id"],
+            name="fk_inventory_principal_agent",
+            ondelete="CASCADE",
+        ),
+        CheckConstraint("available_qty >= 0", name="available_qty"),
+        CheckConstraint("reserved_qty >= 0", name="reserved_qty"),
+        CheckConstraint("reserved_qty <= available_qty", name="reservation_capacity"),
+        Index("ix_inventory_product_available", "product_id", "available_qty"),
+    )
+
+    principal_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("principals.id", ondelete="CASCADE"), primary_key=True
+    )
+    agent_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("agents.id", ondelete="CASCADE"), primary_key=True
+    )
+    product_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("products.id", ondelete="RESTRICT"), primary_key=True
+    )
+    available_qty: Mapped[Decimal] = mapped_column(Numeric(14, 3))
+    reserved_qty: Mapped[Decimal] = mapped_column(Numeric(14, 3), default=Decimal("0"))
+    last_updated: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=utc_now, server_default=func.now()
     )
 

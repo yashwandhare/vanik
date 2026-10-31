@@ -1,0 +1,73 @@
+{
+  "$defs": {
+    "ProductResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "active": {
+          "title": "Active",
+          "type": "boolean"
+        },
+        "attributes": {
+          "additionalProperties": true,
+          "title": "Attributes",
+          "type": "object"
+        },
+        "benchmark_price": {
+          "title": "Benchmark Price",
+          "type": "string"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "sku",
+        "name",
+        "category",
+        "unit",
+        "benchmark_price",
+        "attributes",
+        "active"
+      ],
+      "title": "ProductResponse",
+      "type": "object"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/InventoryLineResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "available_qty": {
+      "title": "Available Qty",
+      "type": "string"
+    },
+    "product": {
+      "$ref": "#/$defs/ProductResponse"
+    }
+  },
+  "required": [
+    "product",
+    "available_qty"
+  ],
+  "title": "InventoryLineResponse",
+  "type": "object"
+}

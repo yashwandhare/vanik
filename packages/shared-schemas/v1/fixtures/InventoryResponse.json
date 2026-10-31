@@ -1,0 +1,651 @@
+{
+  "principal_id": "bbda2995-3a2e-5e3c-90a2-72a4373f960f",
+  "agent_id": "1b100eef-7880-503f-b858-804b0c34696a",
+  "items": [
+    {
+      "product": {
+        "id": "c3cf58e0-6cbc-56d4-9518-1165be5c33bc",
+        "sku": "CNF-BISC-800",
+        "name": "Assorted Biscuits 800 g",
+        "category": "confectionery",
+        "unit": "box",
+        "benchmark_price": "190.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "63.000"
+    },
+    {
+      "product": {
+        "id": "3c10e22c-8c19-55b7-b0eb-cdf59ebcc192",
+        "sku": "CNF-CANDY-1K",
+        "name": "Assorted Candy 1 kg",
+        "category": "confectionery",
+        "unit": "jar",
+        "benchmark_price": "225.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "77.000"
+    },
+    {
+      "product": {
+        "id": "31bc5173-c77e-5bee-9ef9-6924055915fd",
+        "sku": "CNF-CHOCO-300",
+        "name": "Chocolate Gift Box 300 g",
+        "category": "confectionery",
+        "unit": "box",
+        "benchmark_price": "280.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "56.000"
+    },
+    {
+      "product": {
+        "id": "5bed11e4-0519-59a6-aa1e-844f0508ff14",
+        "sku": "CNF-GJ-MIX-200",
+        "name": "Gulab Jamun Mix 200 g",
+        "category": "confectionery",
+        "unit": "box",
+        "benchmark_price": "92.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "118.000"
+    },
+    {
+      "product": {
+        "id": "a1591cd8-5260-539d-baed-d74d9f0cb24e",
+        "sku": "CNF-KAJU-500",
+        "name": "Kaju Katli 500 g",
+        "category": "confectionery",
+        "unit": "box",
+        "benchmark_price": "520.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "49.000"
+    },
+    {
+      "product": {
+        "id": "2d0fa4aa-e433-54f1-ac95-585cb40d68fc",
+        "sku": "CNF-NAMK-500",
+        "name": "Festive Namkeen Mix 500 g",
+        "category": "confectionery",
+        "unit": "pack",
+        "benchmark_price": "140.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "70.000"
+    },
+    {
+      "product": {
+        "id": "a9568abc-da17-5d02-872a-facf1e263f3a",
+        "sku": "CNF-RASG-1K",
+        "name": "Rasgulla Tin 1 kg",
+        "category": "confectionery",
+        "unit": "tin",
+        "benchmark_price": "235.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "125.000"
+    },
+    {
+      "product": {
+        "id": "29d901a3-1e81-5b29-a763-0c65e38baf3f",
+        "sku": "CNF-SOAN-500",
+        "name": "Soan Papdi 500 g",
+        "category": "confectionery",
+        "unit": "box",
+        "benchmark_price": "165.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "42.000"
+    },
+    {
+      "product": {
+        "id": "2d063f3f-cbcd-588c-9e39-74989addc6a5",
+        "sku": "DRY-ALMOND-500",
+        "name": "Almonds 500 g",
+        "category": "dry_fruits",
+        "unit": "pack",
+        "benchmark_price": "410.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "76.000"
+    },
+    {
+      "product": {
+        "id": "d2d9b1f4-b19d-5905-8265-2044785a3aeb",
+        "sku": "DRY-CASHEW-500",
+        "name": "Cashews 500 g",
+        "category": "dry_fruits",
+        "unit": "pack",
+        "benchmark_price": "455.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "83.000"
+    },
+    {
+      "product": {
+        "id": "a11a813d-4640-5fb1-854a-3107783476f7",
+        "sku": "DRY-DATES-500",
+        "name": "Dates 500 g",
+        "category": "dry_fruits",
+        "unit": "pack",
+        "benchmark_price": "185.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "104.000"
+    },
+    {
+      "product": {
+        "id": "061097c7-a6e4-5b85-a89b-f2a60fcf1d37",
+        "sku": "DRY-MAKHANA-250",
+        "name": "Makhana 250 g",
+        "category": "dry_fruits",
+        "unit": "pack",
+        "benchmark_price": "195.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "111.000"
+    },
+    {
+      "product": {
+        "id": "a8bd0276-fa11-5904-8042-a99ea3b48938",
+        "sku": "DRY-PISTA-250",
+        "name": "Pistachios 250 g",
+        "category": "dry_fruits",
+        "unit": "pack",
+        "benchmark_price": "360.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "97.000"
+    },
+    {
+      "product": {
+        "id": "c3cbfbd3-5752-5442-972e-cfde80acde4b",
+        "sku": "DRY-RAISIN-500",
+        "name": "Raisins 500 g",
+        "category": "dry_fruits",
+        "unit": "pack",
+        "benchmark_price": "210.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "90.000"
+    },
+    {
+      "product": {
+        "id": "2f1be87c-20fe-52c9-a3cc-4bdfbc0d0149",
+        "sku": "OIL-GHEE-1L",
+        "name": "Cow Ghee 1 L",
+        "category": "edible_oils",
+        "unit": "jar",
+        "benchmark_price": "625.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "69.000"
+    },
+    {
+      "product": {
+        "id": "a566b713-a5ce-57d2-abe2-9f390d60ce17",
+        "sku": "OIL-GNUT-1L",
+        "name": "Groundnut Oil 1 L",
+        "category": "edible_oils",
+        "unit": "bottle",
+        "benchmark_price": "188.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "55.000"
+    },
+    {
+      "product": {
+        "id": "2300505e-b807-5c7b-825d-5477b6ea6008",
+        "sku": "OIL-MUST-1L",
+        "name": "Mustard Oil 1 L",
+        "category": "edible_oils",
+        "unit": "bottle",
+        "benchmark_price": "168.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "124.000"
+    },
+    {
+      "product": {
+        "id": "16d28411-627b-5fcb-914f-a4089bd76cfb",
+        "sku": "OIL-RBRAN-1L",
+        "name": "Rice Bran Oil 1 L",
+        "category": "edible_oils",
+        "unit": "pouch",
+        "benchmark_price": "145.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "62.000"
+    },
+    {
+      "product": {
+        "id": "2fa99b32-e562-50c1-9353-4da10a2fb476",
+        "sku": "OIL-SOY-1L",
+        "name": "Soybean Oil 1 L",
+        "category": "edible_oils",
+        "unit": "pouch",
+        "benchmark_price": "122.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "48.000"
+    },
+    {
+      "product": {
+        "id": "6f351554-4f28-5a83-a7d6-602248b6335b",
+        "sku": "OIL-SUN-1L",
+        "name": "Sunflower Oil 1 L",
+        "category": "edible_oils",
+        "unit": "pouch",
+        "benchmark_price": "132.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "41.000"
+    },
+    {
+      "product": {
+        "id": "020b97fc-36bf-57cd-9bce-d4eec1576ef5",
+        "sku": "SPC-CARD-50",
+        "name": "Green Cardamom 50 g",
+        "category": "spices",
+        "unit": "pack",
+        "benchmark_price": "185.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "119.000"
+    },
+    {
+      "product": {
+        "id": "4fb22f50-6e7b-5712-92b4-29a4bbc63a03",
+        "sku": "SPC-CHILLI-200",
+        "name": "Red Chilli Powder 200 g",
+        "category": "spices",
+        "unit": "pack",
+        "benchmark_price": "72.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "91.000"
+    },
+    {
+      "product": {
+        "id": "a9e100f5-bab8-56a7-b301-c406591740b4",
+        "sku": "SPC-CINN-50",
+        "name": "Cinnamon 50 g",
+        "category": "spices",
+        "unit": "pack",
+        "benchmark_price": "58.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "43.000"
+    },
+    {
+      "product": {
+        "id": "537e00c0-1053-5e59-ba22-b49df85493f7",
+        "sku": "SPC-CLOVE-50",
+        "name": "Cloves 50 g",
+        "category": "spices",
+        "unit": "pack",
+        "benchmark_price": "78.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "126.000"
+    },
+    {
+      "product": {
+        "id": "863191b2-ee9a-5c50-8d28-b438415265bc",
+        "sku": "SPC-CORI-200",
+        "name": "Coriander Powder 200 g",
+        "category": "spices",
+        "unit": "pack",
+        "benchmark_price": "48.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "98.000"
+    },
+    {
+      "product": {
+        "id": "12e580c2-2cae-5fdf-8d34-4fe263afde79",
+        "sku": "SPC-CUMIN-200",
+        "name": "Cumin Seeds 200 g",
+        "category": "spices",
+        "unit": "pack",
+        "benchmark_price": "92.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "105.000"
+    },
+    {
+      "product": {
+        "id": "daacdf60-0fcf-5dee-9f7a-53abe12eada2",
+        "sku": "SPC-GARAM-100",
+        "name": "Garam Masala 100 g",
+        "category": "spices",
+        "unit": "pack",
+        "benchmark_price": "68.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "112.000"
+    },
+    {
+      "product": {
+        "id": "a8edd2c1-f702-5c87-b606-3ca23ebbdd9d",
+        "sku": "SPC-TURM-200",
+        "name": "Turmeric Powder 200 g",
+        "category": "spices",
+        "unit": "pack",
+        "benchmark_price": "54.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "84.000"
+    },
+    {
+      "product": {
+        "id": "2e50e316-0b79-565c-8faf-4c195b86a516",
+        "sku": "STP-ATTA-5K",
+        "name": "Whole Wheat Atta 5 kg",
+        "category": "staples",
+        "unit": "bag",
+        "benchmark_price": "285.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "54.000"
+    },
+    {
+      "product": {
+        "id": "b2e2df9a-8643-5803-9f9e-c38e406e60cf",
+        "sku": "STP-BESAN-1K",
+        "name": "Besan 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "112.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "68.000"
+    },
+    {
+      "product": {
+        "id": "5dc22834-b41f-5367-8482-8364b2c93fdf",
+        "sku": "STP-CHANA-1K",
+        "name": "Chana Dal 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "105.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "89.000"
+    },
+    {
+      "product": {
+        "id": "a4df7149-3da0-594a-a95d-4ddf3b6c0a10",
+        "sku": "STP-MAIDA-1K",
+        "name": "Maida 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "58.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "61.000"
+    },
+    {
+      "product": {
+        "id": "d9344080-1a53-5f24-b9d4-e1576d2bc276",
+        "sku": "STP-MASOOR-1K",
+        "name": "Masoor Dal 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "126.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "96.000"
+    },
+    {
+      "product": {
+        "id": "f9bfcb24-0fc4-5b7f-877c-08298feb61f5",
+        "sku": "STP-MOONG-1K",
+        "name": "Moong Dal 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "158.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "82.000"
+    },
+    {
+      "product": {
+        "id": "df209577-f932-5bdc-a06f-7febb8951174",
+        "sku": "STP-RICE-BAS-5K",
+        "name": "Basmati Rice 5 kg",
+        "category": "staples",
+        "unit": "bag",
+        "benchmark_price": "620.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "40.000"
+    },
+    {
+      "product": {
+        "id": "5bfd4da7-a0a8-5125-98fa-78e1c651d320",
+        "sku": "STP-RICE-SON-5K",
+        "name": "Sona Masoori Rice 5 kg",
+        "category": "staples",
+        "unit": "bag",
+        "benchmark_price": "390.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "47.000"
+    },
+    {
+      "product": {
+        "id": "f4eda50d-138a-5dc5-8168-00f3d6a67824",
+        "sku": "STP-SALT-1K",
+        "name": "Iodised Salt 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "24.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "117.000"
+    },
+    {
+      "product": {
+        "id": "fbb5f052-e636-5224-9ea3-04447d9bc643",
+        "sku": "STP-SUGAR-1K",
+        "name": "Sugar 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "48.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "110.000"
+    },
+    {
+      "product": {
+        "id": "0ad60847-f9a6-514a-98ef-2dd59129c564",
+        "sku": "STP-TOOR-1K",
+        "name": "Toor Dal 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "176.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "75.000"
+    },
+    {
+      "product": {
+        "id": "e782fdb1-c902-5476-82ff-2adb557303d0",
+        "sku": "STP-URAD-1K",
+        "name": "Urad Dal 1 kg",
+        "category": "staples",
+        "unit": "pack",
+        "benchmark_price": "168.00",
+        "attributes": {
+          "dataset": "diwali_kirana_v1",
+          "synthetic": true
+        },
+        "active": true
+      },
+      "available_qty": "103.000"
+    }
+  ],
+  "pagination": {
+    "limit": 40,
+    "offset": 0,
+    "total": 40
+  }
+}
