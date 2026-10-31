@@ -1,0 +1,43 @@
+{
+  "$defs": {
+    "IdentifierType": {
+      "enum": [
+        "pan",
+        "gstin",
+        "udyam",
+        "cin",
+        "llpin"
+      ],
+      "title": "IdentifierType",
+      "type": "string"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/BusinessIdentifierCreateRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "identifier_type": {
+      "$ref": "#/$defs/IdentifierType"
+    },
+    "is_synthetic": {
+      "const": true,
+      "title": "Is Synthetic",
+      "type": "boolean"
+    },
+    "value": {
+      "format": "password",
+      "maxLength": 64,
+      "minLength": 4,
+      "title": "Value",
+      "type": "string",
+      "writeOnly": true
+    }
+  },
+  "required": [
+    "identifier_type",
+    "value",
+    "is_synthetic"
+  ],
+  "title": "BusinessIdentifierCreateRequest",
+  "type": "object"
+}

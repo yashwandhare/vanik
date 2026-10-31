@@ -68,6 +68,7 @@ class Principal(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=utc_now, server_default=func.now()
     )
+    verification_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class PrincipalMember(Base):
@@ -95,7 +96,12 @@ class BusinessIdentifier(Base):
     __tablename__ = "business_identifiers"
     __table_args__ = (
         CheckConstraint("status IN ('pending', 'demo_verified', 'rejected')", name="status"),
-        Index("ix_business_identifiers_principal_type", "principal_id", "identifier_type"),
+        Index(
+            "ix_business_identifiers_principal_type",
+            "principal_id",
+            "identifier_type",
+            unique=True,
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid, primary_key=True, default=uuid4)

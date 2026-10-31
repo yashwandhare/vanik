@@ -63,5 +63,14 @@ def derive_csrf_token(session_token: str) -> str:
     return hmac.new(session_token.encode("utf-8"), b"vanik.csrf.v1", hashlib.sha256).hexdigest()
 
 
+def digest_identifier(value: str, secret: str) -> str:
+    return hmac.new(secret.encode("utf-8"), value.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+def mask_identifier(value: str) -> str:
+    visible = value[-4:]
+    return f"{'*' * max(0, len(value) - len(visible))}{visible}"
+
+
 def token_matches(token: str, expected_digest: str) -> bool:
     return hmac.compare_digest(digest_token(token), expected_digest)
