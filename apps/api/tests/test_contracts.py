@@ -46,6 +46,11 @@ def test_naive_timestamps_are_rejected() -> None:
         AgentPassportResponse.model_validate(raw)
 
 
+def test_principal_roles_schema_publishes_uniqueness() -> None:
+    schema = PrincipalCreateRequest.model_json_schema(mode="validation")
+    assert schema["properties"]["roles"]["uniqueItems"] is True
+
+
 def test_duplicate_business_roles_are_rejected() -> None:
     raw = json.loads((FIXTURE_DIRECTORY / "PrincipalCreateRequest.json").read_text())
     raw["roles"] = ["buyer", "buyer"]

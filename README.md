@@ -14,7 +14,7 @@ All surfaces use the same backend, identity system, marketplace registry, negoti
 
 ## Repository status
 
-The repository now includes a working FastAPI foundation: configuration, PostgreSQL session setup, health endpoints, shared identity schemas and backend tests. It is **not a completed marketplace implementation**. Authentication, business workflows, the web app, Telegram clients and demo data remain unimplemented.
+The repository now includes a working FastAPI identity foundation: registration, opaque sessions, logout, principal creation, membership-authorized principal reads, PostgreSQL migrations, shared schemas and backend tests. It is **not a completed marketplace implementation**. Verification, agents, commerce workflows, the web app, Telegram clients and demo data remain unimplemented.
 
 ## Core hierarchy
 
@@ -90,6 +90,7 @@ To start the API and local database:
 
 ```bash
 make infra
+make migrate
 make dev
 ```
 
@@ -97,7 +98,7 @@ The API runs at `http://localhost:8000`. `/health` checks process liveness; `/he
 
 Copy `.env.example` to `.env` if you need to override development defaults. Never commit `.env`.
 
-Current application Make targets cover the API only. The web and Bot will get their own commands when B creates them. `seed`, `demo`, `reset-demo` and migrations without real revisions fail explicitly instead of reporting fake success.
+Current application Make targets cover the API only. The web and Bot will get their own commands when B creates them. `make migrate` applies the identity schema. `seed`, `demo` and `reset-demo` fail explicitly instead of reporting fake success.
 
 See [API setup](apps/api/README.md) and the [B handoff](teammateB/PHASE_0_HANDOFF.md) for the next steps.
 

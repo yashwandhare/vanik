@@ -15,7 +15,7 @@ help:
 	@echo "format      Format API source"
 	@echo "typecheck   Run strict API type checks"
 	@echo "contracts   Export versioned JSON schemas"
-	@echo "migrate     Apply database migrations when Phase 1 revisions exist"
+	@echo "migrate     Apply database migrations"
 	@echo "seed/demo/reset-demo are not implemented yet"
 
 infra:

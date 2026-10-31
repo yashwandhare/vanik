@@ -64,7 +64,11 @@ class PrincipalCreateRequest(Contract):
     business_type: str = Field(min_length=1, max_length=80)
     address: str = Field(min_length=1, max_length=500)
     contact_email: EmailStr
-    roles: list[BusinessRole] = Field(min_length=1, max_length=2)
+    roles: list[BusinessRole] = Field(
+        min_length=1,
+        max_length=2,
+        json_schema_extra={"uniqueItems": True},
+    )
 
     @field_validator("roles")
     @classmethod

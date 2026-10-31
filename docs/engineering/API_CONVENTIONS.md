@@ -4,7 +4,16 @@ Main owns these conventions. Client changes must not redefine them.
 
 ## Implementation status
 
-Only `GET /health` and `GET /health/ready` are implemented. The initial identity schemas are published, but their endpoints are not implemented yet.
+The following identity routes are implemented:
+
+- `POST /v1/auth/register`
+- `POST /v1/auth/login`
+- `GET /v1/auth/session`
+- `POST /v1/auth/logout`
+- `POST /v1/principals`
+- `GET /v1/principals/{principal_id}`
+
+Agent, verification, Telegram and commerce routes remain unimplemented. Published schemas do not imply that their routes exist.
 
 ## Routes and responses
 
@@ -74,6 +83,7 @@ P0 uses email and password authentication. Mobile login is deferred; the PRD per
 - Passwords use Argon2id hashing.
 - Registration does not automatically authenticate the user.
 - Login creates a server-side opaque session and returns `SessionResponse`.
+- Authentication mutations are bounded per client in each API worker. Distributed rate limiting is deferred until Redis-backed coordination is needed.
 - The session expires after eight hours; no refresh token is planned for P0.
 - Store only a hash of the session token in the database.
 - Logout revokes the session immediately.
@@ -84,20 +94,27 @@ P0 uses email and password authentication. Mobile login is deferred; the PRD per
 - Login, logout and registration require an allowed Origin for browser access.
 - Authenticated state-changing requests also require `X-CSRF-Token` bound to the current session.
 - Never store the session token in JavaScript storage.
+- The CSRF token is derived from the opaque session secret, is stable for the session, and is verified against its database digest.
+- All `/v1/` responses use `Cache-Control: no-store` because current business responses can contain principal-scoped data.
 
-Proposed identity routes:
+## Implemented identity routes
 
 | Route | Request contract | Success response |
 | --- | --- | --- |
 | `POST /v1/auth/register` | `RegisterRequest` | `201 UserResponse` |
 | `POST /v1/auth/login` | `LoginRequest` | `200 SessionResponse` and cookie |
-| `GET /v1/auth/session` | None | `200 SessionResponse` |
-| `POST /v1/auth/logout` | CSRF header | `204` |
+| `GET /v1/auth/session` | None | `200 SessionResponse`; requires the session cookie |
+| `POST /v1/auth/logout` | Origin, session cookie and CSRF header | `204` |
 | `POST /v1/principals` | `PrincipalCreateRequest` | `201 PrincipalResponse` |
 | `GET /v1/principals/{principal_id}` | None | `200 PrincipalResponse` for an authorized member |
-| `POST /v1/principals/{principal_id}/agents` | `AgentCreateRequest` | `201 AgentPassportResponse` |
-| `GET /v1/principals/{principal_id}/agents` | None | `200 AgentListResponse` |
-| `GET /v1/agents/{agent_id}/passport` | None | `200 AgentPassportResponse` with the approved public subset |
+
+## Published but unimplemented agent routes
+
+The initial Agent Passport schemas can support mock UI work. These routes are not implemented:
+
+- `POST /v1/principals/{principal_id}/agents`
+- `GET /v1/principals/{principal_id}/agents`
+- `GET /v1/agents/{agent_id}/passport`
 
 Agent capabilities and tools are requests, not grants of authority. The backend validates them against principal policy.
 

@@ -9,7 +9,8 @@ This directory contains the instructions and task tracking specific to Teammate 
 3. [Git protocol](GIT_PROTOCOL.md)
 4. [Teammate B TODO](TODO.md)
 5. [Phase 0 handoff](PHASE_0_HANDOFF.md)
-6. [Project documentation index](../docs/README.md)
+6. [Phase 1 identity endpoint handoff](PHASE_1_IDENTITY_HANDOFF.md)
+7. [Project documentation index](../docs/README.md)
 
 ## Authority
 
