@@ -1,13 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #020617;
-  --foreground: #f8fafc;
+  --color-cream-parchment: #f8f9eb;
+  --color-pure-white: #ffffff;
+  --color-obsidian: #000000;
+  --color-charcoal: #202020;
+  --color-sage-mist: #c0c2a9;
+  --color-olive-slate: #5a5a4f;
+  --color-pebble: #7c7d76;
+  --color-bone: #edeee1;
+  --color-forest-depths: #003d21;
+  --color-mint-sprout: #aafdc0;
+  --color-cobalt-ink: #041668;
+  --color-plum-depth: #2d0078;
+  --color-wine-shadow: #3f0929;
+  --color-lilac-wash: #d3beff;
+  --color-sky-wash: #b0f4ff;
+  --color-rose-wash: #ffc0e6;
+  
+  --background: var(--color-cream-parchment);
+  --foreground: var(--color-obsidian);
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--background);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   min-height: 100vh;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, kbd, samp, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom architectural hairline borders */
+.border-hairline {
+  border: 1.5px solid var(--color-obsidian);
+}
+
+.border-sage {
+  border: 1.5px solid var(--color-sage-mist);
+}
+
+/* Monumental Display Leading */
+.leading-monumental {
+  line-height: 0.92;
 }

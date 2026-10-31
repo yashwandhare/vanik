@@ -78,28 +78,33 @@ export default function AgentsPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 space-y-8">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#c0c2a9] pb-6">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Agent Passports Roster</h1>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
+              [ AGENT REGISTRY & IDENTITY ]
+            </span>
             {isMock && (
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#edeee1] text-[#202020] border border-[#c0c2a9] font-bold">
                 FIXTURE
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-400">
-            Persistent AI agent representatives with verified Ed25519 signing identities and trust profiles.
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#000000] tracking-tight">
+            Agent Passports Roster
+          </h1>
+          <p className="text-xs text-[#5a5a4f] mt-1">
+            Persistent autonomous representatives with verifiable Ed25519 signing keys, tool permissions, and trust profiles.
           </p>
         </div>
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-medium transition-colors shadow flex items-center gap-1.5"
+          className="px-5 py-2.5 bg-[#202020] hover:bg-[#000000] text-white rounded-[13px] text-xs font-semibold border border-[#000000] transition-all shadow-sm flex items-center gap-2"
         >
-          <span>+</span>
+          <span className="font-bold text-sm">+</span>
           <span>Spawn New Agent</span>
         </button>
       </div>
@@ -108,18 +113,18 @@ export default function AgentsPage() {
 
       {/* Agents Grid */}
       {loading ? (
-        <div className="text-center py-16 text-slate-500 text-sm animate-pulse">
-          Loading Agent Passports...
+        <div className="text-center py-20 text-[#7c7d76] text-sm font-mono animate-pulse">
+          Loading cryptographic Agent Passports...
         </div>
       ) : agents.length === 0 ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center space-y-3">
-          <p className="text-slate-300 font-medium">No agents spawned for this principal yet.</p>
-          <p className="text-xs text-slate-500">
-            Create your first buyer or seller agent to begin autonomous negotiations.
+        <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] p-12 text-center space-y-4">
+          <p className="text-[#000000] font-bold text-base">No agent representatives spawned yet.</p>
+          <p className="text-xs text-[#5a5a4f] max-w-md mx-auto">
+            Spawn your first buyer or seller representative to begin autonomous counterparty discovery.
           </p>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="mt-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-medium"
+            className="px-5 py-2.5 bg-[#202020] text-white text-xs font-semibold rounded-[13px] border border-[#000000]"
           >
             Spawn Agent
           </button>
@@ -132,15 +137,20 @@ export default function AgentsPage() {
         </div>
       )}
 
-      {/* Create Agent Modal */}
+      {/* Spawn Agent Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">Spawn AI Agent Representative</h2>
+        <div className="fixed inset-0 z-50 bg-[#000000]/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#c0c2a9] pb-4">
+              <div>
+                <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
+                  [ PROVISION PASSPORT ]
+                </span>
+                <h2 className="text-xl font-extrabold text-[#000000] mt-0.5">Spawn AI Representative</h2>
+              </div>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="text-slate-400 hover:text-slate-200 text-xs px-2 py-1 rounded"
+                className="text-[#7c7d76] hover:text-[#000000] font-mono font-bold text-sm px-2 py-1"
               >
                 ✕
               </button>
@@ -148,26 +158,26 @@ export default function AgentsPage() {
 
             <form onSubmit={handleCreateAgent} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Agent Name</label>
+                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Agent Name</label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Marketplace Role</label>
+                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Marketplace Role</label>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setRole('buyer')}
-                    className={`flex-1 py-2 rounded-lg text-xs font-semibold border ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border ${
                       role === 'buyer'
-                        ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500'
-                        : 'bg-slate-950 text-slate-400 border-slate-800'
+                        ? 'bg-[#aafdc0] text-[#003d21] border-[#000000]'
+                        : 'bg-[#f8f9eb] text-[#5a5a4f] border-[#c0c2a9]'
                     }`}
                   >
                     Buyer Agent
@@ -175,10 +185,10 @@ export default function AgentsPage() {
                   <button
                     type="button"
                     onClick={() => setRole('seller')}
-                    className={`flex-1 py-2 rounded-lg text-xs font-semibold border ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border ${
                       role === 'seller'
-                        ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500'
-                        : 'bg-slate-950 text-slate-400 border-slate-800'
+                        ? 'bg-[#b0f4ff] text-[#041668] border-[#000000]'
+                        : 'bg-[#f8f9eb] text-[#5a5a4f] border-[#c0c2a9]'
                     }`}
                   >
                     Seller Agent
@@ -187,32 +197,36 @@ export default function AgentsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Description / Objective</label>
+                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Description / Directive</label>
                 <textarea
                   rows={2}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
                 />
               </div>
 
-              <div className="p-3 bg-slate-950 rounded-lg border border-slate-800 text-[11px] text-slate-400 space-y-1">
-                <span className="font-semibold text-slate-300 block">Cryptographic Identity:</span>
-                <span>An Ed25519 keypair will be generated server-side. Public key fingerprint is automatically published to its Agent Passport.</span>
+              <div className="p-4 bg-[#f8f9eb] rounded-[13px] border border-[#c0c2a9] text-xs text-[#5a5a4f] space-y-1">
+                <span className="font-mono font-bold text-[#003d21] text-[11px] uppercase tracking-wider block">
+                  Cryptographic Protocol:
+                </span>
+                <p className="text-[11px] leading-relaxed">
+                  An Ed25519 signing keypair will be created server-side. The public key fingerprint is permanently published to this Agent Passport.
+                </p>
               </div>
 
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium"
+                  className="px-5 py-2.5 bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] rounded-[9px] border border-[#c0c2a9] text-xs font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="flex-1 py-2 px-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white rounded-lg text-xs font-medium shadow"
+                  className="flex-1 py-2.5 px-4 bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white rounded-[13px] text-xs font-semibold border border-[#000000] transition-all shadow-sm"
                 >
                   {creating ? 'Spawning Agent...' : 'Spawn & Sign Passport'}
                 </button>

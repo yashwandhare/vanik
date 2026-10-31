@@ -93,72 +93,77 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-12 space-y-8">
+    <div className="max-w-2xl mx-auto px-4 py-16 space-y-8">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-white tracking-tight">Register Business Principal</h1>
-        <p className="text-xs text-slate-400">
-          Step {step} of 3 • Establish human identity and verified business principal profile
+        <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
+          [ ONBOARDING GATEWAY ]
+        </span>
+        <h1 className="text-4xl font-extrabold text-[#000000] tracking-tight">Register Business Principal</h1>
+        <p className="text-xs text-[#5a5a4f]">
+          Step {step} of 3 • Establish human identity and verified enterprise principal authority
         </p>
       </div>
 
       {/* Stepper Progress */}
-      <div className="flex items-center justify-between max-w-md mx-auto text-xs font-medium">
-        <div className={`flex items-center gap-1.5 ${step >= 1 ? 'text-indigo-400' : 'text-slate-600'}`}>
-          <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 1 ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400'}`}>1</span>
-          <span>User Account</span>
+      <div className="flex items-center justify-between max-w-md mx-auto text-xs font-mono font-bold">
+        <div className={`flex items-center gap-2 ${step >= 1 ? 'text-[#000000]' : 'text-[#7c7d76]'}`}>
+          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs border border-[#000000] ${step >= 1 ? 'bg-[#aafdc0] text-[#003d21]' : 'bg-[#ffffff] text-[#7c7d76]'}`}>1</span>
+          <span>Account</span>
         </div>
-        <div className="h-0.5 flex-1 mx-2 bg-slate-800" />
-        <div className={`flex items-center gap-1.5 ${step >= 2 ? 'text-indigo-400' : 'text-slate-600'}`}>
-          <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 2 ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400'}`}>2</span>
-          <span>Business Profile</span>
+        <div className="h-0.5 flex-1 mx-3 bg-[#c0c2a9]" />
+        <div className={`flex items-center gap-2 ${step >= 2 ? 'text-[#000000]' : 'text-[#7c7d76]'}`}>
+          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs border border-[#000000] ${step >= 2 ? 'bg-[#aafdc0] text-[#003d21]' : 'bg-[#ffffff] text-[#7c7d76]'}`}>2</span>
+          <span>Principal</span>
         </div>
-        <div className="h-0.5 flex-1 mx-2 bg-slate-800" />
-        <div className={`flex items-center gap-1.5 ${step >= 3 ? 'text-emerald-400' : 'text-slate-600'}`}>
-          <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 3 ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'}`}>3</span>
-          <span>Verification</span>
+        <div className="h-0.5 flex-1 mx-3 bg-[#c0c2a9]" />
+        <div className={`flex items-center gap-2 ${step >= 3 ? 'text-[#003d21]' : 'text-[#7c7d76]'}`}>
+          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs border border-[#000000] ${step >= 3 ? 'bg-[#003d21] text-white' : 'bg-[#ffffff] text-[#7c7d76]'}`}>3</span>
+          <span>Verified</span>
         </div>
       </div>
 
       {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
+      <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] p-8 shadow-sm">
         {step === 1 && (
           <form onSubmit={handleStep1} className="space-y-4">
-            <h2 className="text-base font-semibold text-white">Create Human Account</h2>
-            <p className="text-xs text-slate-400">
-              Account identity is separated from business principal identity.
-            </p>
+            <div>
+              <h2 className="text-xl font-extrabold text-[#000000]">Create Human Account</h2>
+              <p className="text-xs text-[#5a5a4f] mt-0.5">
+                Human credentials are authenticated separately from business principal identity.
+              </p>
+            </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Email Address</label>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Email Address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Phone Number (Synthetic)</label>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Phone Number (Synthetic)</label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Password</label>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Password</label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
               />
             </div>
 
@@ -166,9 +171,9 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white font-medium text-sm transition-colors shadow-md"
+                className="w-full py-3.5 px-4 rounded-[13px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-semibold text-xs border border-[#000000] transition-all shadow-sm"
               >
-                {loading ? 'Creating Account...' : 'Continue to Business Profile'}
+                {loading ? 'Creating Account...' : 'Continue to Business Profile →'}
               </button>
             </div>
           </form>
@@ -176,53 +181,55 @@ export default function RegisterPage() {
 
         {step === 2 && (
           <form onSubmit={handleStep2} className="space-y-4">
-            <h2 className="text-base font-semibold text-white">Business Principal Information</h2>
-            <p className="text-xs text-slate-400">
-              Enter your enterprise details. In this demo environment, verification is synthetic.
-            </p>
+            <div>
+              <h2 className="text-xl font-extrabold text-[#000000]">Business Principal Profile</h2>
+              <p className="text-xs text-[#5a5a4f] mt-0.5">
+                Enter your commercial entity details. Official checks are synthesized via local demo verification.
+              </p>
+            </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Legal Registered Name</label>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Legal Registered Name</label>
               <input
                 type="text"
                 required
                 value={legalName}
                 onChange={(e) => setLegalName(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Trade Name (Display)</label>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Trade Display Name</label>
               <input
                 type="text"
                 value={tradeName}
                 onChange={(e) => setTradeName(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Business Type</label>
+                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Business Type</label>
                 <input
                   type="text"
                   value={businessType}
                   onChange={(e) => setBusinessType(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Marketplace Roles</label>
-                <div className="flex gap-2 pt-1">
+                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Marketplace Roles</label>
+                <div className="flex gap-2 pt-0.5">
                   <button
                     type="button"
                     onClick={() => toggleRole('buyer')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border ${
                       roles.includes('buyer')
-                        ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500'
-                        : 'bg-slate-950 text-slate-400 border-slate-800'
+                        ? 'bg-[#aafdc0] text-[#003d21] border-[#000000]'
+                        : 'bg-[#f8f9eb] text-[#5a5a4f] border-[#c0c2a9]'
                     }`}
                   >
                     Buyer
@@ -230,10 +237,10 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => toggleRole('seller')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border ${
                       roles.includes('seller')
-                        ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500'
-                        : 'bg-slate-950 text-slate-400 border-slate-800'
+                        ? 'bg-[#b0f4ff] text-[#041668] border-[#000000]'
+                        : 'bg-[#f8f9eb] text-[#5a5a4f] border-[#c0c2a9]'
                     }`}
                   >
                     Seller
@@ -243,12 +250,12 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Business Address</label>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Registered Commercial Address</label>
               <textarea
                 rows={2}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
               />
             </div>
 
@@ -256,16 +263,16 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors"
+                className="px-5 py-3 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] text-xs font-semibold border border-[#c0c2a9]"
               >
                 Back
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white font-medium text-sm transition-colors shadow-md"
+                className="flex-1 py-3 px-4 rounded-[13px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-semibold text-xs border border-[#000000] transition-all shadow-sm"
               >
-                {loading ? 'Registering Principal...' : 'Submit & Simulate Verification'}
+                {loading ? 'Submitting...' : 'Register Principal & Seal Verification →'}
               </button>
             </div>
           </form>
@@ -273,54 +280,54 @@ export default function RegisterPage() {
 
         {step === 3 && principalRes && (
           <div className="space-y-6">
-            <div className="p-6 bg-emerald-950/30 border border-emerald-500/40 rounded-xl space-y-4">
+            <div className="p-6 bg-[#aafdc0]/30 border-[1.5px] border-[#000000] rounded-[20px] space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs uppercase font-bold text-emerald-400 tracking-wider">
-                  Registration Complete
+                <span className="font-mono text-xs uppercase font-extrabold text-[#003d21] tracking-wider">
+                  Registration Successful
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-xs font-bold uppercase">
+                <span className="px-3 py-1 rounded-full bg-[#aafdc0] text-[#003d21] border border-[#000000] text-xs font-mono font-bold uppercase">
                   DEMO VERIFIED
                 </span>
               </div>
 
               <div className="space-y-1">
-                <h3 className="text-xl font-bold text-white">{principalRes.legal_name}</h3>
-                <p className="text-xs text-slate-400">Trade: {principalRes.trade_name || principalRes.legal_name}</p>
+                <h3 className="text-2xl font-extrabold text-[#000000]">{principalRes.legal_name}</h3>
+                <p className="text-xs text-[#5a5a4f]">Trade: <span className="font-bold text-[#000000]">{principalRes.trade_name || principalRes.legal_name}</span></p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs border-t border-emerald-900/40 pt-4 font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs border-t border-[#c0c2a9] pt-4 font-mono">
                 <div>
-                  <span className="text-slate-500 block text-[11px]">Principal ID:</span>
-                  <span className="text-slate-200 break-all">{principalRes.id}</span>
+                  <span className="text-[#7c7d76] block text-[10px] uppercase font-bold">Principal ID:</span>
+                  <span className="text-[#000000] font-bold break-all">{principalRes.id}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 block text-[11px]">User Account:</span>
-                  <span className="text-slate-200">{userRes?.email || email}</span>
+                  <span className="text-[#7c7d76] block text-[10px] uppercase font-bold">Owner Account:</span>
+                  <span className="text-[#000000] font-bold">{userRes?.email || email}</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-              <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Next Steps for Principal
-              </h4>
-              <p className="text-xs text-slate-400">
-                You can now spawn persistent AI agent representatives under this principal, assign them Ed25519 cryptographic signing identities, and publish task mandates.
+            <div className="p-4 bg-[#f8f9eb] rounded-[16px] border border-[#c0c2a9] text-xs text-[#5a5a4f] space-y-1">
+              <span className="font-mono font-bold text-[#000000] text-xs uppercase block">
+                Next Steps for Principal:
+              </span>
+              <p className="leading-relaxed">
+                You can now spawn persistent AI agents under this principal, assign them Ed25519 cryptographic signing identities, and publish task mandates.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3 pt-2">
               <Link
                 href="/agents"
-                className="flex-1 text-center py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs transition-colors shadow-md"
+                className="flex-1 text-center py-3.5 px-4 rounded-[13px] bg-[#202020] hover:bg-[#000000] text-white font-semibold text-xs border border-[#000000] transition-all shadow-sm"
               >
                 Create & View Agent Passports →
               </Link>
               <Link
                 href="/catalogue"
-                className="py-2.5 px-4 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition-colors"
+                className="py-3.5 px-5 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] text-xs font-semibold border border-[#c0c2a9]"
               >
-                Browse Marketplace
+                Browse Catalogue
               </Link>
             </div>
           </div>

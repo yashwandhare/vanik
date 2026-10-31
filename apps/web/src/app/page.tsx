@@ -32,161 +32,197 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-indigo-950/30 to-slate-900 border border-slate-800 p-8 sm:p-12">
-        <div className="max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
-            <span>AI-02 Hackathon Track</span>
-            <span>•</span>
-            <span>Autonomous Commerce</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-            Autonomous Commerce.{' '}
-            <span className="bg-gradient-to-r from-indigo-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">
-              Verifiable Trust.
-            </span>
-          </h1>
-
-          <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-            VANIK is an agentic B2B marketplace where verified businesses create persistent AI agents to discover counterparties, negotiate commercial terms across parallel rounds, and prepare deals for human approval.
-          </p>
-
-          <div className="flex flex-wrap gap-4 pt-4">
-            <Link
-              href="/register"
-              className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm transition-all shadow-md hover:shadow-indigo-500/20"
-            >
-              Start Simulated Registration
-            </Link>
-            <Link
-              href="/agents"
-              className="px-5 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium text-sm transition-all"
-            >
-              Inspect Agent Passports
-            </Link>
-            <Link
-              href="/negotiations"
-              className="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-sky-400 border border-sky-900/60 font-medium text-sm transition-all"
-            >
-              Negotiation Workspace
-            </Link>
-          </div>
+    <div className="space-y-16 pb-20">
+      {/* Hero Section on Cream Parchment */}
+      <section className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-16 sm:pt-24 text-center space-y-6">
+        {/* Pill Status Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border-[1.5px] border-[#c0c2a9] bg-transparent text-[#202020] text-xs font-mono font-semibold uppercase tracking-wider">
+          <span className="w-2 h-2 rounded-full bg-[#003d21] inline-block" />
+          <span>AI-02 Hackathon Track • Autonomous B2B Commerce</span>
         </div>
 
-        {/* Backend Live Status Badge */}
-        <div className="mt-8 pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-xs gap-4 text-slate-400">
-          <div className="flex items-center gap-4">
-            <span className="font-semibold text-slate-300">FastAPI Backend Status:</span>
-            {loading ? (
-              <span className="text-slate-500 animate-pulse">Checking /health...</span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <span
-                  className={`w-2.5 h-2.5 rounded-full ${
-                    health?.status === 'healthy' ? 'bg-emerald-400' : 'bg-amber-400'
-                  }`}
-                />
-                <span className="font-mono text-slate-200">
-                  {health?.status || 'unknown'} {isHealthMock && '(fixture fallback)'}
-                </span>
-                {readiness && (
-                  <span className="text-slate-500">
-                    | DB: <code className="text-slate-400">{readiness.database}</code>
-                  </span>
-                )}
-              </span>
-            )}
-          </div>
-          <span className="font-mono text-slate-500 text-[11px]">Next.js 16.4.3 • React 19 • Tailwind 4</span>
-        </div>
-      </div>
+        {/* Monumental Display Headline */}
+        <h1 className="text-5xl sm:text-7xl md:text-8xl font-extrabold text-[#000000] tracking-tighter leading-[0.92] max-w-5xl mx-auto uppercase">
+          Autonomous Commerce.{' '}
+          <span className="inline-flex items-center gap-2 text-[#003d21]">
+            Verifiable Trust.
+            <span className="inline-block w-6 h-6 sm:w-10 sm:h-10 rounded-full border-2 border-[#000000] bg-[#aafdc0]" />
+          </span>
+        </h1>
 
-      {/* Demo Scenario Architecture */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-          <span>Diwali Restock Demo Architecture</span>
-          <span className="text-xs font-normal text-slate-500 font-mono">P0 Target</span>
-        </h2>
+        {/* Subheadline */}
+        <p className="text-lg sm:text-xl text-[#202020] font-normal leading-relaxed max-w-2xl mx-auto pt-2">
+          An agentic B2B marketplace where verified businesses create persistent AI representatives to discover suppliers, negotiate structured price and credit terms across parallel rounds, and structure transactions for human approval.
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-5 space-y-3">
-            <div className="text-xs uppercase font-bold tracking-wider text-indigo-400">1. Buyer Principal</div>
-            <h3 className="text-base font-semibold text-white">Shree Ganesh Kirana</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Kirana owner creates a Diwali procurement task mandate with a 40-SKU basket, budget constraints, and delivery deadline.
-            </p>
-            <div className="pt-2 text-xs text-indigo-300 font-mono">
-              Agent: Diwali Buyer (Ed25519 Signed)
-            </div>
-          </div>
-
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-5 space-y-3">
-            <div className="text-xs uppercase font-bold tracking-wider text-emerald-400">2. Parallel Sellers</div>
-            <h3 className="text-base font-semibold text-white">3 Distinct Principals</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Negotiates in parallel with Margin Optimizer, Inventory Clearance, and Payment-Risk Optimizer. Detects 4th Adversarial Seller injection.
-            </p>
-            <div className="pt-2 text-xs text-emerald-300 font-mono">
-              Deterministic state machine rounds
-            </div>
-          </div>
-
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-5 space-y-3">
-            <div className="text-xs uppercase font-bold tracking-wider text-sky-400">3. Human Control</div>
-            <h3 className="text-base font-semibold text-white">Verifiable Lock & Settle</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Side-by-side offer comparison and recommendation explanation. Exact deal version signed by human before mock UPI settlement.
-            </p>
-            <div className="pt-2 text-xs text-sky-300 font-mono">
-              Single-use cryptographic challenge
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Product Surfaces Grid */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-100">Three First-Class Surfaces</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Actions */}
+        <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
           <Link
-            href="/catalogue"
-            className="block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-slate-700 transition-all group"
+            href="/register"
+            className="px-6 py-3.5 rounded-[13px] bg-[#202020] hover:bg-[#000000] text-white font-semibold text-sm transition-all border border-[#000000]"
           >
-            <div className="text-indigo-400 font-bold text-sm mb-1 group-hover:text-indigo-300">
-              Marketplace Web App →
-            </div>
-            <p className="text-xs text-slate-400">
-              Visual command center for seller discovery, the 40-SKU Diwali catalogue, live negotiation monitoring, and Decision Replay.
-            </p>
+            Start Simulated Registration →
           </Link>
-
           <Link
             href="/agents"
-            className="block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-slate-700 transition-all group"
+            className="px-6 py-3.5 rounded-[9px] bg-transparent hover:bg-[#edeee1] text-[#202020] border-[1.5px] border-[#c0c2a9] hover:border-[#000000] font-semibold text-sm transition-all"
           >
-            <div className="text-emerald-400 font-bold text-sm mb-1 group-hover:text-emerald-300">
-              Agent Passports →
+            Inspect Agent Passports
+          </Link>
+          <Link
+            href="/negotiations"
+            className="px-6 py-3.5 rounded-[9px] bg-[#b0f4ff] hover:brightness-95 text-[#000000] border-[1.5px] border-[#000000] font-semibold text-sm transition-all"
+          >
+            Negotiation Deck
+          </Link>
+        </div>
+
+        {/* Backend Live Status Pill */}
+        <div className="pt-6 flex items-center justify-center gap-3 text-xs font-mono text-[#5a5a4f]">
+          <span>FastAPI Backend Status:</span>
+          {loading ? (
+            <span className="text-[#7c7d76] animate-pulse">Checking /health...</span>
+          ) : (
+            <span className="inline-flex items-center gap-2 bg-[#ffffff] px-3 py-1 rounded-full border border-[#c0c2a9]">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  health?.status === 'healthy' ? 'bg-[#003d21]' : 'bg-[#dc341e]'
+                }`}
+              />
+              <span className="font-bold text-[#000000]">
+                {health?.status || 'unknown'} {isHealthMock && '(fixture fallback)'}
+              </span>
+              {readiness && (
+                <span className="text-[#7c7d76]">
+                  | DB: <code className="text-[#000000]">{readiness.database}</code>
+                </span>
+              )}
+            </span>
+          )}
+        </div>
+      </section>
+
+      {/* Full-Bleed Forest Depths Feature Section */}
+      <section className="bg-[#003d21] text-white rounded-t-[40px] sm:rounded-t-[48px] pt-16 sm:pt-20 pb-20 px-4 sm:px-6 mt-12">
+        <div className="max-w-[1200px] mx-auto space-y-12">
+          {/* Section Header */}
+          <div className="max-w-2xl space-y-3">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#aafdc0] font-bold">
+              [ DIWALI RESTOCK P0 SCENARIO ]
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#aafdc0] tracking-tight leading-tight">
+              One Buyer Agent. Three Independent Sellers. 40 SKU Basket.
+            </h2>
+            <p className="text-sm sm:text-base text-[#c0c2a9] leading-relaxed">
+              Real-world wholesale kirana trade modeled with deterministic constraints, parallel round evaluations, and cryptographic message signing.
+            </p>
+          </div>
+
+          {/* Three Architectural Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#00311a] border border-[#aafdc0]/30 rounded-[22px] p-6 space-y-4">
+              <div className="font-mono text-xs font-bold uppercase tracking-wider text-[#aafdc0]">
+                01 • Buyer Principal
+              </div>
+              <h3 className="text-xl font-extrabold text-white">Shree Ganesh Kirana</h3>
+              <p className="text-xs text-[#c0c2a9] leading-relaxed">
+                Kirana owner publishes a task mandate with 40 distinct festival SKUs, total budget ceilings, delivery deadlines, and permitted tools.
+              </p>
+              <div className="pt-2 text-xs font-mono text-[#aafdc0]">
+                Agent: Diwali Buyer (Ed25519 Signed)
+              </div>
             </div>
-            <p className="text-xs text-slate-400">
-              Inspect persistent agent identities, capabilities, permitted tools, trust confidence ratings, and Ed25519 public key fingerprints.
+
+            <div className="bg-[#00311a] border border-[#aafdc0]/30 rounded-[22px] p-6 space-y-4">
+              <div className="font-mono text-xs font-bold uppercase tracking-wider text-[#aafdc0]">
+                02 • Parallel Sellers
+              </div>
+              <h3 className="text-xl font-extrabold text-white">3 Distinct Principals</h3>
+              <p className="text-xs text-[#c0c2a9] leading-relaxed">
+                Autonomous negotiations concurrently run against Margin Optimizer, Inventory Clearance, and Risk Optimizer sellers. Catches 4th Adversarial Seller injection.
+              </p>
+              <div className="pt-2 text-xs font-mono text-[#aafdc0]">
+                State machine round progression
+              </div>
+            </div>
+
+            <div className="bg-[#00311a] border border-[#aafdc0]/30 rounded-[22px] p-6 space-y-4">
+              <div className="font-mono text-xs font-bold uppercase tracking-wider text-[#aafdc0]">
+                03 • Cryptographic Lock
+              </div>
+              <h3 className="text-xl font-extrabold text-white">Human Single-Use Seal</h3>
+              <p className="text-xs text-[#c0c2a9] leading-relaxed">
+                Explainable recommendation and side-by-side term comparison. Exact final deal hash signed by human owner before simulated UPI settlement.
+              </p>
+              <div className="pt-2 text-xs font-mono text-[#aafdc0]">
+                One-time challenge hash binding
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tonal Pastel Surface Cards for 3 First-Class Surfaces */}
+      <section className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-6 pt-6">
+        <div className="space-y-1">
+          <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
+            [ UNIFIED BACKEND • THREE SURFACES ]
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#000000] tracking-tight">
+            First-Class Marketplace Interfaces
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1: Mint Sprout */}
+          <Link
+            href="/catalogue"
+            className="block p-8 rounded-[24px] bg-[#aafdc0] border-[1.5px] border-[#000000] hover:-translate-y-1 transition-all group"
+          >
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#003d21] mb-2">
+              SURFACE 01
+            </div>
+            <h3 className="text-2xl font-extrabold text-[#000000] mb-2 group-hover:underline decoration-2">
+              Marketplace Web App →
+            </h3>
+            <p className="text-xs text-[#202020] leading-relaxed">
+              Visual command center for seller discovery, the 40-SKU Diwali catalogue, live parallel negotiation monitoring, and Decision Replay audit trails.
             </p>
           </Link>
 
+          {/* Card 2: Lilac Wash */}
+          <Link
+            href="/agents"
+            className="block p-8 rounded-[24px] bg-[#d3beff] border-[1.5px] border-[#000000] hover:-translate-y-1 transition-all group"
+          >
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#2d0078] mb-2">
+              SURFACE 02
+            </div>
+            <h3 className="text-2xl font-extrabold text-[#000000] mb-2 group-hover:underline decoration-2">
+              Agent Passports →
+            </h3>
+            <p className="text-xs text-[#202020] leading-relaxed">
+              Persistent AI representative credentials, verified Ed25519 public key fingerprints (`sha256:...`), tool permissions, and trust confidence metrics.
+            </p>
+          </Link>
+
+          {/* Card 3: Sky Wash */}
           <Link
             href="/miniapp"
-            className="block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-slate-700 transition-all group"
+            className="block p-8 rounded-[24px] bg-[#b0f4ff] border-[1.5px] border-[#000000] hover:-translate-y-1 transition-all group"
           >
-            <div className="text-sky-400 font-bold text-sm mb-1 group-hover:text-sky-300">
-              Telegram Mini App →
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#041668] mb-2">
+              SURFACE 03
             </div>
-            <p className="text-xs text-slate-400">
-              Focused mobile-first workflows for reviewing task mandates, comparing supplier offers, and approving locked deals on Telegram.
+            <h3 className="text-2xl font-extrabold text-[#000000] mb-2 group-hover:underline decoration-2">
+              Telegram Mini App →
+            </h3>
+            <p className="text-xs text-[#202020] leading-relaxed">
+              Focused mobile-first workflows on Telegram for task mandate reviews, side-by-side counterparty offer evaluations, and one-tap cryptographic deal approval.
             </p>
           </Link>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

@@ -3,72 +3,76 @@ import Link from 'next/link';
 
 export const Navbar: React.FC = () => {
   return (
-    <header className="border-b border-slate-800 bg-slate-950/90 backdrop-blur sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="border-b-[1.5px] border-[#c0c2a9] bg-[#f8f9eb]/95 backdrop-blur-md sticky top-0 z-50 transition-all">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+        {/* Brand */}
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">
+          <Link href="/" className="flex items-center gap-2 group">
+            <span className="w-4 h-4 rounded-full bg-[#003d21] border border-[#000000] inline-block group-hover:scale-110 transition-transform" />
+            <span className="text-2xl font-extrabold tracking-tighter text-[#000000] uppercase font-['Space_Grotesk']">
               VANIK
             </span>
-            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-              B2B A2A
+            <span className="hidden sm:inline-block text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-[#edeee1] text-[#202020] border border-[#c0c2a9] tracking-wider">
+              A2A COMMERCE
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-6 text-[14px] font-semibold text-[#202020]">
             <Link
               href="/"
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition-colors"
+              className="hover:text-[#000000] transition-colors hover:underline underline-offset-4 decoration-2 decoration-[#003d21]"
             >
               Overview
             </Link>
             <Link
               href="/catalogue"
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition-colors"
+              className="hover:text-[#000000] transition-colors hover:underline underline-offset-4 decoration-2 decoration-[#003d21]"
             >
               Catalogue (40 SKU)
             </Link>
             <Link
               href="/negotiations"
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition-colors"
+              className="hover:text-[#000000] transition-colors hover:underline underline-offset-4 decoration-2 decoration-[#003d21]"
             >
               Negotiations
             </Link>
             <Link
               href="/principals"
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition-colors"
+              className="hover:text-[#000000] transition-colors hover:underline underline-offset-4 decoration-2 decoration-[#003d21]"
             >
               Principals
             </Link>
             <Link
               href="/agents"
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition-colors"
+              className="hover:text-[#000000] transition-colors hover:underline underline-offset-4 decoration-2 decoration-[#003d21]"
             >
               Agent Passports
             </Link>
             <Link
               href="/miniapp"
-              className="px-3 py-1.5 rounded-md text-sky-400 hover:text-sky-300 hover:bg-sky-950/40 border border-sky-900/60 transition-colors ml-2"
+              className="px-2.5 py-1 rounded-full bg-[#b0f4ff] text-[#000000] border border-[#000000] text-xs font-mono font-bold tracking-tight hover:brightness-95 transition-all"
             >
-              Telegram Mini App
+              Mini App
             </Link>
           </nav>
         </div>
 
+        {/* Action Controls */}
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 text-xs text-slate-400 font-mono bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
-            <span>API: 8000</span>
+          <div className="hidden lg:flex items-center gap-2 text-xs text-[#202020] font-mono bg-[#ffffff] px-3 py-1 rounded-full border-[1.5px] border-[#c0c2a9]">
+            <span className="w-2 h-2 rounded-full bg-[#003d21] inline-block animate-pulse" />
+            <span className="font-semibold text-[11px]">API: 8000</span>
           </div>
           <Link
             href="/login"
-            className="text-xs font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-md border border-slate-700 hover:border-slate-600 transition-colors"
+            className="text-xs font-semibold text-[#202020] hover:text-[#000000] px-4 py-2 rounded-[9px] border-[1.5px] border-[#c0c2a9] hover:border-[#000000] bg-transparent transition-all"
           >
             Sign In
           </Link>
           <Link
             href="/register"
-            className="text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded-md shadow-sm transition-colors"
+            className="text-xs font-semibold text-white bg-[#202020] hover:bg-[#000000] px-4 py-2 rounded-[13px] border border-[#000000] transition-all shadow-sm"
           >
             Register Business
           </Link>

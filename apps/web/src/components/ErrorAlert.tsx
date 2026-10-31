@@ -9,15 +9,15 @@ interface ErrorAlertProps {
 export const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, onDismiss }) => {
   if (typeof error === 'string') {
     return (
-      <div className="bg-rose-950/40 border border-rose-500/40 rounded-lg p-4 text-rose-200 text-sm flex items-start justify-between">
+      <div className="bg-[#ffc0e6] border-[1.5px] border-[#000000] rounded-[16px] p-4 text-[#3f0929] text-sm flex items-start justify-between">
         <div>
-          <span className="font-semibold block">Error</span>
-          <span>{error}</span>
+          <span className="font-mono text-xs font-bold uppercase tracking-wider block mb-1">Error</span>
+          <span className="font-medium">{error}</span>
         </div>
         {onDismiss && (
           <button
             onClick={onDismiss}
-            className="text-rose-400 hover:text-rose-200 text-xs px-2 py-1 rounded"
+            className="text-[#3f0929] hover:text-[#000000] font-mono font-bold text-xs px-2 py-1"
           >
             ✕
           </button>
@@ -27,18 +27,18 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, onDismiss }) => {
   }
 
   return (
-    <div className="bg-rose-950/40 border border-rose-500/40 rounded-lg p-4 text-rose-200 text-sm">
+    <div className="bg-[#ffc0e6] border-[1.5px] border-[#000000] rounded-[16px] p-5 text-[#3f0929]">
       <div className="flex items-start justify-between">
         <div>
-          <span className="font-semibold text-rose-300 uppercase tracking-wider text-xs block mb-1">
+          <span className="font-mono font-bold uppercase tracking-wider text-xs block mb-1 bg-[#ffffff] inline-block px-2 py-0.5 rounded border border-[#000000] text-[#000000]">
             {error.code}
           </span>
-          <p className="font-medium text-rose-100">{error.message}</p>
+          <p className="font-bold text-[#000000] text-sm mt-1">{error.message}</p>
         </div>
         {onDismiss && (
           <button
             onClick={onDismiss}
-            className="text-rose-400 hover:text-rose-200 text-xs px-2 py-1 rounded"
+            className="text-[#3f0929] hover:text-[#000000] font-mono font-bold text-xs px-2 py-1"
           >
             ✕
           </button>
@@ -46,18 +46,18 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, onDismiss }) => {
       </div>
 
       {error.details && error.details.length > 0 && (
-        <ul className="mt-3 pl-4 border-l border-rose-800/60 space-y-1 text-xs text-rose-300">
+        <ul className="mt-3 pl-3 border-l-2 border-[#000000] space-y-1 text-xs font-mono">
           {error.details.map((detail, idx) => (
             <li key={idx}>
-              {detail.field && <code className="bg-rose-900/60 px-1 py-0.5 rounded mr-1 font-mono">{detail.field}</code>}
-              <span>{detail.message}</span>
+              {detail.field && <code className="bg-[#ffffff] px-1.5 py-0.5 rounded mr-1.5 font-bold border border-[#000000]">{detail.field}</code>}
+              <span className="text-[#3f0929] font-medium">{detail.message}</span>
             </li>
           ))}
         </ul>
       )}
 
       {error.request_id && (
-        <div className="mt-3 pt-2 border-t border-rose-900/40 text-[11px] text-rose-400 font-mono">
+        <div className="mt-3 pt-2 border-t border-[#3f0929]/20 text-[11px] font-mono text-[#3f0929]">
           Request ID: {error.request_id}
         </div>
       )}

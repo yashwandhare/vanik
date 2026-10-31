@@ -40,46 +40,49 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-16 space-y-6">
+    <div className="max-w-md mx-auto px-4 py-20 space-y-8">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Sign In to VANIK</h1>
-        <p className="text-xs text-slate-400">
-          Access your business principal and managed AI agent representatives.
+        <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
+          [ HUMAN ACCESS PORTAL ]
+        </span>
+        <h1 className="text-3xl font-extrabold text-[#000000] tracking-tight">Sign In to VANIK</h1>
+        <p className="text-xs text-[#5a5a4f]">
+          Manage your business principal authority and autonomous agent roster.
         </p>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+      <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] p-8 shadow-sm space-y-6">
         {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
 
         {session ? (
           <div className="space-y-4">
-            <div className="p-4 bg-emerald-950/40 border border-emerald-500/40 rounded-xl space-y-2">
+            <div className="p-5 bg-[#aafdc0]/30 border-[1.5px] border-[#000000] rounded-[18px] space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs uppercase font-bold text-emerald-400">Authentication Active</span>
+                <span className="font-mono text-xs uppercase font-extrabold text-[#003d21]">Session Active</span>
                 {isMock && (
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
-                    FIXTURE SESSION
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ffffff] text-[#000000] border border-[#000000] font-bold">
+                    FIXTURE
                   </span>
                 )}
               </div>
-              <p className="text-xs text-emerald-200">Session successfully established.</p>
-              <div className="text-[11px] font-mono text-slate-400 pt-2 border-t border-emerald-900/40 space-y-1">
-                <div>User ID: <span className="text-slate-300">{session.user_id}</span></div>
-                <div>Session ID: <span className="text-slate-300">{session.session_id}</span></div>
-                <div>Expires: <span className="text-slate-300">{new Date(session.expires_at).toLocaleString()}</span></div>
+              <p className="text-xs text-[#003d21] font-semibold">Authentication token verified.</p>
+              <div className="text-[11px] font-mono text-[#202020] pt-2 border-t border-[#c0c2a9] space-y-1">
+                <div>User ID: <span className="font-bold">{session.user_id}</span></div>
+                <div>Session ID: <span className="font-bold">{session.session_id}</span></div>
+                <div>Expires: <span className="font-bold">{new Date(session.expires_at).toLocaleString()}</span></div>
               </div>
             </div>
 
             <div className="flex gap-3">
               <Link
                 href="/principals"
-                className="w-full text-center py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs transition-colors"
+                className="w-full text-center py-3 px-4 rounded-[13px] bg-[#202020] hover:bg-[#000000] text-white font-semibold text-xs border border-[#000000] transition-all shadow-sm"
               >
-                Go to Business Principal
+                Go to Business Principal →
               </Link>
               <button
                 onClick={() => setSession(null)}
-                className="py-2.5 px-4 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors"
+                className="py-3 px-4 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] border border-[#c0c2a9] text-xs font-semibold"
               >
                 Reset
               </button>
@@ -88,25 +91,25 @@ export default function LoginPage() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Email Address</label>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Email Address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
                 placeholder="owner@example.com"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Password</label>
+              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Password</label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
                 placeholder="••••••••"
               />
             </div>
@@ -115,7 +118,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white font-medium text-sm transition-colors shadow-md"
+                className="w-full py-3.5 px-4 rounded-[13px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-semibold text-xs border border-[#000000] transition-all shadow-sm"
               >
                 {loading ? 'Authenticating...' : 'Sign In'}
               </button>
@@ -124,10 +127,10 @@ export default function LoginPage() {
         )}
       </div>
 
-      <div className="text-center text-xs text-slate-500">
-        Don&apos;t have a business registered?{' '}
-        <Link href="/register" className="text-indigo-400 hover:underline">
-          Register new principal
+      <div className="text-center text-xs text-[#5a5a4f]">
+        Don&apos;t have a business principal yet?{' '}
+        <Link href="/register" className="text-[#000000] font-bold hover:underline">
+          Register new enterprise
         </Link>
       </div>
     </div>

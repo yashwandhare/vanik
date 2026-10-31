@@ -14,16 +14,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-slate-950 text-slate-100 antialiased min-h-screen flex flex-col">
+    <html lang="en">
+      <body className="bg-[#f8f9eb] text-[#000000] antialiased min-h-screen flex flex-col font-['Space_Grotesk',sans-serif]">
         <SimulatedBanner />
         <Navbar />
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-slate-900 bg-slate-950 py-8 text-center text-xs text-slate-500">
-          <div className="max-w-7xl mx-auto px-4 space-y-2">
-            <p>VANIK — Autonomous commerce. Verifiable trust.</p>
-            <p className="text-slate-600">
-              Prototype environment for AI-02 hackathon. All GSTIN, PAN, and payment settlement flows are synthetic simulations.
+        <footer className="border-t-[1.5px] border-[#c0c2a9] bg-[#edeee1] py-10 text-center text-xs text-[#5a5a4f]">
+          <div className="max-w-[1200px] mx-auto px-4 space-y-2">
+            <p className="font-extrabold uppercase tracking-widest text-[#000000] text-sm">
+              VANIK • Autonomous Commerce. Verifiable Trust.
+            </p>
+            <p className="text-[#7c7d76] font-mono text-[11px] max-w-xl mx-auto">
+              Prototype environment for AI-02 hackathon track. All GSTIN, PAN, official credentials, and UPI payment settlements are synthetic simulations.
             </p>
           </div>
         </footer>

@@ -10,14 +10,16 @@ export const SimulatedBanner: React.FC<SimulatedBannerProps> = ({
   subtext = 'Official verification, payment settlement, and identities are synthetic simulations for demonstration. No real government documents or money are used.',
 }) => {
   return (
-    <div className="w-full bg-amber-500/10 border-b border-amber-500/30 px-4 py-2 text-xs text-amber-300 flex flex-wrap items-center justify-between gap-2">
-      <div className="flex items-center gap-2 font-medium">
-        <span className="inline-block px-1.5 py-0.5 bg-amber-500 text-slate-950 font-bold rounded tracking-wide text-[10px]">
+    <div className="w-full bg-[#202020] text-[#f8f9eb] border-b border-[#000000] px-4 py-2.5 text-xs flex flex-wrap items-center justify-between gap-2.5 select-none">
+      <div className="flex items-center gap-2.5 font-medium tracking-wide">
+        <span className="inline-block px-2.5 py-0.5 bg-[#aafdc0] text-[#202020] font-mono text-[10px] font-bold rounded-full uppercase tracking-wider">
           DEMO MODE
         </span>
-        <span>{label}</span>
+        <span className="font-mono text-[11px] font-semibold tracking-wider text-[#f8f9eb]">
+          {label}
+        </span>
       </div>
-      <p className="text-slate-400 text-[11px]">{subtext}</p>
+      <p className="text-[#c0c2a9] text-[11px] font-mono tracking-tight">{subtext}</p>
     </div>
   );
 };
