@@ -14,6 +14,15 @@ from app.contracts.identity import (
     SessionResponse,
     UserResponse,
 )
+from app.contracts.marketplace import (
+    InventoryLineResponse,
+    InventoryResponse,
+    InventoryUpdateRequest,
+    ProductListResponse,
+    ProductResponse,
+    SellerListResponse,
+    SellerSummary,
+)
 from app.contracts.pagination import AgentListResponse
 from app.contracts.passport import AgentPassportResponse
 from app.contracts.telegram import (
@@ -48,6 +57,13 @@ MODELS: dict[str, type[BaseModel]] = {
         TelegramLinkCompleteRequest,
         TelegramLinkResponse,
         TelegramLinkStartResponse,
+        ProductResponse,
+        ProductListResponse,
+        InventoryResponse,
+        InventoryLineResponse,
+        InventoryUpdateRequest,
+        SellerSummary,
+        SellerListResponse,
     )
 }
 SCHEMA_DIRECTORY = Path(__file__).resolve().parents[3] / "packages/shared-schemas/v1"

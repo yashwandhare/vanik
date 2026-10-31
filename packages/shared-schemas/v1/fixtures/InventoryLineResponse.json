@@ -1,0 +1,16 @@
+{
+  "product": {
+    "id": "c3cf58e0-6cbc-56d4-9518-1165be5c33bc",
+    "sku": "CNF-BISC-800",
+    "name": "Assorted Biscuits 800 g",
+    "category": "confectionery",
+    "unit": "box",
+    "benchmark_price": "190.00",
+    "attributes": {
+      "dataset": "diwali_kirana_v1",
+      "synthetic": true
+    },
+    "active": true
+  },
+  "available_qty": "63.000"
+}

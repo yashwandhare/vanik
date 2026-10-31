@@ -29,6 +29,9 @@ jobs:
           --health-retries 10
     env:
       RUN_POSTGRES_INTEGRATION: "1"
+      AGENT_KEY_ENCRYPTION_SECRET: >-
+        synthetic-ci-agent-encryption-secret-for-tests
+      DEMO_ACCOUNT_PASSWORD: synthetic-ci-account-password-for-tests
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -42,6 +45,7 @@ jobs:
       - run: make lint
       - run: make typecheck
       - run: make migrate
+      - run: make seed
       - run: uv --directory apps/api run --locked alembic check
       - run: make test
       - name: Verify migration downgrade and re-upgrade

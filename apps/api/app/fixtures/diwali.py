@@ -1,0 +1,48 @@
+from decimal import Decimal
+
+# Exactly 40 distinct synthetic Diwali restock SKUs across the required categories.
+DIWALI_PRODUCTS: tuple[tuple[str, str, str, str, Decimal], ...] = (
+    ("STP-RICE-BAS-5K", "Basmati Rice 5 kg", "staples", "bag", Decimal("620")),
+    ("STP-RICE-SON-5K", "Sona Masoori Rice 5 kg", "staples", "bag", Decimal("390")),
+    ("STP-ATTA-5K", "Whole Wheat Atta 5 kg", "staples", "bag", Decimal("285")),
+    ("STP-MAIDA-1K", "Maida 1 kg", "staples", "pack", Decimal("58")),
+    ("STP-BESAN-1K", "Besan 1 kg", "staples", "pack", Decimal("112")),
+    ("STP-TOOR-1K", "Toor Dal 1 kg", "staples", "pack", Decimal("176")),
+    ("STP-MOONG-1K", "Moong Dal 1 kg", "staples", "pack", Decimal("158")),
+    ("STP-CHANA-1K", "Chana Dal 1 kg", "staples", "pack", Decimal("105")),
+    ("STP-MASOOR-1K", "Masoor Dal 1 kg", "staples", "pack", Decimal("126")),
+    ("STP-URAD-1K", "Urad Dal 1 kg", "staples", "pack", Decimal("168")),
+    ("STP-SUGAR-1K", "Sugar 1 kg", "staples", "pack", Decimal("48")),
+    ("STP-SALT-1K", "Iodised Salt 1 kg", "staples", "pack", Decimal("24")),
+    ("OIL-MUST-1L", "Mustard Oil 1 L", "edible_oils", "bottle", Decimal("168")),
+    ("OIL-SUN-1L", "Sunflower Oil 1 L", "edible_oils", "pouch", Decimal("132")),
+    ("OIL-SOY-1L", "Soybean Oil 1 L", "edible_oils", "pouch", Decimal("122")),
+    ("OIL-GNUT-1L", "Groundnut Oil 1 L", "edible_oils", "bottle", Decimal("188")),
+    ("OIL-RBRAN-1L", "Rice Bran Oil 1 L", "edible_oils", "pouch", Decimal("145")),
+    ("OIL-GHEE-1L", "Cow Ghee 1 L", "edible_oils", "jar", Decimal("625")),
+    ("DRY-ALMOND-500", "Almonds 500 g", "dry_fruits", "pack", Decimal("410")),
+    ("DRY-CASHEW-500", "Cashews 500 g", "dry_fruits", "pack", Decimal("455")),
+    ("DRY-RAISIN-500", "Raisins 500 g", "dry_fruits", "pack", Decimal("210")),
+    ("DRY-PISTA-250", "Pistachios 250 g", "dry_fruits", "pack", Decimal("360")),
+    ("DRY-DATES-500", "Dates 500 g", "dry_fruits", "pack", Decimal("185")),
+    ("DRY-MAKHANA-250", "Makhana 250 g", "dry_fruits", "pack", Decimal("195")),
+    ("CNF-GJ-MIX-200", "Gulab Jamun Mix 200 g", "confectionery", "box", Decimal("92")),
+    ("CNF-RASG-1K", "Rasgulla Tin 1 kg", "confectionery", "tin", Decimal("235")),
+    ("CNF-SOAN-500", "Soan Papdi 500 g", "confectionery", "box", Decimal("165")),
+    ("CNF-KAJU-500", "Kaju Katli 500 g", "confectionery", "box", Decimal("520")),
+    ("CNF-CHOCO-300", "Chocolate Gift Box 300 g", "confectionery", "box", Decimal("280")),
+    ("CNF-BISC-800", "Assorted Biscuits 800 g", "confectionery", "box", Decimal("190")),
+    ("CNF-NAMK-500", "Festive Namkeen Mix 500 g", "confectionery", "pack", Decimal("140")),
+    ("CNF-CANDY-1K", "Assorted Candy 1 kg", "confectionery", "jar", Decimal("225")),
+    ("SPC-TURM-200", "Turmeric Powder 200 g", "spices", "pack", Decimal("54")),
+    ("SPC-CHILLI-200", "Red Chilli Powder 200 g", "spices", "pack", Decimal("72")),
+    ("SPC-CORI-200", "Coriander Powder 200 g", "spices", "pack", Decimal("48")),
+    ("SPC-CUMIN-200", "Cumin Seeds 200 g", "spices", "pack", Decimal("92")),
+    ("SPC-GARAM-100", "Garam Masala 100 g", "spices", "pack", Decimal("68")),
+    ("SPC-CARD-50", "Green Cardamom 50 g", "spices", "pack", Decimal("185")),
+    ("SPC-CLOVE-50", "Cloves 50 g", "spices", "pack", Decimal("78")),
+    ("SPC-CINN-50", "Cinnamon 50 g", "spices", "pack", Decimal("58")),
+)
+
+if len(DIWALI_PRODUCTS) != 40 or len({item[0] for item in DIWALI_PRODUCTS}) != 40:
+    raise RuntimeError("The Diwali catalogue must contain exactly 40 distinct SKUs")

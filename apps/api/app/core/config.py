@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     cors_allowed_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
     mock_upi_enabled: bool = True
     demo_verification_enabled: bool = True
+    demo_account_password: SecretStr = SecretStr("")
 
     @model_validator(mode="after")
     def validate_boundaries(self) -> Self:

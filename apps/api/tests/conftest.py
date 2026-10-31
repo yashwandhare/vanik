@@ -55,6 +55,7 @@ def application(database_engine: Engine) -> FastAPI:
     application = create_app(
         Settings(
             app_env="test",
+            demo_account_password=SecretStr("synthetic-demo-account-password-for-tests"),
             agent_key_encryption_secret=SecretStr(
                 "synthetic-agent-key-encryption-test-only-secret"
             ),
