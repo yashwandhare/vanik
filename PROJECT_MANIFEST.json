@@ -1,0 +1,32 @@
+{
+  "project": "VANIK",
+  "version": "2.1-organized-starter",
+  "status": "documentation-and-infrastructure-scaffold",
+  "implemented_application": false,
+  "implemented_infrastructure": [
+    "postgresql-compose-service",
+    "redis-compose-service"
+  ],
+  "documents": [
+    "docs/README.md",
+    "docs/product/PRODUCT_BRIEF.md",
+    "docs/product/PRD.md",
+    "docs/engineering/ARCHITECTURE.md",
+    "docs/engineering/DATA_MODEL.md",
+    "docs/engineering/PROTOCOL_AND_API.md",
+    "docs/engineering/TRUST_AND_SECURITY.md",
+    "docs/decisions/DECISIONS.md",
+    "docs/delivery/IMPLEMENTATION_PLAN.md",
+    "docs/delivery/TEAM_EXECUTION_PLAN.md",
+    "docs/delivery/PROJECT_TODO.md",
+    "docs/delivery/DEMO_RUNBOOK.md"
+  ],
+  "teammate_b_documents": [
+    "teammateB/README.md",
+    "teammateB/ONBOARDING.md",
+    "teammateB/GIT_PROTOCOL.md",
+    "teammateB/TODO.md",
+    "teammateB/WORKING_INSTRUCTIONS.md"
+  ],
+  "important": "Application commands and features are specified but not implemented."
+}

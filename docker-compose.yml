@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: vanik-postgres
+    environment:
+      POSTGRES_DB: vanik
+      POSTGRES_USER: vanik
+      POSTGRES_PASSWORD: vanik
+    ports:
+      - "5432:5432"
+    volumes:
+      - vanik_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vanik -d vanik"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: vanik-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - vanik_redisdata:/data
+
+volumes:
+  vanik_pgdata:
+  vanik_redisdata:
