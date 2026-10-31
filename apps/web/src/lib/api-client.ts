@@ -238,7 +238,7 @@ export class ApiClient {
     });
   }
 
-  // Agents & Passports (Unimplemented in backend until Phase 2 - labeled mock fallback)
+  // Agents & Passports (Implemented in backend with Ed25519 persistence - real requests only)
   public async createAgent(
     principalId: string,
     payload: AgentCreateRequest
@@ -248,30 +248,49 @@ export class ApiClient {
       {
         method: 'POST',
         body: JSON.stringify(payload),
-      },
-      () => ({
-        ...FIXTURE_AGENT_PASSPORT,
-        principal_id: principalId,
-        name: payload.name,
-        role: payload.role,
-        description: payload.description || '',
-      })
+      }
     );
   }
 
   public async listAgents(principalId: string): Promise<{ data: AgentListResponse; isMock: boolean }> {
     return this.request<AgentListResponse>(
       `/v1/principals/${encodeURIComponent(principalId)}/agents`,
-      { method: 'GET' },
-      () => FIXTURE_AGENT_LIST
+      { method: 'GET' }
     );
   }
 
   public async getAgentPassport(agentId: string): Promise<{ data: AgentPassportResponse; isMock: boolean }> {
     return this.request<AgentPassportResponse>(
       `/v1/agents/${encodeURIComponent(agentId)}/passport`,
-      { method: 'GET' },
-      () => FIXTURE_AGENT_PASSPORT
+      { method: 'GET' }
+    );
+  }
+
+  public async pauseAgent(agentId: string): Promise<{ data: AgentPassportResponse; isMock: boolean }> {
+    return this.request<AgentPassportResponse>(
+      `/v1/agents/${encodeURIComponent(agentId)}/pause`,
+      { method: 'POST' }
+    );
+  }
+
+  public async resumeAgent(agentId: string): Promise<{ data: AgentPassportResponse; isMock: boolean }> {
+    return this.request<AgentPassportResponse>(
+      `/v1/agents/${encodeURIComponent(agentId)}/resume`,
+      { method: 'POST' }
+    );
+  }
+
+  public async revokeAgent(agentId: string): Promise<{ data: AgentPassportResponse; isMock: boolean }> {
+    return this.request<AgentPassportResponse>(
+      `/v1/agents/${encodeURIComponent(agentId)}/revoke`,
+      { method: 'POST' }
+    );
+  }
+
+  public async rotateAgentKey(agentId: string): Promise<{ data: AgentPassportResponse; isMock: boolean }> {
+    return this.request<AgentPassportResponse>(
+      `/v1/agents/${encodeURIComponent(agentId)}/keys/rotate`,
+      { method: 'POST' }
     );
   }
 }

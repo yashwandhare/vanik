@@ -4,10 +4,23 @@ import type { AgentPassportResponse } from '../lib/types';
 interface PassportCardProps {
   passport: AgentPassportResponse;
   isMock?: boolean;
+  onPause?: (agentId: string) => Promise<void> | void;
+  onResume?: (agentId: string) => Promise<void> | void;
+  onRevoke?: (agentId: string) => Promise<void> | void;
+  onRotateKey?: (agentId: string) => Promise<void> | void;
 }
 
-export const PassportCard: React.FC<PassportCardProps> = ({ passport, isMock = false }) => {
+export const PassportCard: React.FC<PassportCardProps> = ({
+  passport,
+  isMock = false,
+  onPause,
+  onResume,
+  onRevoke,
+  onRotateKey,
+}) => {
   const isBuyer = passport.role === 'buyer';
+  const isRevoked = passport.agent_status === 'revoked';
+  const isPaused = passport.agent_status === 'paused';
 
   return (
     <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[22px] p-6 relative transition-all hover:-translate-y-0.5">
@@ -23,6 +36,11 @@ export const PassportCard: React.FC<PassportCardProps> = ({ passport, isMock = f
             )}
           </div>
           <p className="text-xs text-[#5a5a4f] mt-1">{passport.description || 'Autonomous commercial representative'}</p>
+          {passport.strategy_profile && (
+            <span className="inline-block mt-1 font-mono text-[10px] text-[#5a5a4f] uppercase tracking-wider">
+              Strategy: <strong className="text-[#000000] font-bold">{passport.strategy_profile}</strong>
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-1.5 font-mono text-[11px]">
@@ -120,6 +138,53 @@ export const PassportCard: React.FC<PassportCardProps> = ({ passport, isMock = f
           </div>
         </div>
       </div>
+
+      {/* Lifecycle Actions */}
+      {(onPause || onResume || onRevoke || onRotateKey) && !isRevoked && (
+        <div className="pt-3 mt-3 border-t border-[#c0c2a9] flex flex-wrap items-center gap-2">
+          {isPaused ? (
+            onResume && (
+              <button
+                type="button"
+                onClick={() => onResume(passport.agent_id)}
+                className="px-3 py-1 rounded-[8px] bg-[#aafdc0] hover:bg-[#8aecab] text-[#003d21] font-mono text-[11px] font-bold border border-[#000000] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+              >
+                Resume Agent
+              </button>
+            )
+          ) : (
+            onPause && (
+              <button
+                type="button"
+                onClick={() => onPause(passport.agent_id)}
+                className="px-3 py-1 rounded-[8px] bg-[#f8f9eb] hover:bg-[#edeee1] text-[#202020] font-mono text-[11px] font-bold border border-[#c0c2a9] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+              >
+                Pause
+              </button>
+            )
+          )}
+
+          {onRotateKey && (
+            <button
+              type="button"
+              onClick={() => onRotateKey(passport.agent_id)}
+              className="px-3 py-1 rounded-[8px] bg-[#b0f4ff] hover:brightness-95 text-[#041668] font-mono text-[11px] font-bold border border-[#000000] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+            >
+              Rotate Key
+            </button>
+          )}
+
+          {onRevoke && (
+            <button
+              type="button"
+              onClick={() => onRevoke(passport.agent_id)}
+              className="px-3 py-1 rounded-[8px] bg-[#ffffff] hover:bg-[#ffc0e6] text-[#3f0929] font-mono text-[11px] font-bold border border-[#c0c2a9] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ml-auto"
+            >
+              Revoke
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

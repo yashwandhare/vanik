@@ -123,17 +123,19 @@ describe('ApiClient', () => {
     }
   });
 
-  it('only allows mock fallback on explicitly unimplemented demo routes', async () => {
+  it('never fakes success on implemented agent routes during network failure', async () => {
     // Network failure simulation
     global.fetch = vi.fn().mockRejectedValue(new Error('Connection refused'));
 
     const client = new ApiClient({ baseUrl: 'http://localhost:8000', useMockFallback: true });
 
-    // Unimplemented Phase 2 Agent passport uses mock when fallback enabled
-    const passport = await client.getAgentPassport('30000000-0000-4000-8000-000000000001');
-    expect(passport.data.agent_id).toBe(FIXTURE_AGENT_PASSPORT.agent_id);
-    expect(passport.data.signing_key.algorithm).toBe('Ed25519');
-    expect(passport.isMock).toBe(true);
+    // Agent endpoints are now fully implemented and must throw on failure
+    await expect(client.getAgentPassport('30000000-0000-4000-8000-000000000001')).rejects.toThrow(
+      'Connection refused'
+    );
+    await expect(client.listAgents('20000000-0000-4000-8000-000000000001')).rejects.toThrow(
+      'Connection refused'
+    );
   });
 
   it('propagates CSRF token on mutating requests', async () => {

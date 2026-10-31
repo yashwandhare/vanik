@@ -18,6 +18,7 @@ function AgentsContent() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [name, setName] = useState('Diwali Staples Buyer');
   const [role, setRole] = useState<BusinessRole>('buyer');
+  const [strategyProfile, setStrategyProfile] = useState('default');
   const [description, setDescription] = useState('Procurement agent for 40-SKU Diwali restock basket');
   const [creating, setCreating] = useState(false);
 
@@ -99,6 +100,7 @@ function AgentsContent() {
         description,
         capabilities: role === 'buyer' ? ['request_quote', 'evaluate_offers'] : ['receive_rfq', 'generate_offer'],
         allowed_tools: ['marketplace_search', 'benchmark_compare'],
+        strategy_profile: role === 'buyer' ? 'default' : strategyProfile,
       });
 
       setAgents([res.data, ...agents]);
@@ -116,6 +118,82 @@ function AgentsContent() {
       }
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handlePauseAgent = async (agentId: string) => {
+    setError(null);
+    try {
+      const res = await apiClient.pauseAgent(agentId);
+      setAgents((prev) => prev.map((a) => (a.agent_id === agentId ? res.data : a)));
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'client-error',
+        });
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to pause agent');
+      }
+    }
+  };
+
+  const handleResumeAgent = async (agentId: string) => {
+    setError(null);
+    try {
+      const res = await apiClient.resumeAgent(agentId);
+      setAgents((prev) => prev.map((a) => (a.agent_id === agentId ? res.data : a)));
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'client-error',
+        });
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to resume agent');
+      }
+    }
+  };
+
+  const handleRevokeAgent = async (agentId: string) => {
+    setError(null);
+    try {
+      const res = await apiClient.revokeAgent(agentId);
+      setAgents((prev) => prev.map((a) => (a.agent_id === agentId ? res.data : a)));
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'client-error',
+        });
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to revoke agent');
+      }
+    }
+  };
+
+  const handleRotateKey = async (agentId: string) => {
+    setError(null);
+    try {
+      const res = await apiClient.rotateAgentKey(agentId);
+      setAgents((prev) => prev.map((a) => (a.agent_id === agentId ? res.data : a)));
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'client-error',
+        });
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to rotate signing key');
+      }
     }
   };
 
@@ -176,7 +254,15 @@ function AgentsContent() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {agents.map((agent) => (
-            <PassportCard key={agent.agent_id} passport={agent} isMock={isMock} />
+            <PassportCard
+              key={agent.agent_id}
+              passport={agent}
+              isMock={isMock}
+              onPause={handlePauseAgent}
+              onResume={handleResumeAgent}
+              onRevoke={handleRevokeAgent}
+              onRotateKey={handleRotateKey}
+            />
           ))}
         </div>
       )}
@@ -240,7 +326,10 @@ function AgentsContent() {
                     type="button"
                     role="radio"
                     aria-checked={role === 'buyer'}
-                    onClick={() => setRole('buyer')}
+                    onClick={() => {
+                      setRole('buyer');
+                      setStrategyProfile('default');
+                    }}
                     className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
                       role === 'buyer'
                         ? 'bg-[#aafdc0] text-[#003d21] border-[#000000]'
@@ -264,6 +353,29 @@ function AgentsContent() {
                   </button>
                 </div>
               </div>
+
+              {role === 'seller' && (
+                <div>
+                  <label
+                    htmlFor="agent-strategy-select"
+                    className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                  >
+                    Strategy Profile
+                  </label>
+                  <select
+                    id="agent-strategy-select"
+                    value={strategyProfile}
+                    onChange={(e) => setStrategyProfile(e.target.value)}
+                    className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
+                  >
+                    <option value="default">Default Balanced Seller</option>
+                    <option value="margin">Margin Optimizer (Seller A)</option>
+                    <option value="clearance">Inventory Clearance (Seller B)</option>
+                    <option value="payment_risk">Payment-Risk Optimizer (Seller C)</option>
+                    <option value="adversarial">Adversarial Red-Team Injection (Seller D)</option>
+                  </select>
+                </div>
+              )}
 
               <div>
                 <label
