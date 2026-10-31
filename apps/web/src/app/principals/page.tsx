@@ -33,13 +33,18 @@ function PrincipalsContent() {
   const resolvedPrincipalId =
     searchParams.get('principalId') ||
     searchParams.get('id') ||
-    (typeof window !== 'undefined' ? sessionStorage.getItem('vanik_principal_id') : null) ||
-    '20000000-0000-4000-8000-000000000001';
+    (typeof window !== 'undefined' ? sessionStorage.getItem('vanik_principal_id') : null);
 
   useEffect(() => {
     async function initPrincipal() {
       setLoading(true);
       setError(null);
+      if (!resolvedPrincipalId) {
+        setPrincipal(null);
+        setLoading(false);
+        setError('No business principal selected. Register a business or open its profile link.');
+        return;
+      }
 
       // Restore session/CSRF state if active
       try {
