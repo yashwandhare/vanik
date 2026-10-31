@@ -50,9 +50,9 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Implement authentication, session expiry and logout.
 - [x] Implement explicitly simulated verification states.
 - [x] Implement short-lived, single-use Telegram linking tokens.
-- [ ] Implement agent creation, lifecycle and ownership checks.
-- [ ] Generate and protect Ed25519 signing identities.
-- [ ] Implement Agent Passport responses and principal authority ceilings.
+- [x] Implement agent creation, lifecycle and ownership checks.
+- [x] Generate and protect Ed25519 signing identities.
+- [x] Implement Agent Passport responses and principal authority ceilings.
 - [x] Add unit tests for authentication, CSRF and principal authority boundaries.
 - [x] Verify the identity migration and integration flow against PostgreSQL in CI.
 

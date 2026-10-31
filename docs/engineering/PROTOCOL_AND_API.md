@@ -2,9 +2,9 @@
 
 ## Contract status
 
-Health, registration, session, logout, principal creation, membership-authorized principal reads, synthetic identifiers, demo verification and Telegram linking are implemented. Their version 1 schemas are published in [`packages/shared-schemas/v1`](../../packages/shared-schemas/v1), with route mappings in [API conventions](API_CONVENTIONS.md).
+Health, registration, principals, verification, Telegram linking and persistent agent identity/lifecycle are implemented. Their schemas are in [`packages/shared-schemas/v1`](../../packages/shared-schemas/v1); see [API conventions](API_CONVENTIONS.md) and the [Agent Passport handoff](../../teammateB/AGENT_PASSPORT_HANDOFF.md).
 
-Agent, verification, Telegram, negotiation and commerce examples remain proposals, not complete implemented wire contracts. All resource identifiers use UUID strings. Money uses decimal strings in JSON.
+The negotiation and commerce examples below remain proposals. Identity signing primitives do not yet enforce task mandates, message expiry or nonce/replay checks. All resource identifiers use UUID strings; money uses decimal strings in JSON.
 
 ## 1. Message envelope
 

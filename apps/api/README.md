@@ -16,12 +16,16 @@ Main owns this application, database revisions and API contracts.
 - Synthetic identifier storage using keyed digests and display-safe masks.
 - Explicitly labeled demo verification for owner/admin members.
 - Single-use Telegram link codes, Bot-authenticated completion, relinking and unlinking.
+- Persistent buyer/seller agents, public Passports and member-only roster lists.
+- Owner/admin lifecycle management and key rotation.
+- Encrypted Ed25519 keys and principal permission ceilings.
+- Append-only agent lifecycle audit rows.
 - Standard error responses and server-generated request IDs.
 - Alembic identity schema migration.
 - Versioned identity contracts, JSON schemas and synthetic fixtures.
 - Backend, contract and PostgreSQL integration tests.
 
-Telegram commands/notifications, agents, negotiation and settlement endpoints are not implemented. A published schema is not a working endpoint.
+Telegram commands/notifications, task mandates, negotiation envelopes and settlement endpoints are not implemented. Identity signing primitives do not authorize a commercial action.
 
 ## Setup
 
@@ -38,6 +42,8 @@ make typecheck
 The committed `apps/api/uv.lock` pins all resolved backend dependencies. The local API environment lives in `apps/api/.venv` and is ignored by Git.
 
 Copy `.env.example` to the root `.env` if you need to override local defaults. Never commit `.env`.
+
+Agent creation requires a high-entropy `AGENT_KEY_ENCRYPTION_SECRET` of at least 32 characters. Generate one with `python -c 'import secrets; print(secrets.token_urlsafe(32))'`. The placeholder is rejected for key creation; never use this secret in frontend configuration.
 
 ## Run locally
 

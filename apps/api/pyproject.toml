@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vanik-api"
-version = "0.4.0"
+version = "0.5.0"
 description = "VANIK modular-monolith API"
 requires-python = ">=3.12,<3.15"
 dependencies = [
@@ -17,6 +17,7 @@ dependencies = [
   "psycopg[binary]==3.3.6",
   "uvicorn==0.54.0",
   "argon2-cffi==25.1.0",
+  "cryptography==50.0.2",
 ]
 
 [dependency-groups]

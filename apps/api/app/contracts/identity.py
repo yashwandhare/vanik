@@ -7,6 +7,7 @@ from pydantic import AwareDatetime, EmailStr, Field, SecretStr, field_validator
 from app.contracts.common import Contract
 
 DisplayName = Annotated[str, Field(min_length=1, max_length=120)]
+PermissionName = Annotated[str, Field(min_length=1, max_length=64)]
 
 
 class BusinessRole(StrEnum):
@@ -89,6 +90,17 @@ class AgentCreateRequest(Contract):
     name: DisplayName
     role: BusinessRole
     description: str = Field(default="", max_length=1000)
-    capabilities: list[str] = Field(default_factory=list, max_length=30)
-    allowed_tools: list[str] = Field(default_factory=list, max_length=30)
+    capabilities: list[PermissionName] = Field(
+        default_factory=list, max_length=30, json_schema_extra={"uniqueItems": True}
+    )
+    allowed_tools: list[PermissionName] = Field(
+        default_factory=list, max_length=30, json_schema_extra={"uniqueItems": True}
+    )
     strategy_profile: str = Field(default="default", min_length=1, max_length=80)
+
+    @field_validator("capabilities", "allowed_tools")
+    @classmethod
+    def unique_permission_names(cls, values: list[str]) -> list[str]:
+        if len(set(values)) != len(values):
+            raise ValueError("Permission names must be unique")
+        return values

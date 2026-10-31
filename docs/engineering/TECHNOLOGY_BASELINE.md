@@ -46,7 +46,7 @@ Use npm, not a second package manager. Commit `package-lock.json` when B creates
 
 ## Selected Phase 1 libraries
 
-- `cryptography==50.0.2` for Ed25519 and private-key encryption. It will be added with agent identity.
+- `cryptography==50.0.2` is installed for Ed25519 and AES-GCM private-key encryption.
 - `argon2-cffi==25.1.0` for password hashing. It is installed and used by authentication.
 
 ## LLM boundary
