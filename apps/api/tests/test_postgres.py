@@ -1,12 +1,14 @@
 import os
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest  # type: ignore[import-not-found, unused-ignore]
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
-from sqlalchemy import inspect, text
+from sqlalchemy import inspect, text, update
+from sqlalchemy.exc import DBAPIError
 
 from app.core.config import Settings
+from app.db.models import AuditEvent
 from app.db.session import create_database_engine
 from app.main import create_app
 
@@ -31,6 +33,9 @@ def test_real_postgres_connection_and_schema() -> None:
             "business_identifiers",
             "telegram_link_tokens",
             "telegram_links",
+            "agents",
+            "agent_keys",
+            "events",
         } <= tables
     finally:
         engine.dispose()
@@ -43,6 +48,7 @@ def test_identity_flow_with_real_postgres() -> None:
         app_env="test",
         telegram_bot_enabled=True,
         telegram_webhook_secret=SecretStr("synthetic-ci-telegram-secret-12345"),
+        agent_key_encryption_secret=SecretStr("synthetic-ci-agent-encryption-secret-for-tests"),
     )
     with TestClient(create_app(settings)) as client:
         registered = client.post(
@@ -84,6 +90,36 @@ def test_identity_flow_with_real_postgres() -> None:
         assert verified.json()["label"] == "SIMULATED / DEMO"
         principal = client.get(f"/v1/principals/{principal_id}")
         assert principal.json()["verification_status"] == "demo_verified"
+        agent = client.post(
+            f"/v1/principals/{principal_id}/agents",
+            headers=headers,
+            json={
+                "name": "CI buyer",
+                "role": "buyer",
+                "capabilities": ["request_quote"],
+                "allowed_tools": ["marketplace_search"],
+            },
+        )
+        assert agent.status_code == 201
+        agent_id = agent.json()["agent_id"]
+        assert "private" not in agent.text
+        assert client.get(f"/v1/agents/{agent_id}/passport").status_code == 200
+        rotated = client.post(f"/v1/agents/{agent_id}/keys/rotate", headers=headers)
+        assert rotated.status_code == 200
+        assert rotated.json()["signing_key"]["key_version"] == 2
+        assert client.post(f"/v1/agents/{agent_id}/revoke", headers=headers).status_code == 200
+        engine = create_database_engine(settings)
+        try:
+            with engine.connect() as connection:
+                with pytest.raises(DBAPIError):
+                    with connection.begin_nested():
+                        connection.execute(
+                            update(AuditEvent)
+                            .where(AuditEvent.entity_id == UUID(agent_id))
+                            .values(event_type="tampered")
+                        )
+        finally:
+            engine.dispose()
         link_start = client.post(
             "/v1/telegram/link/start", headers={"Origin": origin, "X-CSRF-Token": csrf}
         )

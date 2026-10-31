@@ -4,7 +4,7 @@ This directory contains the product, engineering and delivery sources of truth f
 
 ## Current repository status
 
-The repository contains working registration, opaque sessions, logout, principal creation, membership-authorized principal reads, identity migrations and backend tests. PostgreSQL and Redis have Compose configuration. Verification, agents, commerce workflows, the web application, Telegram clients and demo data are not implemented yet.
+The backend implements registration, sessions, principals, synthetic verification, Telegram linking, persistent Agent Passports, encrypted Ed25519 keys and lifecycle audit events. Marketplace, task mandates, negotiation and settlement remain pending. B's web and Bot work is reviewed separately before integration.
 
 Do not assume that a feature exists because a document specifies it.
 

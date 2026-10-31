@@ -45,10 +45,13 @@ These routes are now implemented:
 
 The web start/unlink calls require the session cookie, Origin and CSRF token. Only the Bot worker can complete a link; it sends `X-Telegram-Bot-Secret`. Never use a Telegram username as ownership evidence. Link codes expire after ten minutes, are single-use and are stored only as digests.
 
+## Agent persistence
+
+See [Agent Passport handoff](AGENT_PASSPORT_HANDOFF.md) for implemented creation, roster, public Passport, lifecycle and key-rotation routes. Remove fallback fixtures for these implemented operations after this backend reaches `main`.
+
 ## Still mock-only
 
 - Telegram commands and notifications.
-- Agent creation and Agent Passport persistence.
 - Marketplace, negotiation, approval and payment.
 
 Do not connect those screens to fabricated routes. Report any contract mismatch to Main before changing shared schemas.
