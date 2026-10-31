@@ -40,98 +40,100 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-20 space-y-8">
-      <div className="text-center space-y-2">
-        <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
-          [ HUMAN ACCESS PORTAL ]
-        </span>
-        <h1 className="text-3xl font-extrabold text-[#000000] tracking-tight">Sign In to VANIK</h1>
-        <p className="text-xs text-[#5a5a4f]">
-          Manage your business principal authority and autonomous agent roster.
-        </p>
-      </div>
+    <div className="vanik-container py-16 sm:py-20">
+      <div className="max-w-md mx-auto space-y-8">
+        <div className="text-center space-y-2">
+          <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
+            [ HUMAN ACCESS PORTAL ]
+          </span>
+          <h1 className="text-3xl font-extrabold text-[#000000] tracking-tight">Sign In to VANIK</h1>
+          <p className="text-xs sm:text-sm text-[#5a5a4f]">
+            Access your verified business principal authority and AI agent roster.
+          </p>
+        </div>
 
-      <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] p-8 shadow-sm space-y-6">
-        {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
+        <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] p-6 sm:p-8 shadow-sm space-y-6">
+          {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
 
-        {session ? (
-          <div className="space-y-4">
-            <div className="p-5 bg-[#aafdc0]/30 border-[1.5px] border-[#000000] rounded-[18px] space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-xs uppercase font-extrabold text-[#003d21]">Session Active</span>
-                {isMock && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ffffff] text-[#000000] border border-[#000000] font-bold">
-                    FIXTURE
-                  </span>
-                )}
+          {session ? (
+            <div className="space-y-4">
+              <div className="p-5 bg-[#aafdc0]/30 border-[1.5px] border-[#000000] rounded-[18px] space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs uppercase font-extrabold text-[#003d21]">Session Active</span>
+                  {isMock && (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ffffff] text-[#000000] border border-[#000000] font-bold">
+                      FIXTURE
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-[#003d21] font-semibold">Authentication token verified.</p>
+                <div className="text-[11px] font-mono text-[#202020] pt-2 border-t border-[#c0c2a9] space-y-1">
+                  <div>User ID: <span className="font-bold">{session.user_id}</span></div>
+                  <div>Session ID: <span className="font-bold">{session.session_id}</span></div>
+                  <div>Expires: <span className="font-bold">{new Date(session.expires_at).toLocaleString()}</span></div>
+                </div>
               </div>
-              <p className="text-xs text-[#003d21] font-semibold">Authentication token verified.</p>
-              <div className="text-[11px] font-mono text-[#202020] pt-2 border-t border-[#c0c2a9] space-y-1">
-                <div>User ID: <span className="font-bold">{session.user_id}</span></div>
-                <div>Session ID: <span className="font-bold">{session.session_id}</span></div>
-                <div>Expires: <span className="font-bold">{new Date(session.expires_at).toLocaleString()}</span></div>
+
+              <div className="flex gap-3">
+                <Link
+                  href="/principals"
+                  className="w-full text-center py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
+                >
+                  Go to Business Principal →
+                </Link>
+                <button
+                  onClick={() => setSession(null)}
+                  className="py-3 px-4 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] border border-[#c0c2a9] text-xs font-semibold"
+                >
+                  Reset
+                </button>
               </div>
             </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  placeholder="owner@example.com"
+                />
+              </div>
 
-            <div className="flex gap-3">
-              <Link
-                href="/principals"
-                className="w-full text-center py-3 px-4 rounded-[13px] bg-[#202020] hover:bg-[#000000] text-white font-semibold text-xs border border-[#000000] transition-all shadow-sm"
-              >
-                Go to Business Principal →
-              </Link>
-              <button
-                onClick={() => setSession(null)}
-                className="py-3 px-4 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] border border-[#c0c2a9] text-xs font-semibold"
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Email Address</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
-                placeholder="owner@example.com"
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Password</label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  placeholder="••••••••"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Password</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
-                placeholder="••••••••"
-              />
-            </div>
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
+                >
+                  {loading ? 'Authenticating...' : 'Sign In'}
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
 
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3.5 px-4 rounded-[13px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-semibold text-xs border border-[#000000] transition-all shadow-sm"
-              >
-                {loading ? 'Authenticating...' : 'Sign In'}
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
-
-      <div className="text-center text-xs text-[#5a5a4f]">
-        Don&apos;t have a business principal yet?{' '}
-        <Link href="/register" className="text-[#000000] font-bold hover:underline">
-          Register new enterprise
-        </Link>
+        <div className="text-center text-xs text-[#5a5a4f]">
+          Don&apos;t have a business principal yet?{' '}
+          <Link href="/register" className="text-[#000000] font-bold hover:underline">
+            Register new enterprise
+          </Link>
+        </div>
       </div>
     </div>
   );

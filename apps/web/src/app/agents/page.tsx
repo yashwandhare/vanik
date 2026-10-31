@@ -78,11 +78,11 @@ export default function AgentsPage() {
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 space-y-8">
+    <div className="vanik-container py-10 sm:py-14 space-y-8">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#c0c2a9] pb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
             <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
               [ AGENT REGISTRY & IDENTITY ]
             </span>
@@ -95,14 +95,14 @@ export default function AgentsPage() {
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#000000] tracking-tight">
             Agent Passports Roster
           </h1>
-          <p className="text-xs text-[#5a5a4f] mt-1">
+          <p className="text-xs sm:text-sm text-[#5a5a4f]">
             Persistent autonomous representatives with verifiable Ed25519 signing keys, tool permissions, and trust profiles.
           </p>
         </div>
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-5 py-2.5 bg-[#202020] hover:bg-[#000000] text-white rounded-[13px] text-xs font-semibold border border-[#000000] transition-all shadow-sm flex items-center gap-2"
+          className="px-4 py-2 bg-[#202020] hover:bg-[#000000] text-white rounded-[11px] text-xs font-bold border border-[#000000] transition-all shadow-sm flex items-center gap-2 self-start sm:self-auto"
         >
           <span className="font-bold text-sm">+</span>
           <span>Spawn New Agent</span>
@@ -124,7 +124,7 @@ export default function AgentsPage() {
           </p>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-5 py-2.5 bg-[#202020] text-white text-xs font-semibold rounded-[13px] border border-[#000000]"
+            className="px-5 py-2.5 bg-[#202020] text-white text-xs font-bold rounded-[11px] border border-[#000000]"
           >
             Spawn Agent
           </button>
@@ -206,7 +206,7 @@ export default function AgentsPage() {
                 />
               </div>
 
-              <div className="p-4 bg-[#f8f9eb] rounded-[13px] border border-[#c0c2a9] text-xs text-[#5a5a4f] space-y-1">
+              <div className="p-3.5 bg-[#f8f9eb] rounded-[13px] border border-[#c0c2a9] text-xs text-[#5a5a4f] space-y-1">
                 <span className="font-mono font-bold text-[#003d21] text-[11px] uppercase tracking-wider block">
                   Cryptographic Protocol:
                 </span>
@@ -219,14 +219,14 @@ export default function AgentsPage() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-5 py-2.5 bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] rounded-[9px] border border-[#c0c2a9] text-xs font-semibold"
+                  className="px-4 py-2 bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] rounded-[9px] border border-[#c0c2a9] text-xs font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="flex-1 py-2.5 px-4 bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white rounded-[13px] text-xs font-semibold border border-[#000000] transition-all shadow-sm"
+                  className="flex-1 py-2 px-4 bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white rounded-[11px] text-xs font-bold border border-[#000000] transition-all shadow-sm"
                 >
                   {creating ? 'Spawning Agent...' : 'Spawn & Sign Passport'}
                 </button>

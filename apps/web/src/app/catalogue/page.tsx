@@ -39,11 +39,11 @@ export default function CataloguePage() {
   });
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 space-y-8">
+    <div className="vanik-container py-10 sm:py-14 space-y-8">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#c0c2a9] pb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
             <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
               [ MANDI COMMODITY LEDGER ]
             </span>
@@ -54,13 +54,13 @@ export default function CataloguePage() {
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#000000] tracking-tight">
             Diwali Restock Catalogue (40 SKU Basket)
           </h1>
-          <p className="text-xs text-[#5a5a4f] mt-1">
+          <p className="text-xs sm:text-sm text-[#5a5a4f]">
             Standardized wholesale commodities with seed benchmark reference prices to prevent fraudulent discount inflation.
           </p>
         </div>
 
-        <div className="text-xs text-[#202020] bg-[#ffffff] border-[1.5px] border-[#000000] px-4 py-2 rounded-[13px] font-mono font-bold">
-          Benchmark Scope: <span className="text-[#003d21]">40 Distinct SKUs</span>
+        <div className="text-xs text-[#202020] bg-[#ffffff] border-[1.5px] border-[#000000] px-4 py-2 rounded-[13px] font-mono font-bold self-start sm:self-auto">
+          Scope: <span className="text-[#003d21]">40 Distinct SKUs</span>
         </div>
       </div>
 
@@ -71,7 +71,7 @@ export default function CataloguePage() {
           placeholder="Filter by SKU code or product name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-[220px] px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs text-[#000000] font-medium focus:outline-none focus:border-[#000000]"
+          className="flex-1 min-w-[200px] px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs text-[#000000] font-medium focus:outline-none focus:border-[#000000]"
         />
 
         <div className="flex flex-wrap gap-1.5">
@@ -92,35 +92,37 @@ export default function CataloguePage() {
       </div>
 
       {/* Ledger Table */}
-      <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[22px] overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-[#f8f9eb] text-[#202020] uppercase font-mono tracking-wider border-b-[1.5px] border-[#000000]">
-            <tr>
-              <th className="px-5 py-3.5">SKU Code</th>
-              <th className="px-5 py-3.5">Product Name</th>
-              <th className="px-5 py-3.5">Category</th>
-              <th className="px-5 py-3.5">Unit</th>
-              <th className="px-5 py-3.5 text-right">Benchmark Price (INR)</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#c0c2a9] font-sans">
-            {filtered.map((item) => (
-              <tr key={item.id} className="hover:bg-[#f8f9eb]/60 transition-colors">
-                <td className="px-5 py-3.5 font-mono text-[#000000] font-bold">{item.sku}</td>
-                <td className="px-5 py-3.5 text-[#202020] font-semibold">{item.name}</td>
-                <td className="px-5 py-3.5 text-[#5a5a4f]">
-                  <span className="px-2.5 py-0.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-full text-[11px] font-mono">
-                    {item.category}
-                  </span>
-                </td>
-                <td className="px-5 py-3.5 text-[#7c7d76] capitalize font-mono">{item.unit}</td>
-                <td className="px-5 py-3.5 text-right font-mono text-[#003d21] font-bold text-sm">
-                  ₹{item.benchmarkPrice}
-                </td>
+      <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[20px] overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[650px] text-left text-xs">
+            <thead className="bg-[#f8f9eb] text-[#202020] uppercase font-mono tracking-wider border-b-[1.5px] border-[#000000]">
+              <tr>
+                <th className="px-5 py-3.5">SKU Code</th>
+                <th className="px-5 py-3.5">Product Name</th>
+                <th className="px-5 py-3.5">Category</th>
+                <th className="px-5 py-3.5">Unit</th>
+                <th className="px-5 py-3.5 text-right">Benchmark Price (INR)</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-[#c0c2a9] font-sans">
+              {filtered.map((item) => (
+                <tr key={item.id} className="hover:bg-[#f8f9eb]/60 transition-colors">
+                  <td className="px-5 py-3.5 font-mono text-[#000000] font-bold">{item.sku}</td>
+                  <td className="px-5 py-3.5 text-[#202020] font-semibold">{item.name}</td>
+                  <td className="px-5 py-3.5 text-[#5a5a4f]">
+                    <span className="px-2.5 py-0.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-full text-[11px] font-mono">
+                      {item.category}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3.5 text-[#7c7d76] capitalize font-mono">{item.unit}</td>
+                  <td className="px-5 py-3.5 text-right font-mono text-[#003d21] font-bold text-sm">
+                    ₹{item.benchmarkPrice}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div className="p-4 bg-[#ffffff] border border-[#c0c2a9] rounded-[13px] text-xs text-[#5a5a4f] flex flex-wrap items-center justify-between gap-2">

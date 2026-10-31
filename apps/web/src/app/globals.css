@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -19,33 +18,52 @@
   --color-sky-wash: #b0f4ff;
   --color-rose-wash: #ffc0e6;
   
-  --background: var(--color-cream-parchment);
-  --foreground: var(--color-obsidian);
+  --background: #f8f9eb;
+  --foreground: #000000;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   color: var(--foreground);
   background-color: var(--background);
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code, kbd, samp, pre, .font-mono {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Custom architectural hairline borders */
-.border-hairline {
-  border: 1.5px solid var(--color-obsidian);
+::selection {
+  background-color: #aafdc0;
+  color: #003d21;
 }
 
-.border-sage {
-  border: 1.5px solid var(--color-sage-mist);
+/* Master container class for strict horizontal alignment across all views */
+.vanik-container {
+  max-width: 72rem; /* 1152px / 6xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-/* Monumental Display Leading */
-.leading-monumental {
-  line-height: 0.92;
+@media (min-width: 640px) {
+  .vanik-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .vanik-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
