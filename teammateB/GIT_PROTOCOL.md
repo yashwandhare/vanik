@@ -1,46 +1,72 @@
 # Git Protocol for Main and Teammate B
 
-This protocol applies after Main initializes the repository and publishes the GitHub URL.
+Repository: `git@github.com:yashwandhare/vanik.git`.
 
 ## Branch ownership
 
-| Branch pattern | Owner | Purpose |
+| Branch | Owner | Purpose |
 | --- | --- | --- |
 | `main` | Main | Stable integration branch |
 | `feat/main-*` | Main | Main feature work |
 | `fix/main-*` | Main | Main fixes |
-| `feat/b-*` | Teammate B | B feature work |
-| `fix/b-*` | Teammate B | B fixes |
+| `devb` | Teammate B | All B implementation and fixes |
+
+`devb` is B's only working and push branch. This rule replaces the earlier per-task B branch convention.
 
 ## Mandatory rules
 
 1. Only Main can merge into `main`.
-2. Teammate B must never push directly to `main`.
-3. Teammate B works only on B-owned feature or fix branches.
-4. Every B change reaches `main` through a Pull Request.
+2. B must never push directly to `main`.
+3. B works and pushes only on `devb`.
+4. B opens Pull Requests from `devb` to `main`.
 5. Never commit secrets, `.env`, private keys, tokens or real identity data.
-6. Never rewrite or force-push `main` or a shared branch.
-7. Do not force-push a B branch unless Main explicitly approves `--force-with-lease`.
-8. Do not silently change an API, schema, route or state name.
-9. Stage only files that belong to the current task.
-10. Run relevant checks before every PR update.
+6. Never force-push or rewrite a shared branch.
+7. Do not silently change an API, schema, route or state name.
+8. Stage only files that belong to the current task.
+9. Run relevant checks before every PR update.
+10. Keep `devb` after a merge. Do not delete it as a disposable feature branch.
 
-## Start a task
+## Initial setup
 
-Update the local integration branch:
+Clone the repository if needed:
 
 ```bash
+git clone git@github.com:yashwandhare/vanik.git
+cd vanik
+```
+
+Inspect the current state:
+
+```bash
+git status
+git branch --show-current
+git remote -v
+```
+
+Do not discard uncommitted changes. Resolve or report them before switching branches.
+
+With a clean working tree, update `main` and select or create `devb`:
+
+```bash
+git fetch origin
 git switch main
 git pull --ff-only origin main
+
+if git show-ref --verify --quiet refs/heads/devb; then
+    git switch devb
+elif git show-ref --verify --quiet refs/remotes/origin/devb; then
+    git switch --track -c devb origin/devb
+else
+    git switch -c devb main
+fi
+
+if git show-ref --verify --quiet refs/remotes/origin/devb; then
+    git merge origin/devb
+fi
+git merge origin/main
 ```
 
-Create a B-owned branch:
-
-```bash
-git switch -c feat/b-<short-task>
-```
-
-Use `fix/b-<short-task>` for a focused bug fix.
+If `devb` already exists remotely, preserve its history. Do not recreate or reset it from `main`.
 
 ## Commit work
 
@@ -49,65 +75,52 @@ Inspect the change first:
 ```bash
 git status
 git diff
+git branch --show-current
 ```
 
-Run the relevant tests, lint, type checks and build. Stage specific files:
+The branch must be `devb`. Run relevant tests, lint, type checks and builds. Stage specific files:
 
 ```bash
 git add <specific-files>
 git commit -m "<type>: <short description>"
 ```
 
-Use these commit types:
+Use Conventional Commit types such as `feat:`, `fix:`, `test:`, `docs:` and `chore:`. Keep each commit focused.
 
-- `feat:` new behavior.
-- `fix:` bug fix.
-- `test:` tests.
-- `docs:` documentation.
-- `refactor:` behavior-preserving restructuring.
-- `chore:` tooling or configuration.
-- `style:` formatting only.
-
-Keep each commit focused. Do not combine unrelated web, bot and documentation work.
-
-## Push the branch
+## Push only to devb
 
 ```bash
-git push -u origin feat/b-<short-task>
+git push -u origin devb
 ```
 
-Never run:
+Never push to `main` or another branch.
 
-```bash
-git push origin main
-```
+## Keep devb current
 
-## Update a B branch from `main`
-
-Commit or stash local changes first. Then run:
+Commit your local work first. Then run:
 
 ```bash
 git fetch origin
-git switch feat/b-<short-task>
+git switch devb
+git merge origin/devb
 git merge origin/main
 ```
 
-Resolve conflicts only in files you understand. Ask Main before resolving a conflict in shared contracts or Main-owned files.
-
-Run checks again, then push:
+Ask Main before resolving conflicts in shared contracts or Main-owned files. Run checks again, then push:
 
 ```bash
-git push origin feat/b-<short-task>
+git push origin devb
 ```
 
-Merge `origin/main` into the B branch. Do not rebase a branch that another person uses.
+Merge `origin/main` into `devb`. Do not force-push or rebase shared history.
 
 ## Open a Pull Request
 
 Use:
 
 - **Base:** `main`
-- **Compare:** the B-owned branch
+- **Compare:** `devb`
+- **Reviewer:** Main
 - **Title:** Conventional Commit style
 
 Include:
@@ -126,11 +139,10 @@ Include:
 - None / approved change reference
 
 ## Verification
-- [ ] Unit tests
-- [ ] UI or integration tests
+- [ ] Tests
 - [ ] Lint and type checks
 - [ ] Build
-- [ ] Manual UI or bot check
+- [ ] Manual UI or Bot check
 
 ## Screenshots
 -
@@ -142,19 +154,19 @@ Include:
 -
 ```
 
-Do not mark a check as complete unless it ran successfully.
+Do not mark a check complete unless it ran successfully.
 
 ## Review and merge
 
-Main reviews ownership, contracts, security boundaries, tests and integration risk. Teammate B responds on the same branch.
+Main reviews ownership, contracts, security boundaries, tests and integration risk. B responds on `devb`.
 
-Only Main merges the PR. The preferred merge method is squash and merge. After Main confirms the merge, update local `main` and delete obsolete local branches.
+Only Main merges the PR. After a merge, update `devb` from `origin/main` using the workflow above. Keep the branch for the next task.
 
-## Contract-change protocol
+## Contract changes
 
-When a client needs a contract change:
+When the client needs a contract change:
 
-1. Stop work that depends on the uncertain field or behavior.
+1. Stop work that depends on the uncertain behavior.
 2. Send Main the endpoint, current contract, requested change and reason.
 3. Continue another unblocked task.
 4. Wait for Main to publish or approve the contract.

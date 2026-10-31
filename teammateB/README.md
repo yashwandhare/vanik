@@ -8,11 +8,12 @@ This directory contains the instructions and task tracking specific to Teammate 
 2. [Working instructions](WORKING_INSTRUCTIONS.md)
 3. [Git protocol](GIT_PROTOCOL.md)
 4. [Teammate B TODO](TODO.md)
-5. [Project documentation index](../docs/README.md)
+5. [Phase 0 handoff](PHASE_0_HANDOFF.md)
+6. [Project documentation index](../docs/README.md)
 
 ## Authority
 
-Main owns architecture, backend behavior, shared contracts, integration and merges to `main`.
+Main owns architecture, backend behavior, shared contracts, integration and merges to `main`. B works and pushes only on `devb`; this replaces any earlier per-task B branch convention.
 
 Teammate B owns:
 

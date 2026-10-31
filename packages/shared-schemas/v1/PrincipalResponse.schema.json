@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "BusinessRole": {
+      "enum": [
+        "buyer",
+        "seller"
+      ],
+      "title": "BusinessRole",
+      "type": "string"
+    },
+    "MembershipRole": {
+      "enum": [
+        "owner",
+        "admin",
+        "operator",
+        "viewer"
+      ],
+      "title": "MembershipRole",
+      "type": "string"
+    },
+    "VerificationStatus": {
+      "enum": [
+        "not_submitted",
+        "pending",
+        "demo_verified",
+        "rejected"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/PrincipalResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "address": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Address",
+      "type": "string"
+    },
+    "business_type": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Business Type",
+      "type": "string"
+    },
+    "contact_email": {
+      "format": "email",
+      "title": "Contact Email",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "legal_name": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Legal Name",
+      "type": "string"
+    },
+    "membership_role": {
+      "$ref": "#/$defs/MembershipRole"
+    },
+    "roles": {
+      "items": {
+        "$ref": "#/$defs/BusinessRole"
+      },
+      "maxItems": 2,
+      "minItems": 1,
+      "title": "Roles",
+      "type": "array"
+    },
+    "trade_name": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Trade Name",
+      "type": "string"
+    },
+    "verification_status": {
+      "$ref": "#/$defs/VerificationStatus"
+    }
+  },
+  "required": [
+    "legal_name",
+    "trade_name",
+    "business_type",
+    "address",
+    "contact_email",
+    "roles",
+    "id",
+    "verification_status",
+    "membership_role",
+    "created_at"
+  ],
+  "title": "PrincipalResponse",
+  "type": "object"
+}

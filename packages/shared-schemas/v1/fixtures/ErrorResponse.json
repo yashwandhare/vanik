@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "validation_error",
+    "message": "Request validation failed.",
+    "details": [
+      {
+        "field": "body.email",
+        "code": "value_error",
+        "message": "Invalid or missing value."
+      }
+    ],
+    "request_id": "40000000-0000-4000-8000-000000000001"
+  }
+}

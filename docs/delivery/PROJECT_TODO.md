@@ -18,13 +18,15 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Publish Main and Teammate B ownership boundaries.
 - [x] Create phased project and Teammate B checklists.
 - [x] Add repository ignore rules for secrets and generated files.
-- [ ] Initialize Git after the project lead provides the GitHub repository URL.
+- [x] Initialize Git and connect the project GitHub repository.
 - [ ] Configure `main` as the protected integration branch.
-- [ ] Select and record exact backend, frontend, bot and cryptography versions.
-- [ ] Define authentication and session behavior.
-- [ ] Define API route, pagination and error conventions.
-- [ ] Publish versioned schemas and representative JSON fixtures.
-- [ ] Create the backend skeleton, configuration and database connection.
+- [x] Select and record the initial backend, frontend, bot and cryptography versions.
+- [x] Define the Phase 1 authentication and session design.
+- [x] Define API route, pagination and error conventions.
+- [x] Publish initial identity schemas and representative JSON fixtures.
+- [x] Create the backend skeleton, configuration and database connection code.
+- [ ] Verify the real PostgreSQL integration tests in CI or a local service.
+- [ ] Publish the remaining Telegram, marketplace and commerce contract packs before their dependent client work.
 
 ### Teammate B
 

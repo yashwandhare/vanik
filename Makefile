@@ -1,18 +1,22 @@
-.PHONY: help infra down install dev test lint format migrate seed demo reset-demo
+UV ?= uv
+API = $(UV) --directory apps/api
+
+.PHONY: help infra down install dev test lint format typecheck contracts \
+	install-api dev-api test-api lint-api format-api typecheck-api migrate seed demo reset-demo
 
 help:
-	@echo "VANIK developer targets"
+	@echo "VANIK developer targets (application commands currently cover the API only)"
 	@echo "infra       Start PostgreSQL and Redis"
 	@echo "down        Stop local infrastructure"
-	@echo "install     Install application dependencies (implement per app)"
-	@echo "dev         Run API, web and Telegram bot (implement per app)"
-	@echo "test        Run test suites (implement per app)"
-	@echo "lint        Run linters (implement per app)"
-	@echo "format      Format source (implement per app)"
-	@echo "migrate     Apply database migrations (requires API implementation)"
-	@echo "seed        Load synthetic demo data (requires seed script)"
-	@echo "demo        Run canonical demo (requires implementation)"
-	@echo "reset-demo  Reset and reseed demo (requires implementation)"
+	@echo "install     Sync the locked API development environment"
+	@echo "dev         Run the API on port 8000"
+	@echo "test        Run API and shared-contract tests"
+	@echo "lint        Check API source and formatting"
+	@echo "format      Format API source"
+	@echo "typecheck   Run strict API type checks"
+	@echo "contracts   Export versioned JSON schemas"
+	@echo "migrate     Apply database migrations when Phase 1 revisions exist"
+	@echo "seed/demo/reset-demo are not implemented yet"
 
 infra:
 	docker compose up -d postgres redis
@@ -20,29 +24,39 @@ infra:
 down:
 	docker compose down
 
-install:
-	@echo "TODO: install apps/api, apps/web and apps/telegram-bot dependencies"
+install: install-api
+install-api:
+	$(API) sync --locked
 
-dev:
-	@echo "TODO: start API, web and Telegram bot after implementation"
+dev: dev-api
+dev-api:
+	$(API) run --locked uvicorn app.main:create_app --factory --reload --host 127.0.0.1 --port 8000
 
-test:
-	@echo "TODO: run test suites after implementation"
+test: test-api
+test-api:
+	$(API) run --locked python -m pytest
 
-lint:
-	@echo "TODO: run linters after implementation"
+lint: lint-api
+lint-api:
+	$(API) run --locked ruff check app scripts tests alembic
+	$(API) run --locked ruff format --check app scripts tests alembic
 
-format:
-	@echo "TODO: run formatters after implementation"
+format: format-api
+format-api:
+	$(API) run --locked ruff format app scripts tests alembic
+
+typecheck: typecheck-api
+typecheck-api:
+	$(API) run --locked mypy app scripts tests
+
+contracts:
+	$(API) run --locked python scripts/export_schemas.py
 
 migrate:
-	@echo "TODO: alembic upgrade head after API implementation"
+	@test -n "$$(find apps/api/alembic/versions -name '*.py' -print -quit)" || \
+		{ echo "No schema migrations exist yet. Phase 1 must add real revisions." >&2; exit 1; }
+	$(API) run --locked alembic upgrade head
 
-seed:
-	@echo "TODO: python -m app.seed after API implementation"
-
-demo:
-	@echo "TODO: launch canonical demo after implementation"
-
-reset-demo:
-	@echo "TODO: reset demo database and reseed after implementation"
+seed demo reset-demo:
+	@echo "$@ is not implemented yet; no demo state was changed." >&2
+	@exit 1

@@ -1,0 +1,61 @@
+{
+  "$defs": {
+    "BusinessRole": {
+      "enum": [
+        "buyer",
+        "seller"
+      ],
+      "title": "BusinessRole",
+      "type": "string"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/AgentCreateRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tools": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 30,
+      "title": "Allowed Tools",
+      "type": "array"
+    },
+    "capabilities": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 30,
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "description": {
+      "default": "",
+      "maxLength": 1000,
+      "title": "Description",
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "role": {
+      "$ref": "#/$defs/BusinessRole"
+    },
+    "strategy_profile": {
+      "default": "default",
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Strategy Profile",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "role"
+  ],
+  "title": "AgentCreateRequest",
+  "type": "object"
+}

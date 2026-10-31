@@ -1,0 +1,26 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/LoginRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "email": {
+      "format": "email",
+      "title": "Email",
+      "type": "string"
+    },
+    "password": {
+      "format": "password",
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Password",
+      "type": "string",
+      "writeOnly": true
+    }
+  },
+  "required": [
+    "email",
+    "password"
+  ],
+  "title": "LoginRequest",
+  "type": "object"
+}

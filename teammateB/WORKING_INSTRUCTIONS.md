@@ -83,6 +83,7 @@ Never claim a test, build or manual check ran when it did not.
 - Never use real government identity documents or real payment details.
 - Ask Main before destructive operations.
 - Never push or merge directly to `main`.
+- Work and push only on `devb`.
 - Never force-push a shared branch.
 - Follow `teammateB/GIT_PROTOCOL.md` for every task.
 
@@ -108,7 +109,7 @@ A Teammate B task is done when:
 - Relevant tests and checks pass.
 - The final diff contains no unrelated changes, secrets or debug code.
 - Documentation and screenshots are updated when needed.
-- The work is pushed to a B-owned branch.
+- The work is pushed to `devb`.
 - A clear Pull Request is ready for Main's review.
 
 The task is not integrated until Main merges it.

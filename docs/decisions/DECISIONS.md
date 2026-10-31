@@ -24,3 +24,7 @@
 | D-020 | Public web search/fetch, real KYC, real UPI, full ONDC/AA and voice are deferred | Locked |
 | D-021 | Fixed safe UI component catalogue for P0 | Locked |
 | D-022 | Contact exchange is later, not required in hackathon demo | Deferred |
+| D-023 | Final product name is VANIK | Confirmed by project lead |
+| D-024 | Use the selected versions in the technology baseline and lock dependencies | Selected by Main |
+| D-025 | P0 authentication uses email/password with server-side opaque sessions and CSRF protection | Selected by Main |
+| D-026 | Version 1 wire identifiers use UUIDs; timestamps are timezone-aware; monetary values use decimal strings | Selected by Main |

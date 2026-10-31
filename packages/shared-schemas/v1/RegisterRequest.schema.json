@@ -1,0 +1,33 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/RegisterRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "display_name": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Display Name",
+      "type": "string"
+    },
+    "email": {
+      "format": "email",
+      "title": "Email",
+      "type": "string"
+    },
+    "password": {
+      "format": "password",
+      "maxLength": 128,
+      "minLength": 12,
+      "title": "Password",
+      "type": "string",
+      "writeOnly": true
+    }
+  },
+  "required": [
+    "email",
+    "password",
+    "display_name"
+  ],
+  "title": "RegisterRequest",
+  "type": "object"
+}

@@ -61,26 +61,24 @@ B does not independently change core backend rules, database migrations, signing
 | --- | --- | --- |
 | `main` | Main only | Stable, integrated project |
 | `feat/main-*` | Main | Main's own feature work |
-| `feat/b-*` | Teammate B | B's feature work |
 | `fix/main-*` | Main | Main-owned fixes |
-| `fix/b-*` | Teammate B | B-owned fixes |
+| `devb` | Teammate B | All B features and fixes |
 
 Examples:
 
 - `feat/main-identity-api`
 - `feat/main-negotiation-engine`
-- `feat/b-marketplace-ui`
-- `feat/b-telegram-bot`
+- `devb` for all Teammate B work.
 
 ### Non-negotiable rules
 
 1. **Only Main merges into `main`.**
 2. B must never push directly to `main`.
-3. B pushes work only to B's own feature branch.
-4. B opens a Pull Request (PR) targeting `main`; Main reviews and merges it.
-5. B regularly pulls the latest `main` into B's feature branch to stay current.
-6. Main also works on feature branches, then merges their own completed work into `main`.
-7. No one force-pushes a shared branch. B may use `--force-with-lease` on B's private branch only after Main explicitly approves it.
+3. B works and pushes only on `devb`.
+4. B opens a Pull Request from `devb` to `main`; Main reviews and merges it.
+5. B regularly merges the latest `origin/main` into `devb`.
+6. Main works on Main-owned feature branches, then integrates completed work into `main`.
+7. No one force-pushes or rewrites a shared branch.
 8. Never commit secrets, `.env`, API keys, tokens, private signing keys, real business identifiers or personal data.
 9. Do not commit generated build output, virtual environments, dependency folders or local databases.
 10. A PR must not silently change a shared API contract. Update the contract and notify the other developer first.
@@ -107,11 +105,15 @@ git switch main
 git pull --ff-only origin main
 ```
 
-B starts work on a separate branch:
+B works on the persistent `devb` branch:
 
 ```bash
-git switch -c feat/b-marketplace-ui
+git fetch origin
+git switch devb
+git merge origin/main
 ```
+
+If `devb` does not exist locally, follow [B's Git protocol](../../teammateB/GIT_PROTOCOL.md) to track or create it without overwriting existing work.
 
 Main starts work on a separate branch:
 
@@ -343,7 +345,7 @@ Both developers work in parallel wherever contracts and dependencies permit. Eac
 - Verify every P0 page and interaction.
 - Check responsive layout and loading/error states.
 - Verify web and Telegram show consistent task/deal status.
-- Fix UI bugs on B-owned branches.
+- Fix UI bugs on `devb`.
 - Prepare screenshots/demo navigation notes if needed.
 - Avoid feature additions after demo freeze unless Main approves.
 
@@ -421,16 +423,17 @@ git switch main
 git pull --ff-only origin main
 ```
 
-Then create or switch to your own feature branch:
+Main creates or selects a Main-owned feature branch:
 
 ```bash
-git switch -c feat/<owner>-<short-task>
+git switch -c feat/main-<short-task>
 ```
 
-If the branch already exists:
+B selects `devb` and updates it:
 
 ```bash
-git switch feat/<owner>-<short-task>
+git switch devb
+git merge origin/main
 ```
 
 ### Before every commit
@@ -482,10 +485,10 @@ Keep commits focused. Do not combine unrelated frontend, backend and documentati
 git push -u origin feat/main-<short-task>
 ```
 
-**B pushes only to B's feature branches:**
+**B pushes only to `devb`:**
 
 ```bash
-git push -u origin feat/b-<short-task>
+git push -u origin devb
 ```
 
 B must never run:
@@ -500,24 +503,24 @@ B first commits or stashes any local changes, then:
 
 ```bash
 git fetch origin
-git switch feat/b-<short-task>
+git switch devb
 git merge origin/main
 ```
 
-Resolve conflicts locally, run tests, then push the updated B branch:
+Resolve conflicts locally, run tests, then push:
 
 ```bash
-git push origin feat/b-<short-task>
+git push origin devb
 ```
 
-For this two-person project, merging `origin/main` into B's feature branch is preferred over rebasing shared work because it is easier to reason about and avoids rewriting pushed commits.
+`devb` is a persistent shared branch. Merge `origin/main` into it; do not rebase or force-push it.
 
 ### Pull Request protocol
 
 B opens a PR:
 
 - **Base:** `main`
-- **Compare:** `feat/b-<short-task>`
+- **Compare:** `devb`
 - **Title:** same style as commit, e.g. `feat: build marketplace seller discovery`
 - **Description:** summary, changed routes/components, tests run, screenshots for UI, API/schema dependencies, known limitations.
 
@@ -547,7 +550,7 @@ git pull --ff-only origin main
 
 B then updates their branch using the branch-update protocol above.
 
-Delete merged feature branches after confirming the merge is present.
+Delete only disposable Main feature branches after confirming the merge. Keep `devb` for B's next task.
 
 ---
 
@@ -614,7 +617,7 @@ A task is complete only when:
 - The implementation matches the agreed contract.
 - Relevant tests pass.
 - No secrets or local-only files are committed.
-- The change is pushed to the owner's feature branch.
+- The change is pushed to the owner's branch: a Main feature branch or `devb`.
 - The PR is reviewed and merged by Main, if it is intended for `main`.
 - The other developer is informed of any API, schema or behavior change.
 
@@ -624,7 +627,7 @@ A phase is complete only when its checkpoint passes. Both developers can move to
 
 ## 9. Golden rules
 
-1. Main owns integration; B owns their feature branches.
+1. Main owns integration; B works and pushes only on `devb`.
 2. Only Main merges into `main`.
 3. B pushes code to B's branch and pulls updates from `main`.
 4. Agree on contracts before parallel implementation.

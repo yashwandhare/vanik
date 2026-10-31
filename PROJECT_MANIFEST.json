@@ -1,8 +1,16 @@
 {
   "project": "VANIK",
-  "version": "2.1-organized-starter",
-  "status": "documentation-and-infrastructure-scaffold",
-  "implemented_application": false,
+  "version": "0.1.0-api-foundation",
+  "status": "backend-foundation-business-workflows-pending",
+  "implemented_application": true,
+  "implemented_business_workflows": false,
+  "implemented_components": [
+    "api-liveness-and-database-readiness",
+    "configuration-and-error-boundary",
+    "database-session-lifecycle",
+    "initial-identity-wire-contracts",
+    "backend-and-contract-tests"
+  ],
   "implemented_infrastructure": [
     "postgresql-compose-service",
     "redis-compose-service"
@@ -13,6 +21,8 @@
     "docs/product/PRD.md",
     "docs/engineering/ARCHITECTURE.md",
     "docs/engineering/DATA_MODEL.md",
+    "docs/engineering/TECHNOLOGY_BASELINE.md",
+    "docs/engineering/API_CONVENTIONS.md",
     "docs/engineering/PROTOCOL_AND_API.md",
     "docs/engineering/TRUST_AND_SECURITY.md",
     "docs/decisions/DECISIONS.md",
@@ -26,7 +36,8 @@
     "teammateB/ONBOARDING.md",
     "teammateB/GIT_PROTOCOL.md",
     "teammateB/TODO.md",
-    "teammateB/WORKING_INSTRUCTIONS.md"
+    "teammateB/WORKING_INSTRUCTIONS.md",
+    "teammateB/PHASE_0_HANDOFF.md"
   ],
-  "important": "Application commands and features are specified but not implemented."
+  "important": "Only health endpoints are implemented. Identity schemas are published; authentication and commerce endpoints are not implemented."
 }

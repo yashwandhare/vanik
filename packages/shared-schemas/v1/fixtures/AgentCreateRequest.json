@@ -1,0 +1,12 @@
+{
+  "name": "Diwali Buyer",
+  "role": "buyer",
+  "description": "Synthetic procurement agent",
+  "capabilities": [
+    "request_quote"
+  ],
+  "allowed_tools": [
+    "marketplace_search"
+  ],
+  "strategy_profile": "default"
+}

@@ -1,0 +1,64 @@
+{
+  "$defs": {
+    "UserResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "display_name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "email": {
+          "format": "email",
+          "title": "Email",
+          "type": "string"
+        },
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "display_name",
+        "created_at"
+      ],
+      "title": "UserResponse",
+      "type": "object"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/SessionResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "csrf_token": {
+      "maxLength": 128,
+      "minLength": 32,
+      "title": "Csrf Token",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "user": {
+      "$ref": "#/$defs/UserResponse"
+    }
+  },
+  "required": [
+    "user",
+    "expires_at",
+    "csrf_token"
+  ],
+  "title": "SessionResponse",
+  "type": "object"
+}

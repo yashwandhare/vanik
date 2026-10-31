@@ -1,0 +1,10 @@
+{
+  "legal_name": "Synthetic Kirana Demo",
+  "trade_name": "Synthetic Kirana",
+  "business_type": "retail",
+  "address": "Synthetic demo address, Pune",
+  "contact_email": "demo@example.com",
+  "roles": [
+    "buyer"
+  ]
+}

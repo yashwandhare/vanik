@@ -14,7 +14,7 @@ All surfaces use the same backend, identity system, marketplace registry, negoti
 
 ## Repository status
 
-This repository contains the product and engineering documentation, local infrastructure configuration and a starter directory structure. It is **not a completed marketplace implementation**. PostgreSQL and Redis can run now. The API, web, bot, schema, test and demo commands remain specifications until their application code is implemented.
+The repository now includes a working FastAPI foundation: configuration, PostgreSQL session setup, health endpoints, shared identity schemas and backend tests. It is **not a completed marketplace implementation**. Authentication, business workflows, the web app, Telegram clients and demo data remain unimplemented.
 
 ## Core hierarchy
 
@@ -50,6 +50,8 @@ Start with the [documentation index](docs/README.md).
 - [Product requirements](docs/product/PRD.md)
 - [Architecture](docs/engineering/ARCHITECTURE.md)
 - [Data model](docs/engineering/DATA_MODEL.md)
+- [Technology baseline](docs/engineering/TECHNOLOGY_BASELINE.md)
+- [API conventions](docs/engineering/API_CONVENTIONS.md)
 - [Protocol and API contracts](docs/engineering/PROTOCOL_AND_API.md)
 - [Trust and security](docs/engineering/TRUST_AND_SECURITY.md)
 - [Decision log](docs/decisions/DECISIONS.md)
@@ -59,79 +61,45 @@ Start with the [documentation index](docs/README.md).
 - [Demo runbook](docs/delivery/DEMO_RUNBOOK.md)
 - [Teammate B workspace](teammateB/README.md)
 
-## Proposed stack
+## Selected stack
 
-- Backend: Python 3.12+, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic.
-- Database: PostgreSQL; Redis optional for task/event coordination.
-- Web: Next.js, TypeScript, Tailwind CSS.
-- Telegram: Python Telegram Bot or aiogram; Mini App served by the web app.
-- Agent orchestration: Python async tasks; LLM provider behind an adapter.
-- Identity signatures: Ed25519 via PyNaCl or cryptography.
+- Backend: Python 3.12.12, FastAPI, Pydantic v2, SQLAlchemy and Alembic.
+- Database: PostgreSQL 16; Redis 7 is optional for coordination.
+- Web: Node.js 22.23.1, Next.js, React, TypeScript and Tailwind CSS.
+- Telegram: Python Telegram Bot; Mini App served by the web app.
+- Signing: Ed25519 through `cryptography`, to be implemented during Phase 1.
 - Local services: Docker Compose.
 
-The stack is a proposed implementation baseline, not a claim that these services are already implemented in this bundle.
+See the [technology baseline](docs/engineering/TECHNOLOGY_BASELINE.md) for exact versions and implementation status.
 
-## Quick start
+## Backend quick start
 
-### 1. Requirements
+Install Git and `uv`. Docker is required only to start local PostgreSQL and Redis.
 
-- Git
-- Docker Engine + Docker Compose plugin
-- Python 3.12+
-- Node.js 20+ and npm
-
-### 2. Configure environment
+From the repository root:
 
 ```bash
-cp .env.example .env
+uv python install 3.12.12
+make install
+make test
+make lint
+make typecheck
 ```
 
-Edit `.env` and set secrets before running real integrations. For a local mock-only setup, placeholder values can be used where explicitly marked.
-
-### 3. Start infrastructure
+To start the API and local database:
 
 ```bash
-docker compose up -d postgres redis
+make infra
+make dev
 ```
 
-### 4. Backend (once implemented)
+The API runs at `http://localhost:8000`. `/health` checks process liveness; `/health/ready` checks database connectivity. `/docs` lists only implemented endpoints.
 
-```bash
-cd apps/api
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-alembic upgrade head
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+Copy `.env.example` to `.env` if you need to override development defaults. Never commit `.env`.
 
-### 5. Web app (once implemented)
+Current application Make targets cover the API only. The web and Bot will get their own commands when B creates them. `seed`, `demo`, `reset-demo` and migrations without real revisions fail explicitly instead of reporting fake success.
 
-```bash
-cd apps/web
-npm install
-npm run dev
-```
-
-### 6. Telegram bot (once implemented)
-
-```bash
-cd apps/telegram-bot
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python -m bot.main
-```
-
-### 7. Demo data and reset (commands to implement)
-
-```bash
-make seed
-make demo
-make reset-demo
-```
-
-These Make targets are specified as required developer commands in the implementation plan. They are not executable until the corresponding implementation is added.
+See [API setup](apps/api/README.md) and the [B handoff](teammateB/PHASE_0_HANDOFF.md) for the next steps.
 
 ## Useful commands
 
