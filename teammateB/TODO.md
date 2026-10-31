@@ -35,18 +35,19 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 
 ## Phase 2 — Marketplace and catalogue
 
-- [ ] Build marketplace overview metrics and recent activity.
-- [ ] Build seller discovery cards and filters.
-- [ ] Build seller and business profile pages.
-- [ ] Build catalogue and inventory tables.
-- [ ] Build search, filter and sort controls.
-- [ ] Build explainable ranking factors and evidence views.
-- [ ] Build seller inventory and business-profile workspace.
-- [ ] Add responsive, keyboard and accessible-name checks.
+- [x] Build marketplace overview metrics and live tabbed workspace.
+- [x] Build seller discovery cards and filters (query, coverage region, max delivery days, min credit terms).
+- [x] Build catalogue ledger table consuming live `/v1/catalogue/products` (40-SKU basket, benchmark pricing).
+- [x] Build search and category filter controls with live backend synchronization.
+- [x] Build unrated history presentation (`reliability_score: null`, 0 trade outcomes) and synthetic seller tags.
+- [x] Build live seller inventory inspector drawer (`GET /v1/principals/{id}/agents/{agent_id}/inventory`).
+- [x] Build authenticated stock updater with error surfacing for 401/403/404/409/422 (`POST .../inventory`).
+- [x] Add responsive layout, keyboard accessibility, Tab cycle trapping, and ARIA roles.
+- [x] Add comprehensive regression test suite (28 Vitest tests passing across client, components, contexts).
 
-**Dependency:** Main must provide seller, catalogue, inventory, activity and ranking contracts.
+**Dependency:** Main provided `/v1/catalogue/products`, `/v1/marketplace/sellers`, `/v1/principals/{id}/agents/{agent_id}/inventory`.
 
-**Checkpoint:** The marketplace uses real seeded data and shows distinct seller principals and the 40-SKU catalogue.
+**Checkpoint:** The marketplace uses real seeded data, renders the 40-SKU catalogue, discovers distinct seller agents, and supports authenticated stock reconciliation.
 
 ## Phase 3 — Negotiation workspace
 

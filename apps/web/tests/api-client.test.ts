@@ -303,4 +303,157 @@ describe('ApiClient', () => {
       })
     );
   });
+
+  it('queries catalogue products with category and search query', async () => {
+    const mockProducts = {
+      items: [
+        {
+          id: '10000000-0000-4000-8000-000000000001',
+          sku: 'RICE-BASMATI-5KG',
+          name: 'Premium Basmati Rice 5kg',
+          category: 'staples',
+          unit: 'bag',
+          benchmark_price: '450.00',
+          attributes: { weight: '5kg' },
+          active: true,
+        },
+      ],
+      pagination: { total: 1, limit: 40, offset: 0 },
+    };
+
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => mockProducts,
+      headers: new Headers(),
+    });
+    global.fetch = mockFetch;
+
+    const client = new ApiClient({ baseUrl: 'http://localhost:8000', useMockFallback: false });
+    const res = await client.listCatalogueProducts({ category: 'staples', query: 'basmati' });
+
+    expect(res.data.items.length).toBe(1);
+    expect(res.data.items[0].sku).toBe('RICE-BASMATI-5KG');
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/v1/catalogue/products?category=staples&query=basmati',
+      expect.objectContaining({ method: 'GET' })
+    );
+  });
+
+  it('queries marketplace sellers with filters', async () => {
+    const mockSellers = {
+      items: [
+        {
+          principal_id: '20000000-0000-4000-8000-000000000002',
+          trade_name: 'Mangal Wholesale',
+          verification_status: 'demo_verified',
+          coverage: ['pune', 'mumbai'],
+          delivery_days: 3,
+          credit_days: [7, 15],
+          available_sku_count: 38,
+          reliability_evidence_count: 0,
+          evidence_is_simulated: true,
+          reliability_score: null,
+          agents: [
+            {
+              agent_id: '30000000-0000-4000-8000-000000000002',
+              name: 'Mangal Wholesale Seller Agent',
+              strategy_profile: 'margin',
+              status: 'active',
+            },
+          ],
+        },
+      ],
+      pagination: { total: 1, limit: 20, offset: 0 },
+    };
+
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => mockSellers,
+      headers: new Headers(),
+    });
+    global.fetch = mockFetch;
+
+    const client = new ApiClient({ baseUrl: 'http://localhost:8000', useMockFallback: false });
+    const res = await client.listMarketplaceSellers({ min_credit_days: 7, max_delivery_days: 5 });
+
+    expect(res.data.items.length).toBe(1);
+    expect(res.data.items[0].trade_name).toBe('Mangal Wholesale');
+    expect(res.data.items[0].agents[0].strategy_profile).toBe('margin');
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/v1/marketplace/sellers?min_credit_days=7&max_delivery_days=5',
+      expect.objectContaining({ method: 'GET' })
+    );
+  });
+
+  it('fetches and updates seller inventory with CSRF token', async () => {
+    const mockInventory = {
+      principal_id: '20000000-0000-4000-8000-000000000002',
+      agent_id: '30000000-0000-4000-8000-000000000002',
+      items: [
+        {
+          product: {
+            id: '10000000-0000-4000-8000-000000000001',
+            sku: 'RICE-BASMATI-5KG',
+            name: 'Premium Basmati Rice 5kg',
+            category: 'staples',
+            unit: 'bag',
+            benchmark_price: '450.00',
+            attributes: {},
+            active: true,
+          },
+          available_qty: '500.00',
+        },
+      ],
+      pagination: { total: 1, limit: 20, offset: 0 },
+    };
+
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => mockInventory,
+      headers: new Headers(),
+    });
+    global.fetch = mockFetch;
+
+    const client = new ApiClient({ baseUrl: 'http://localhost:8000', useMockFallback: false });
+    const res = await client.getSellerInventory(
+      '20000000-0000-4000-8000-000000000002',
+      '30000000-0000-4000-8000-000000000002'
+    );
+    expect(res.data.items[0].available_qty).toBe('500.00');
+
+    // Update inventory
+    const updatedLine = {
+      product: mockInventory.items[0].product,
+      available_qty: '600.00',
+    };
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => updatedLine,
+      headers: new Headers(),
+    });
+    client.setCsrfToken('inv-csrf');
+
+    const updateRes = await client.updateSellerInventory(
+      '20000000-0000-4000-8000-000000000002',
+      '30000000-0000-4000-8000-000000000002',
+      {
+        product_id: '10000000-0000-4000-8000-000000000001',
+        stock_qty: 600,
+      }
+    );
+    expect(updateRes.data.available_qty).toBe('600.00');
+    expect(mockFetch).toHaveBeenLastCalledWith(
+      'http://localhost:8000/v1/principals/20000000-0000-4000-8000-000000000002/agents/30000000-0000-4000-8000-000000000002/inventory',
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({
+          'X-CSRF-Token': 'inv-csrf',
+        }),
+      })
+    );
+  });
 });

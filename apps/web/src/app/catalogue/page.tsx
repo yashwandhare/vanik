@@ -1,136 +1,948 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { apiClient, ApiClientError } from '../../lib/api-client';
+import { ErrorAlert } from '../../components/ErrorAlert';
+import type {
+  ErrorEnvelope,
+  InventoryLineResponse,
+  ProductResponse,
+  SellerAgentSummary,
+  SellerSummary,
+} from '../../lib/types';
 
-// Representative 40-SKU Diwali Restock catalogue items
-const SAMPLE_40_SKUS = [
-  { id: '1', sku: 'RICE-BASMATI-5KG', name: 'Premium Basmati Rice 5kg', category: 'Staples', unit: 'bag', benchmarkPrice: '450.00' },
-  { id: '2', sku: 'RICE-KOLAM-25KG', name: 'Kolam Rice Bag 25kg', category: 'Staples', unit: 'bag', benchmarkPrice: '1450.00' },
-  { id: '3', sku: 'ATTA-CHAKKI-10KG', name: 'Chakki Fresh Wheat Atta 10kg', category: 'Staples', unit: 'bag', benchmarkPrice: '380.00' },
-  { id: '4', sku: 'MAIDA-PREMIUM-1KG', name: 'Refined Wheat Flour (Maida) 1kg', category: 'Staples', unit: 'packet', benchmarkPrice: '42.00' },
-  { id: '5', sku: 'SUGAR-M30-5KG', name: 'Refined Sugar M-30 Grade 5kg', category: 'Staples', unit: 'bag', benchmarkPrice: '210.00' },
-  { id: '6', sku: 'OIL-SUNFLOWER-1L', name: 'Refined Sunflower Cooking Oil 1L', category: 'Edible Oils', unit: 'pouch', benchmarkPrice: '135.00' },
-  { id: '7', sku: 'OIL-MUSTARD-1L', name: 'Kachi Ghani Mustard Oil 1L', category: 'Edible Oils', unit: 'bottle', benchmarkPrice: '150.00' },
-  { id: '8', sku: 'GHEE-COW-1L', name: 'Pure Cow Ghee 1L Tin', category: 'Dairy & Sweets', unit: 'tin', benchmarkPrice: '620.00' },
-  { id: '9', sku: 'DAL-TOOR-PREMIUM-1KG', name: 'Polished Toor Dal 1kg', category: 'Pulses', unit: 'packet', benchmarkPrice: '165.00' },
-  { id: '10', sku: 'DAL-MOONG-YELLOW-1KG', name: 'Yellow Moong Dal Split 1kg', category: 'Pulses', unit: 'packet', benchmarkPrice: '120.00' },
-  { id: '11', sku: 'DAL-CHANA-1KG', name: 'Desi Chana Dal 1kg', category: 'Pulses', unit: 'packet', benchmarkPrice: '95.00' },
-  { id: '12', sku: 'DAL-URAD-GOTA-1KG', name: 'White Urad Gota Whole 1kg', category: 'Pulses', unit: 'packet', benchmarkPrice: '140.00' },
-  { id: '13', sku: 'DRYFRUIT-CASHEW-W240', name: 'Premium Cashews W240 500g', category: 'Dry Fruits', unit: 'box', benchmarkPrice: '480.00' },
-  { id: '14', sku: 'DRYFRUIT-ALMOND-CALIF', name: 'California Almonds 500g', category: 'Dry Fruits', unit: 'box', benchmarkPrice: '420.00' },
-  { id: '15', sku: 'DRYFRUIT-RAISIN-GREEN', name: 'Green Kishmish (Raisins) 500g', category: 'Dry Fruits', unit: 'packet', benchmarkPrice: '180.00' },
-  { id: '16', sku: 'DRYFRUIT-PISTA-ROAST', name: 'Roasted Salted Pistachios 250g', category: 'Dry Fruits', unit: 'pouch', benchmarkPrice: '310.00' },
-  { id: '17', sku: 'SPICE-CARDAMOM-8MM', name: 'Green Cardamom (Elaichi) 8mm 100g', category: 'Spices', unit: 'bottle', benchmarkPrice: '280.00' },
-  { id: '18', sku: 'SPICE-CLOVE-WHOLE', name: 'Selected Whole Cloves (Laung) 100g', category: 'Spices', unit: 'packet', benchmarkPrice: '110.00' },
-  { id: '19', sku: 'SPICE-BLACKPEPPER', name: 'Malabar Black Pepper 100g', category: 'Spices', unit: 'packet', benchmarkPrice: '90.00' },
-  { id: '20', sku: 'SPICE-CINNAMON-STICK', name: 'Ceylon Cinnamon Quills 100g', category: 'Spices', unit: 'packet', benchmarkPrice: '85.00' },
+const CATEGORIES = [
+  { slug: 'all', label: 'All Categories' },
+  { slug: 'staples', label: 'Staples' },
+  { slug: 'edible_oils', label: 'Edible Oils' },
+  { slug: 'dry_fruits', label: 'Dry Fruits' },
+  { slug: 'confectionery', label: 'Confectionery' },
+  { slug: 'spices', label: 'Spices' },
 ];
 
+const COVERAGE_REGIONS = ['all', 'pune', 'mumbai', 'delhi', 'ahmedabad', 'bengaluru'];
+
 export default function CataloguePage() {
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('All');
+  const [activeTab, setActiveTab] = useState<'catalogue' | 'sellers'>('catalogue');
 
-  const categories = ['All', 'Staples', 'Edible Oils', 'Dairy & Sweets', 'Pulses', 'Dry Fruits', 'Spices'];
+  // Catalogue State
+  const [products, setProducts] = useState<ProductResponse[]>([]);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [catalogueSearch, setCatalogueSearch] = useState('');
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [productsError, setProductsError] = useState<ErrorEnvelope | string | null>(null);
 
-  const filtered = SAMPLE_40_SKUS.filter((item) => {
-    const matchesSearch = item.name.toLowerCase().includes(search.toLowerCase()) || item.sku.toLowerCase().includes(search.toLowerCase());
-    const matchesCat = category === 'All' || item.category === category;
-    return matchesSearch && matchesCat;
-  });
+  // Sellers State
+  const [sellers, setSellers] = useState<SellerSummary[]>([]);
+  const [totalSellers, setTotalSellers] = useState(0);
+  const [sellerSearch, setSellerSearch] = useState('');
+  const [sellerCoverage, setSellerCoverage] = useState('all');
+  const [maxDeliveryDays, setMaxDeliveryDays] = useState('');
+  const [minCreditDays, setMinCreditDays] = useState('');
+  const [loadingSellers, setLoadingSellers] = useState(true);
+  const [sellersError, setSellersError] = useState<ErrorEnvelope | string | null>(null);
+
+  // Inventory Inspector & Stock Edit State
+  const [inspectingSeller, setInspectingSeller] = useState<SellerSummary | null>(null);
+  const [inspectingAgent, setInspectingAgent] = useState<SellerAgentSummary | null>(null);
+  const [inventoryItems, setInventoryItems] = useState<InventoryLineResponse[]>([]);
+  const [loadingInventory, setLoadingInventory] = useState(false);
+  const [inventoryError, setInventoryError] = useState<ErrorEnvelope | string | null>(null);
+
+  // Stock Update Sub-State
+  const [editingLine, setEditingLine] = useState<InventoryLineResponse | null>(null);
+  const [stockInput, setStockInput] = useState('');
+  const [updatingStock, setUpdatingStock] = useState(false);
+  const [stockError, setStockError] = useState<ErrorEnvelope | string | null>(null);
+  const [stockSuccess, setStockSuccess] = useState<string | null>(null);
+
+  // Modal references for focus trapping and restoration
+  const inventoryDialogRef = useRef<HTMLDivElement>(null);
+  const stockDialogRef = useRef<HTMLDivElement>(null);
+  const triggerButtonRef = useRef<HTMLButtonElement | null>(null);
+  const stockInputRef = useRef<HTMLInputElement>(null);
+
+  // Attempt session restoration on mount
+  useEffect(() => {
+    apiClient.getSession().catch(() => {});
+  }, []);
+
+  // Fetch Catalogue Products
+  const fetchProducts = useCallback(async () => {
+    setLoadingProducts(true);
+    setProductsError(null);
+    try {
+      const res = await apiClient.listCatalogueProducts({
+        category: selectedCategory !== 'all' ? selectedCategory : undefined,
+        query: catalogueSearch.trim() || undefined,
+        limit: 100,
+      });
+      setProducts(res.data.items);
+      setTotalProducts(res.data.pagination.total);
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setProductsError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'catalogue-error',
+        });
+      } else {
+        setProductsError(err instanceof Error ? err.message : 'Failed to load catalogue products');
+      }
+    } finally {
+      setLoadingProducts(false);
+    }
+  }, [selectedCategory, catalogueSearch]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  // Fetch Marketplace Sellers
+  const fetchSellers = useCallback(async () => {
+    setLoadingSellers(true);
+    setSellersError(null);
+    try {
+      const res = await apiClient.listMarketplaceSellers({
+        coverage: sellerCoverage !== 'all' ? sellerCoverage : undefined,
+        max_delivery_days: maxDeliveryDays ? Number(maxDeliveryDays) : undefined,
+        min_credit_days: minCreditDays ? Number(minCreditDays) : undefined,
+        query: sellerSearch.trim() || undefined,
+        limit: 50,
+      });
+      setSellers(res.data.items);
+      setTotalSellers(res.data.pagination.total);
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setSellersError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'sellers-error',
+        });
+      } else {
+        setSellersError(err instanceof Error ? err.message : 'Failed to load marketplace sellers');
+      }
+    } finally {
+      setLoadingSellers(false);
+    }
+  }, [sellerCoverage, maxDeliveryDays, minCreditDays, sellerSearch]);
+
+  useEffect(() => {
+    fetchSellers();
+  }, [fetchSellers]);
+
+  // Open Inventory Inspector
+  const openInventoryModal = async (
+    seller: SellerSummary,
+    agent: SellerAgentSummary,
+    triggerElement: HTMLButtonElement | null
+  ) => {
+    triggerButtonRef.current = triggerElement;
+    setInspectingSeller(seller);
+    setInspectingAgent(agent);
+    setInventoryItems([]);
+    setInventoryError(null);
+    setStockSuccess(null);
+    setStockError(null);
+    setEditingLine(null);
+    setLoadingInventory(true);
+
+    try {
+      const res = await apiClient.getSellerInventory(seller.principal_id, agent.agent_id, {
+        limit: 100,
+      });
+      setInventoryItems(res.data.items);
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setInventoryError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'inventory-error',
+        });
+      } else {
+        setInventoryError(err instanceof Error ? err.message : 'Failed to fetch live inventory');
+      }
+    } finally {
+      setLoadingInventory(false);
+    }
+  };
+
+  const closeInventoryModal = () => {
+    setInspectingSeller(null);
+    setInspectingAgent(null);
+    setEditingLine(null);
+    if (triggerButtonRef.current && triggerButtonRef.current.isConnected) {
+      triggerButtonRef.current.focus();
+    }
+  };
+
+  // Keyboard navigation & Focus Trapping for Inventory Modal
+  useEffect(() => {
+    if (!inspectingSeller || editingLine) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeInventoryModal();
+      }
+      if (e.key === 'Tab') {
+        const controls = inventoryDialogRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]'
+        );
+        const first = controls?.[0];
+        const last = controls?.[controls.length - 1];
+        if (e.shiftKey && first && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && last && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [inspectingSeller, editingLine]);
+
+  // Focus Trapping for Stock Edit Modal
+  useEffect(() => {
+    if (!editingLine) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setEditingLine(null);
+      }
+      if (e.key === 'Tab') {
+        const controls = stockDialogRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]'
+        );
+        const first = controls?.[0];
+        const last = controls?.[controls.length - 1];
+        if (e.shiftKey && first && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && last && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    const timeout = setTimeout(() => stockInputRef.current?.focus(), 50);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      clearTimeout(timeout);
+    };
+  }, [editingLine]);
+
+  // Submit Stock Update
+  const handleUpdateStock = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inspectingSeller || !inspectingAgent || !editingLine) return;
+
+    const parsedQty = parseFloat(stockInput);
+    if (isNaN(parsedQty) || parsedQty < 0) {
+      setStockError('Stock quantity must be a non-negative number.');
+      return;
+    }
+
+    setUpdatingStock(true);
+    setStockError(null);
+    setStockSuccess(null);
+
+    try {
+      const res = await apiClient.updateSellerInventory(
+        inspectingSeller.principal_id,
+        inspectingAgent.agent_id,
+        {
+          product_id: editingLine.product.id,
+          stock_qty: parsedQty,
+        }
+      );
+
+      // Update item in local inventory table
+      setInventoryItems((prev) =>
+        prev.map((item) =>
+          item.product.id === editingLine.product.id
+            ? { ...item, available_qty: res.data.available_qty }
+            : item
+        )
+      );
+
+      setStockSuccess(`Stock for ${editingLine.product.sku} successfully updated to ${res.data.available_qty} ${editingLine.product.unit}.`);
+      setEditingLine(null);
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setStockError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'stock-error',
+        });
+      } else {
+        setStockError(err instanceof Error ? err.message : 'Stock update failed');
+      }
+    } finally {
+      setUpdatingStock(false);
+    }
+  };
 
   return (
     <div className="vanik-container py-10 sm:py-14 space-y-8">
-      {/* Header */}
+      {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#c0c2a9] pb-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
-              [ MANDI COMMODITY LEDGER ]
+              [ MANDI COMMODITY & COUNTERPARTY LEDGER ]
             </span>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#aafdc0] text-[#003d21] border border-[#000000] font-bold">
-              PHASE 0 SHELL
+              PHASE 2 LIVE
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#000000] tracking-tight">
-            Diwali Restock Catalogue (40 SKU Basket)
+            Diwali Restock Catalogue & Marketplace
           </h1>
-          <p className="text-xs sm:text-sm text-[#5a5a4f]">
-            Standardized wholesale commodities with seed benchmark reference prices to prevent fraudulent discount inflation.
+          <p className="text-xs sm:text-sm text-[#5a5a4f] max-w-3xl">
+            Live commodity catalogue with benchmark reference prices, verified wholesale supplier discovery, and real-time inventory ledger powered by autonomous A2A negotiation agents.
           </p>
         </div>
 
-        <div className="text-xs text-[#202020] bg-[#ffffff] border-[1.5px] border-[#000000] px-4 py-2 rounded-[13px] font-mono font-bold self-start sm:self-auto">
-          Scope: <span className="text-[#003d21]">40 Distinct SKUs</span>
+        {/* Tab Switcher */}
+        <div
+          role="tablist"
+          aria-label="Catalogue sections"
+          className="flex items-center bg-[#ffffff] border-[1.5px] border-[#000000] p-1 rounded-[14px] shadow-sm self-start sm:self-auto"
+        >
+          <button
+            role="tab"
+            id="tab-catalogue"
+            aria-selected={activeTab === 'catalogue'}
+            aria-controls="panel-catalogue"
+            onClick={() => setActiveTab('catalogue')}
+            className={`px-4 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
+              activeTab === 'catalogue'
+                ? 'bg-[#202020] text-white shadow-sm'
+                : 'text-[#5a5a4f] hover:text-[#000000]'
+            }`}
+          >
+            40-SKU Catalogue ({totalProducts || products.length})
+          </button>
+          <button
+            role="tab"
+            id="tab-sellers"
+            aria-selected={activeTab === 'sellers'}
+            aria-controls="panel-sellers"
+            onClick={() => setActiveTab('sellers')}
+            className={`px-4 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
+              activeTab === 'sellers'
+                ? 'bg-[#202020] text-white shadow-sm'
+                : 'text-[#5a5a4f] hover:text-[#000000]'
+            }`}
+          >
+            Wholesale Sellers ({totalSellers || sellers.length})
+          </button>
         </div>
       </div>
 
-      {/* Filter / Search Bar */}
-      <div className="flex flex-wrap items-center gap-3 bg-[#ffffff] border-[1.5px] border-[#000000] p-4 rounded-[16px]">
-        <input
-          type="text"
-          aria-label="Filter catalogue by SKU or product name"
-          placeholder="Filter by SKU code or product name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-[200px] px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs text-[#000000] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
-        />
-
-        <div className="flex flex-wrap gap-1.5" role="toolbar" aria-label="Filter by product category">
-          {categories.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => setCategory(c)}
-              className={`px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
-                category === c
-                  ? 'bg-[#202020] text-white border border-[#000000]'
-                  : 'bg-[#f8f9eb] text-[#5a5a4f] hover:text-[#000000] border border-[#c0c2a9]'
-              }`}
-            >
-              {c}
-            </button>
-          ))}
+      {/* Global Success / Notice Alert */}
+      {stockSuccess && (
+        <div className="bg-[#aafdc0] border-[1.5px] border-[#000000] rounded-[16px] p-4 text-[#003d21] text-xs font-bold flex items-center justify-between">
+          <span>✓ {stockSuccess}</span>
+          <button
+            type="button"
+            onClick={() => setStockSuccess(null)}
+            className="text-[#003d21] hover:text-[#000000] font-mono text-xs px-2 py-1"
+          >
+            ✕
+          </button>
         </div>
-      </div>
+      )}
 
-      {/* Ledger Table */}
-      <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[20px] overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[650px] text-left text-xs">
-            <thead className="bg-[#f8f9eb] text-[#202020] uppercase font-mono tracking-wider border-b-[1.5px] border-[#000000]">
-              <tr>
-                <th className="px-5 py-3.5">SKU Code</th>
-                <th className="px-5 py-3.5">Product Name</th>
-                <th className="px-5 py-3.5">Category</th>
-                <th className="px-5 py-3.5">Unit</th>
-                <th className="px-5 py-3.5 text-right">Benchmark Price (INR)</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#c0c2a9] font-sans">
-              {filtered.map((item) => (
-                <tr key={item.id} className="hover:bg-[#f8f9eb]/60 transition-colors">
-                  <td className="px-5 py-3.5 font-mono text-[#000000] font-bold">{item.sku}</td>
-                  <td className="px-5 py-3.5 text-[#202020] font-semibold">{item.name}</td>
-                  <td className="px-5 py-3.5 text-[#5a5a4f]">
-                    <span className="px-2.5 py-0.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-full text-[11px] font-mono">
-                      {item.category}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3.5 text-[#7c7d76] capitalize font-mono">{item.unit}</td>
-                  <td className="px-5 py-3.5 text-right font-mono text-[#003d21] font-bold text-sm">
-                    ₹{item.benchmarkPrice}
-                  </td>
-                </tr>
+      {/* TAB 1: 40-SKU CATALOGUE */}
+      {activeTab === 'catalogue' && (
+        <section
+          id="panel-catalogue"
+          role="tabpanel"
+          aria-labelledby="tab-catalogue"
+          className="space-y-6"
+        >
+          {/* Filter Bar */}
+          <div className="flex flex-wrap items-center gap-3 bg-[#ffffff] border-[1.5px] border-[#000000] p-4 rounded-[16px]">
+            <input
+              type="text"
+              aria-label="Search catalogue products by SKU code or name"
+              placeholder="Filter by SKU (e.g. STP-RICE) or product name..."
+              value={catalogueSearch}
+              onChange={(e) => setCatalogueSearch(e.target.value)}
+              className="flex-1 min-w-[220px] px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs text-[#000000] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+            />
+
+            <div className="flex flex-wrap gap-1.5" role="toolbar" aria-label="Filter products by category">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.slug}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.slug)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
+                    selectedCategory === cat.slug
+                      ? 'bg-[#202020] text-white border border-[#000000]'
+                      : 'bg-[#f8f9eb] text-[#5a5a4f] hover:text-[#000000] border border-[#c0c2a9]'
+                  }`}
+                >
+                  {cat.label}
+                </button>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <div className="p-4 bg-[#ffffff] border border-[#c0c2a9] rounded-[13px] text-xs text-[#5a5a4f] flex flex-wrap items-center justify-between gap-2">
-        <span>Backend Catalogue API is slated for Phase 2 by Main.</span>
-        <span className="font-mono text-[#7c7d76] text-[11px]">Ref: docs/delivery/PROJECT_TODO.md</span>
-      </div>
+          {productsError && (
+            <ErrorAlert error={productsError} onDismiss={() => setProductsError(null)} />
+          )}
+
+          {/* Table Container */}
+          <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[20px] overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[700px] text-left text-xs">
+                <thead className="bg-[#f8f9eb] text-[#202020] uppercase font-mono tracking-wider border-b-[1.5px] border-[#000000]">
+                  <tr>
+                    <th className="px-5 py-3.5">SKU Code</th>
+                    <th className="px-5 py-3.5">Product Name</th>
+                    <th className="px-5 py-3.5">Category</th>
+                    <th className="px-5 py-3.5">Unit</th>
+                    <th className="px-5 py-3.5 text-right">Benchmark Price</th>
+                    <th className="px-5 py-3.5 text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#c0c2a9] font-sans">
+                  {loadingProducts ? (
+                    <tr>
+                      <td colSpan={6} className="px-5 py-12 text-center text-[#5a5a4f] font-mono">
+                        <span className="inline-block w-4 h-4 border-2 border-[#000000] border-t-transparent rounded-full animate-spin mr-2" />
+                        Querying live mandi catalogue (/v1/catalogue/products)...
+                      </td>
+                    </tr>
+                  ) : products.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-5 py-12 text-center text-[#5a5a4f]">
+                        No matching catalogue items found.
+                      </td>
+                    </tr>
+                  ) : (
+                    products.map((item) => (
+                      <tr key={item.id} className="hover:bg-[#f8f9eb]/60 transition-colors">
+                        <td className="px-5 py-3.5 font-mono text-[#000000] font-bold">
+                          {item.sku}
+                        </td>
+                        <td className="px-5 py-3.5 text-[#202020] font-semibold">
+                          {item.name}
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <span className="px-2.5 py-0.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-full text-[11px] font-mono capitalize">
+                            {item.category.replace('_', ' ')}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3.5 text-[#7c7d76] capitalize font-mono">
+                          {item.unit}
+                        </td>
+                        <td className="px-5 py-3.5 text-right font-mono text-[#003d21] font-bold text-sm">
+                          ₹{item.benchmark_price}
+                        </td>
+                        <td className="px-5 py-3.5 text-center">
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${
+                              item.active
+                                ? 'bg-[#aafdc0] text-[#003d21] border border-[#000000]'
+                                : 'bg-[#edeee1] text-[#7c7d76] border border-[#c0c2a9]'
+                            }`}
+                          >
+                            {item.active ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Footer Status */}
+            <div className="p-4 bg-[#f8f9eb] border-t border-[#c0c2a9] text-xs text-[#5a5a4f] flex flex-wrap items-center justify-between gap-2">
+              <span className="font-mono">
+                Showing {products.length} of {totalProducts} verified mandi items
+              </span>
+              <span className="font-mono text-[#7c7d76] text-[11px]">
+                GET /v1/catalogue/products
+              </span>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* TAB 2: MARKETPLACE SELLERS & AGENTS */}
+      {activeTab === 'sellers' && (
+        <section
+          id="panel-sellers"
+          role="tabpanel"
+          aria-labelledby="tab-sellers"
+          className="space-y-6"
+        >
+          {/* Seller Filter Toolbar */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#ffffff] border-[1.5px] border-[#000000] p-4 rounded-[16px]">
+            <div>
+              <label htmlFor="seller-query" className="block text-[11px] font-mono font-bold text-[#7c7d76] uppercase mb-1">
+                Search Sellers
+              </label>
+              <input
+                id="seller-query"
+                type="text"
+                placeholder="Search trade name..."
+                value={sellerSearch}
+                onChange={(e) => setSellerSearch(e.target.value)}
+                className="w-full px-3 py-1.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[8px] text-xs text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="seller-coverage" className="block text-[11px] font-mono font-bold text-[#7c7d76] uppercase mb-1">
+                Coverage Region
+              </label>
+              <select
+                id="seller-coverage"
+                value={sellerCoverage}
+                onChange={(e) => setSellerCoverage(e.target.value)}
+                className="w-full px-3 py-1.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[8px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+              >
+                {COVERAGE_REGIONS.map((r) => (
+                  <option key={r} value={r}>
+                    {r === 'all' ? 'All Delivery Regions' : r.toUpperCase()}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="seller-delivery" className="block text-[11px] font-mono font-bold text-[#7c7d76] uppercase mb-1">
+                Max Delivery Days
+              </label>
+              <select
+                id="seller-delivery"
+                value={maxDeliveryDays}
+                onChange={(e) => setMaxDeliveryDays(e.target.value)}
+                className="w-full px-3 py-1.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[8px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+              >
+                <option value="">Any Fulfillment Speed</option>
+                <option value="2">Within 2 Days</option>
+                <option value="3">Within 3 Days</option>
+                <option value="5">Within 5 Days</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="seller-credit" className="block text-[11px] font-mono font-bold text-[#7c7d76] uppercase mb-1">
+                Min Credit Terms
+              </label>
+              <select
+                id="seller-credit"
+                value={minCreditDays}
+                onChange={(e) => setMinCreditDays(e.target.value)}
+                className="w-full px-3 py-1.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[8px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+              >
+                <option value="">Any Credit Window</option>
+                <option value="0">Net 0 (Cash only)</option>
+                <option value="7">Net 7 Days+</option>
+                <option value="15">Net 15 Days+</option>
+                <option value="30">Net 30 Days+</option>
+              </select>
+            </div>
+          </div>
+
+          {sellersError && (
+            <ErrorAlert error={sellersError} onDismiss={() => setSellersError(null)} />
+          )}
+
+          {/* Sellers Grid */}
+          {loadingSellers ? (
+            <div className="p-12 text-center text-[#5a5a4f] bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[20px] font-mono text-xs">
+              <span className="inline-block w-4 h-4 border-2 border-[#000000] border-t-transparent rounded-full animate-spin mr-2" />
+              Discovering verified wholesale sellers (/v1/marketplace/sellers)...
+            </div>
+          ) : sellers.length === 0 ? (
+            <div className="p-12 text-center text-[#5a5a4f] bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[20px]">
+              No sellers match the selected delivery criteria or coverage zone.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sellers.map((seller) => (
+                <div
+                  key={seller.principal_id}
+                  className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[20px] p-6 shadow-sm flex flex-col justify-between space-y-6"
+                >
+                  <div className="space-y-4">
+                    {/* Seller Header */}
+                    <div className="flex items-start justify-between gap-3 border-b border-[#c0c2a9] pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h2 className="text-xl font-extrabold text-[#000000]">
+                            {seller.trade_name}
+                          </h2>
+                          {seller.evidence_is_simulated && (
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f8f9eb] text-[#7c7d76] border border-[#c0c2a9] font-bold">
+                              SYNTHETIC
+                            </span>
+                          )}
+                        </div>
+                        <p className="font-mono text-[11px] text-[#7c7d76] mt-0.5">
+                          ID: {seller.principal_id}
+                        </p>
+                      </div>
+
+                      <span
+                        className={`text-[10px] font-mono px-2.5 py-1 rounded-full uppercase font-bold border ${
+                          seller.verification_status === 'demo_verified'
+                            ? 'bg-[#aafdc0] text-[#003d21] border-[#000000]'
+                            : 'bg-[#edeee1] text-[#202020] border-[#c0c2a9]'
+                        }`}
+                      >
+                        {seller.verification_status.replace('_', ' ')}
+                      </span>
+                    </div>
+
+                    {/* Commercial Terms Badges */}
+                    <div className="grid grid-cols-3 gap-2.5 font-mono text-center">
+                      <div className="bg-[#f8f9eb] p-2.5 rounded-[12px] border border-[#c0c2a9]">
+                        <span className="text-[10px] uppercase text-[#7c7d76] block font-bold">Fulfillment</span>
+                        <span className="text-xs font-extrabold text-[#000000]">
+                          {seller.delivery_days} {seller.delivery_days === 1 ? 'day' : 'days'}
+                        </span>
+                      </div>
+
+                      <div className="bg-[#f8f9eb] p-2.5 rounded-[12px] border border-[#c0c2a9]">
+                        <span className="text-[10px] uppercase text-[#7c7d76] block font-bold">Credit Terms</span>
+                        <span className="text-xs font-extrabold text-[#000000]">
+                          {seller.credit_days.length > 0
+                            ? seller.credit_days.map((d) => `Net ${d}`).join(', ')
+                            : 'Prepaid'}
+                        </span>
+                      </div>
+
+                      <div className="bg-[#f8f9eb] p-2.5 rounded-[12px] border border-[#c0c2a9]">
+                        <span className="text-[10px] uppercase text-[#7c7d76] block font-bold">Live Basket</span>
+                        <span className="text-xs font-extrabold text-[#003d21]">
+                          {seller.available_sku_count} SKUs
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Regional Coverage */}
+                    <div>
+                      <span className="text-[10px] font-mono uppercase text-[#7c7d76] font-bold block mb-1.5">
+                        Supply Coverage:
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {seller.coverage.map((city) => (
+                          <span
+                            key={city}
+                            className="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#edeee1] text-[#202020] border border-[#c0c2a9] font-medium uppercase"
+                          >
+                            {city}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Reliability & Trade History (Strict Non-Synthetic Representation) */}
+                    <div className="p-3 bg-[#f8f9eb] rounded-[13px] border border-[#c0c2a9] space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-mono font-bold text-[#202020]">
+                          Mandi Reliability Record:
+                        </span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ffffff] text-[#7c7d76] border border-[#c0c2a9]">
+                          {seller.reliability_score !== null
+                            ? `Score: ${seller.reliability_score}`
+                            : 'Unrated (New Seller)'}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#5a5a4f]">
+                        {seller.reliability_evidence_count === 0
+                          ? '0 verified trade outcomes recorded on-chain. Counterparties establish trust through cryptographic passports and deposit guarantees.'
+                          : `${seller.reliability_evidence_count} settled contract outcomes.`}
+                      </p>
+                    </div>
+
+                    {/* Autonomous Trading Agents */}
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-mono uppercase text-[#7c7d76] font-bold block">
+                        Assigned Autonomous Negotiation Agents:
+                      </span>
+                      {seller.agents.map((ag) => (
+                        <div
+                          key={ag.agent_id}
+                          className="flex items-center justify-between p-3 rounded-[12px] bg-[#ffffff] border border-[#000000]"
+                        >
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-[#000000]">{ag.name}</span>
+                              <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-[#aafdc0] text-[#003d21] border border-[#000000] font-bold">
+                                {ag.status}
+                              </span>
+                            </div>
+                            <span className="text-[11px] font-mono text-[#5a5a4f] block">
+                              Strategy: <strong className="text-[#000000] capitalize">{ag.strategy_profile.replace('_', ' ')}</strong>
+                            </span>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={(e) => openInventoryModal(seller, ag, e.currentTarget)}
+                            className="px-3 py-1.5 rounded-[9px] bg-[#202020] text-white hover:bg-[#000000] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+                          >
+                            Inspect Live Inventory →
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* MODAL 1: INVENTORY INSPECTOR DIALOG */}
+      {inspectingSeller && inspectingAgent && !editingLine && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="inventory-dialog-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        >
+          <div
+            ref={inventoryDialogRef}
+            className="w-full max-w-4xl max-h-[90vh] bg-[#ffffff] border-[2px] border-[#000000] rounded-[24px] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          >
+            {/* Modal Header */}
+            <div className="p-6 border-b-[1.5px] border-[#000000] bg-[#f8f9eb] flex items-start justify-between gap-4">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#7c7d76] font-bold block mb-1">
+                  [ LIVE AGENT INVENTORY LEDGER ]
+                </span>
+                <h2 id="inventory-dialog-title" className="text-2xl font-extrabold text-[#000000]">
+                  {inspectingSeller.trade_name}
+                </h2>
+                <p className="text-xs text-[#5a5a4f] mt-1 font-mono">
+                  Agent: <strong className="text-[#000000]">{inspectingAgent.name}</strong> ({inspectingAgent.strategy_profile}) | ID: {inspectingAgent.agent_id}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeInventoryModal}
+                className="w-8 h-8 rounded-full border border-[#000000] bg-[#ffffff] hover:bg-[#edeee1] flex items-center justify-center font-mono font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+                aria-label="Close inventory dialog"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Inventory Informational Banner */}
+            <div className="bg-[#edeee1] px-6 py-3 border-b border-[#c0c2a9] text-xs text-[#5a5a4f] flex items-center justify-between">
+              <span>
+                💡 <strong>Public Free-to-Sell Inventory</strong>: Available quantities reflect unreserved on-hand allocations.
+              </span>
+              <span className="font-mono text-[11px] text-[#202020] font-bold">
+                {inventoryItems.length} lines listed
+              </span>
+            </div>
+
+            {/* Inventory Body / Table */}
+            <div className="p-6 overflow-y-auto space-y-4 flex-1">
+              {inventoryError && (
+                <ErrorAlert error={inventoryError} onDismiss={() => setInventoryError(null)} />
+              )}
+
+              {loadingInventory ? (
+                <div className="py-16 text-center font-mono text-xs text-[#5a5a4f]">
+                  <span className="inline-block w-4 h-4 border-2 border-[#000000] border-t-transparent rounded-full animate-spin mr-2" />
+                  Querying seller inventory allocation...
+                </div>
+              ) : inventoryItems.length === 0 ? (
+                <div className="py-16 text-center text-xs text-[#5a5a4f]">
+                  No active inventory lines discovered for this agent.
+                </div>
+              ) : (
+                <div className="border border-[#000000] rounded-[16px] overflow-hidden">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#f8f9eb] border-b border-[#000000] font-mono text-[#202020] uppercase">
+                      <tr>
+                        <th className="px-4 py-3">SKU</th>
+                        <th className="px-4 py-3">Commodity</th>
+                        <th className="px-4 py-3">Benchmark</th>
+                        <th className="px-4 py-3 text-right">Available Qty</th>
+                        <th className="px-4 py-3 text-center">Manage</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#c0c2a9]">
+                      {inventoryItems.map((line) => (
+                        <tr key={line.product.id} className="hover:bg-[#f8f9eb]/60">
+                          <td className="px-4 py-3 font-mono font-bold text-[#000000]">
+                            {line.product.sku}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className="font-semibold text-[#000000] block">{line.product.name}</span>
+                            <span className="text-[10px] text-[#7c7d76] font-mono capitalize">
+                              {line.product.category.replace('_', ' ')} • {line.product.unit}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 font-mono text-[#5a5a4f]">
+                            ₹{line.product.benchmark_price}
+                          </td>
+                          <td className="px-4 py-3 text-right font-mono font-bold text-sm text-[#003d21]">
+                            {line.available_qty} {line.product.unit}s
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingLine(line);
+                                setStockInput(line.available_qty);
+                                setStockError(null);
+                              }}
+                              className="px-2.5 py-1 bg-[#ffffff] hover:bg-[#edeee1] border border-[#000000] rounded-[7px] text-[11px] font-mono font-bold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+                            >
+                              Update Stock
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-[#c0c2a9] bg-[#f8f9eb] flex items-center justify-between">
+              <span className="text-[11px] font-mono text-[#7c7d76]">
+                POST /v1/principals/{'{id}'}/agents/{'{agent_id}'}/inventory requires principal auth & CSRF token
+              </span>
+              <button
+                type="button"
+                onClick={closeInventoryModal}
+                className="px-4 py-2 bg-[#202020] text-white hover:bg-[#000000] text-xs font-mono font-bold rounded-[10px]"
+              >
+                Close Inspector
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 2: STOCK UPDATE DIALOG */}
+      {editingLine && inspectingSeller && inspectingAgent && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="stock-dialog-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        >
+          <div
+            ref={stockDialogRef}
+            className="w-full max-w-md bg-[#ffffff] border-[2px] border-[#000000] rounded-[24px] shadow-2xl overflow-hidden p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#7c7d76] font-bold block mb-1">
+                  [ STOCK QUANTITY RECONCILIATION ]
+                </span>
+                <h3 id="stock-dialog-title" className="text-xl font-extrabold text-[#000000]">
+                  Update On-Hand Stock
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingLine(null)}
+                className="w-7 h-7 rounded-full border border-[#000000] flex items-center justify-center font-mono font-bold text-xs hover:bg-[#edeee1]"
+                aria-label="Cancel stock update"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-3 bg-[#f8f9eb] rounded-[12px] border border-[#c0c2a9] space-y-1">
+              <span className="font-mono text-xs font-bold text-[#000000] block">
+                {editingLine.product.sku}
+              </span>
+              <span className="text-xs text-[#5a5a4f] block">
+                {editingLine.product.name}
+              </span>
+              <span className="text-[11px] font-mono text-[#003d21] font-bold block">
+                Current Available: {editingLine.available_qty} {editingLine.product.unit}s
+              </span>
+            </div>
+
+            {stockError && (
+              <ErrorAlert error={stockError} onDismiss={() => setStockError(null)} />
+            )}
+
+            <form onSubmit={handleUpdateStock} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="stock-qty-input"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
+                  New Total Stock Quantity ({editingLine.product.unit}s)
+                </label>
+                <input
+                  id="stock-qty-input"
+                  ref={stockInputRef}
+                  type="number"
+                  step="any"
+                  min="0"
+                  required
+                  value={stockInput}
+                  onChange={(e) => setStockInput(e.target.value)}
+                  placeholder="e.g. 500"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-sm font-mono font-bold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+                />
+                <p className="text-[11px] text-[#5a5a4f] mt-1.5 leading-relaxed">
+                  Total on-hand stock. Note: Cannot reduce stock below existing buyer reservations (HTTP 409 Conflict). Requires authenticated Owner/Admin/Operator role.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingLine(null)}
+                  className="px-4 py-2 border border-[#000000] rounded-[9px] text-xs font-mono font-bold text-[#000000] hover:bg-[#edeee1]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={updatingStock}
+                  className="px-5 py-2 bg-[#202020] hover:bg-[#000000] text-white border border-[#000000] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2"
+                >
+                  {updatingStock ? (
+                    <>
+                      <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    'Save Stock Quantity'
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,11 +8,18 @@ import type {
   ErrorEnvelope,
   ErrorResponse,
   HealthResponse,
+  InventoryLineResponse,
+  InventoryResponse,
+  InventoryUpdateRequest,
   LoginRequest,
   PrincipalCreateRequest,
   PrincipalResponse,
+  ProductListResponse,
+  ProductResponse,
   ReadinessResponse,
   RegisterRequest,
+  SellerListResponse,
+  SellerSummary,
   SessionResponse,
   TelegramLinkStartResponse,
   UserResponse,
@@ -291,6 +298,79 @@ export class ApiClient {
     return this.request<AgentPassportResponse>(
       `/v1/agents/${encodeURIComponent(agentId)}/keys/rotate`,
       { method: 'POST' }
+    );
+  }
+
+  // Marketplace & Catalogue (Phase 2 - Published in packages/shared-schemas/v1)
+  public async listCatalogueProducts(params?: {
+    category?: string;
+    query?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<{ data: ProductListResponse; isMock: boolean }> {
+    const searchParams = new URLSearchParams();
+    if (params?.category) searchParams.set('category', params.category);
+    if (params?.query) searchParams.set('query', params.query);
+    if (params?.limit !== undefined) searchParams.set('limit', String(params.limit));
+    if (params?.offset !== undefined) searchParams.set('offset', String(params.offset));
+
+    const qs = searchParams.toString();
+    const path = `/v1/catalogue/products${qs ? `?${qs}` : ''}`;
+    return this.request<ProductListResponse>(path, { method: 'GET' });
+  }
+
+  public async listMarketplaceSellers(params?: {
+    category?: string;
+    coverage?: string;
+    min_credit_days?: number;
+    max_delivery_days?: number;
+    query?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<{ data: SellerListResponse; isMock: boolean }> {
+    const searchParams = new URLSearchParams();
+    if (params?.category) searchParams.set('category', params.category);
+    if (params?.coverage) searchParams.set('coverage', params.coverage);
+    if (params?.min_credit_days !== undefined) {
+      searchParams.set('min_credit_days', String(params.min_credit_days));
+    }
+    if (params?.max_delivery_days !== undefined) {
+      searchParams.set('max_delivery_days', String(params.max_delivery_days));
+    }
+    if (params?.query) searchParams.set('query', params.query);
+    if (params?.limit !== undefined) searchParams.set('limit', String(params.limit));
+    if (params?.offset !== undefined) searchParams.set('offset', String(params.offset));
+
+    const qs = searchParams.toString();
+    const path = `/v1/marketplace/sellers${qs ? `?${qs}` : ''}`;
+    return this.request<SellerListResponse>(path, { method: 'GET' });
+  }
+
+  public async getSellerInventory(
+    principalId: string,
+    agentId: string,
+    params?: { limit?: number; offset?: number }
+  ): Promise<{ data: InventoryResponse; isMock: boolean }> {
+    const searchParams = new URLSearchParams();
+    if (params?.limit !== undefined) searchParams.set('limit', String(params.limit));
+    if (params?.offset !== undefined) searchParams.set('offset', String(params.offset));
+
+    const qs = searchParams.toString();
+    const path = `/v1/principals/${encodeURIComponent(principalId)}/agents/${encodeURIComponent(agentId)}/inventory${qs ? `?${qs}` : ''}`;
+    return this.request<InventoryResponse>(path, { method: 'GET' });
+  }
+
+  public async updateSellerInventory(
+    principalId: string,
+    agentId: string,
+    payload: InventoryUpdateRequest
+  ): Promise<{ data: InventoryLineResponse; isMock: boolean }> {
+    return this.request<InventoryLineResponse>(
+      `/v1/principals/${encodeURIComponent(principalId)}/agents/${encodeURIComponent(agentId)}/inventory`,
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }
     );
   }
 }
