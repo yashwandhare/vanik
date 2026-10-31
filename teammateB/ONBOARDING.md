@@ -14,9 +14,9 @@ The product has three interfaces:
 
 ## 2. Current repository state
 
-The repository now includes a working API foundation: settings, health checks, database sessions, initial identity schemas and tests. It also contains PostgreSQL and Redis configuration and project documentation.
+The repository includes working health, registration, session, logout, principal-creation and membership-authorized principal-read endpoints. It also contains shared identity schemas, an identity migration, PostgreSQL and Redis configuration and project documentation.
 
-Business workflows, authentication endpoints, database revisions, the web application, Telegram clients and demo data are not implemented yet. Read [the Phase 0 handoff](PHASE_0_HANDOFF.md) for the client work that can start.
+Verification, Telegram linking, agents, commerce workflows, the web application, Telegram clients and demo data are not implemented yet. Read the Phase 0 and Phase 1 handoffs for client work that can start.
 
 ## 3. Required reading
 
@@ -32,7 +32,7 @@ Read these files before implementation:
 8. `teammateB/GIT_PROTOCOL.md`
 9. `teammateB/TODO.md`
 
-Read `docs/engineering/TECHNOLOGY_BASELINE.md`, `docs/engineering/API_CONVENTIONS.md` and `teammateB/PHASE_0_HANDOFF.md` before scaffolding.
+Read `docs/engineering/TECHNOLOGY_BASELINE.md`, `docs/engineering/API_CONVENTIONS.md`, `teammateB/PHASE_0_HANDOFF.md` and `teammateB/PHASE_1_IDENTITY_HANDOFF.md` before scaffolding.
 
 Read `docs/engineering/DATA_MODEL.md` when a view depends on entity relationships. Read `docs/delivery/DEMO_RUNBOOK.md` before demo integration.
 

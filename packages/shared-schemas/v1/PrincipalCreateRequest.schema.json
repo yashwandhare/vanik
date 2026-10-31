@@ -43,7 +43,8 @@
       "maxItems": 2,
       "minItems": 1,
       "title": "Roles",
-      "type": "array"
+      "type": "array",
+      "uniqueItems": true
     },
     "trade_name": {
       "maxLength": 120,

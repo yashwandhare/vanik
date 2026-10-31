@@ -16,10 +16,11 @@ help:
 	@echo "dev-web        Run the Next.js web application on port 3000"
 	@echo "test           Run API, contract, and web tests"
 	@echo "lint           Check API and web formatting/linting"
+	@echo "format         Format API source"
 	@echo "typecheck      Run strict API and web type checks"
 	@echo "build-web      Build production bundle for web application"
 	@echo "contracts      Export versioned JSON schemas"
-	@echo "migrate        Apply database migrations when Phase 1 revisions exist"
+	@echo "migrate        Apply database migrations"
 	@echo "seed/demo/reset-demo are not implemented yet"
 
 infra:

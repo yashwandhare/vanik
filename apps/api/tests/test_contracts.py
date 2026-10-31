@@ -2,7 +2,7 @@ import json
 from decimal import Decimal
 from typing import Literal
 
-import pytest
+import pytest  # type: ignore[import-not-found, unused-ignore]
 from pydantic import ValidationError
 
 from app.contracts.identity import PrincipalCreateRequest, RegisterRequest
@@ -12,7 +12,9 @@ from scripts.export_schemas import MODELS, SCHEMA_DIRECTORY
 FIXTURE_DIRECTORY = SCHEMA_DIRECTORY / "fixtures"
 
 
-@pytest.mark.parametrize("name", sorted(MODELS))
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator, unused-ignore]
+    "name", sorted(MODELS)
+)
 def test_examples_validate_against_published_models(name: str) -> None:
     raw = json.loads((FIXTURE_DIRECTORY / f"{name}.json").read_text())
     parsed = MODELS[name].model_validate(raw)
@@ -20,7 +22,9 @@ def test_examples_validate_against_published_models(name: str) -> None:
         assert parsed.model_dump(mode="json") == raw
 
 
-@pytest.mark.parametrize("name", sorted(MODELS))
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator, unused-ignore]
+    "name", sorted(MODELS)
+)
 def test_exported_schemas_match_their_source(name: str) -> None:
     mode: Literal["validation", "serialization"] = (
         "validation" if name.endswith("Request") else "serialization"
@@ -44,6 +48,11 @@ def test_naive_timestamps_are_rejected() -> None:
     raw["created_at"] = "2026-10-31T10:00:00"
     with pytest.raises(ValidationError, match="timezone"):
         AgentPassportResponse.model_validate(raw)
+
+
+def test_principal_roles_schema_publishes_uniqueness() -> None:
+    schema = PrincipalCreateRequest.model_json_schema(mode="validation")
+    assert schema["properties"]["roles"]["uniqueItems"] is True
 
 
 def test_duplicate_business_roles_are_rejected() -> None:

@@ -12,7 +12,7 @@ Main selected this baseline for Phase 0. Backend versions are pinned in `apps/ap
 | Pydantic | 2.14.2 | Installed |
 | Pydantic Settings | 2.16.2 | Installed |
 | SQLAlchemy | 2.1.6 | Installed |
-| Alembic | 1.20.1 | Installed; no database revisions yet |
+| Alembic | 1.20.1 | Installed; identity revision implemented |
 | Psycopg | 3.3.6 | Installed with binary extra |
 | Uvicorn | 0.54.0 | Installed |
 | email-validator | 2.3.0 | Installed for identity email validation |
@@ -46,10 +46,8 @@ Use npm, not a second package manager. Commit `package-lock.json` when B creates
 
 ## Selected Phase 1 libraries
 
-- `cryptography==50.0.2` for Ed25519 and private-key encryption.
-- `argon2-cffi==25.1.0` for password hashing.
-
-These libraries are selected but not installed as application dependencies yet. Add them when the corresponding implementation begins.
+- `cryptography==50.0.2` for Ed25519 and private-key encryption. It will be added with agent identity.
+- `argon2-cffi==25.1.0` for password hashing. It is installed and used by authentication.
 
 ## LLM boundary
 

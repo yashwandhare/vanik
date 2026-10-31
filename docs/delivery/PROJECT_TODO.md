@@ -19,13 +19,13 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Create phased project and Teammate B checklists.
 - [x] Add repository ignore rules for secrets and generated files.
 - [x] Initialize Git and connect the project GitHub repository.
-- [ ] Configure `main` as the protected integration branch.
+- [x] Configure `main` as the protected integration branch.
 - [x] Select and record the initial backend, frontend, bot and cryptography versions.
 - [x] Define the Phase 1 authentication and session design.
 - [x] Define API route, pagination and error conventions.
 - [x] Publish initial identity schemas and representative JSON fixtures.
 - [x] Create the backend skeleton, configuration and database connection code.
-- [ ] Verify the real PostgreSQL integration tests in CI or a local service.
+- [x] Verify the real PostgreSQL integration tests in CI.
 - [ ] Publish the remaining Telegram, marketplace and commerce contract packs before their dependent client work.
 
 ### Teammate B
@@ -46,14 +46,15 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 
 ### Main
 
-- [ ] Implement users, principals, memberships and business roles.
-- [ ] Implement authentication, session expiry and logout.
+- [x] Implement users, principals, memberships and business roles.
+- [x] Implement authentication, session expiry and logout.
 - [ ] Implement explicitly simulated verification states.
 - [ ] Implement short-lived, single-use Telegram linking tokens.
 - [ ] Implement agent creation, lifecycle and ownership checks.
 - [ ] Generate and protect Ed25519 signing identities.
 - [ ] Implement Agent Passport responses and principal authority ceilings.
-- [ ] Add unit and integration tests for authority and identity boundaries.
+- [x] Add unit tests for authentication, CSRF and principal authority boundaries.
+- [x] Verify the identity migration and integration flow against PostgreSQL in CI.
 
 ### Teammate B
 
