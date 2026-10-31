@@ -10,6 +10,12 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - Teammate B owns the marketplace interfaces and Telegram clients.
 - A phase closes only after its checkpoint passes.
 
+## Current snapshot
+
+- **Phase 0:** Main repository/contracts/backend foundation complete. B's web/Bot foundation is still in PR #7; clean web installation and required CI are failing, so B items remain unchecked.
+- **Phase 1:** Main identity, verification, Telegram linking and persistent Agent Passport backend complete and PostgreSQL-verified. B integration remains pending review.
+- **Phases 2–7:** Not complete. Agent signing primitives exist, but mandates, signed envelopes, negotiation, trust, deals, complete replay/memory, deterministic seed/reset and demo rehearsal remain pending.
+
 ## Phase 0 — Repository, scope and contracts
 
 ### Main
@@ -26,7 +32,8 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Publish initial identity schemas and representative JSON fixtures.
 - [x] Create the backend skeleton, configuration and database connection code.
 - [x] Verify the real PostgreSQL integration tests in CI.
-- [ ] Publish the remaining Telegram, marketplace and commerce contract packs before their dependent client work.
+- [x] Publish identity, verification, Telegram-linking and Agent Passport contract packs before dependent client integration.
+- [ ] Publish marketplace, task, negotiation, trust, deal and event contract packs before dependent client integration.
 
 ### Teammate B
 
@@ -36,6 +43,7 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Establish routes, layout, navigation, design tokens and API client boundaries.
 - [x] Create contract-aligned mock fixtures only after Main publishes schemas.
 - [x] Create the Telegram Bot skeleton after Main confirms the library and contract.
+- [ ] Merge the verified web/Bot foundation through PR #7 after clean install and required CI pass.
 
 ### Checkpoint
 
@@ -50,11 +58,11 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Implement authentication, session expiry and logout.
 - [x] Implement explicitly simulated verification states.
 - [x] Implement short-lived, single-use Telegram linking tokens.
-- [ ] Implement agent creation, lifecycle and ownership checks.
-- [ ] Generate and protect Ed25519 signing identities.
-- [ ] Implement Agent Passport responses and principal authority ceilings.
+- [x] Implement agent creation, lifecycle and ownership checks.
+- [x] Generate and protect Ed25519 signing identities.
+- [x] Implement Agent Passport responses and principal authority ceilings.
 - [x] Add unit tests for authentication, CSRF and principal authority boundaries.
-- [x] Verify the identity migration and integration flow against PostgreSQL in CI.
+- [x] Verify the identity, verification, Telegram and Agent Passport migrations/integration flows against PostgreSQL in CI.
 
 ### Teammate B
 
@@ -101,8 +109,7 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 ### Main
 
 - [ ] Finalize canonical signed message schemas.
-- [ ] Implement Ed25519 signing and verification.
-- [ ] Implement key status, replay protection, nonce tracking and expiry checks.
+- [ ] Implement mandate-authorized signed message envelopes, replay protection and message expiry using the existing Ed25519 identity primitive.
 - [ ] Implement the negotiation state machine and valid transitions.
 - [ ] Implement concurrent per-seller RFQ dispatch with timeout isolation.
 - [ ] Implement margin, clearance and payment-risk seller strategies.
@@ -177,7 +184,8 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 
 ### Main
 
-- [ ] Implement append-only material event history.
+- [x] Implement append-only Agent Passport lifecycle and key-rotation events.
+- [ ] Extend append-only material event history across tasks, negotiations, security decisions and deals.
 - [ ] Implement Decision Replay from recorded events.
 - [ ] Implement supplier memory with source, time, scope and evidence.
 - [ ] Implement one scheduled or seeded proactive trigger.
@@ -200,11 +208,14 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 
 ### Main
 
-- [ ] Implement functional Make targets for install, development, tests, lint, format, migrations, seed, demo and reset.
-- [ ] Run backend unit, integration, state-machine and security tests.
-- [ ] Verify API authorization and principal isolation.
-- [ ] Verify migration, seed and reset behavior from a clean environment.
-- [ ] Integrate and review Teammate B pull requests.
+- [x] Implement functional API install, development, tests, lint, format, type-check and migration targets.
+- [ ] Integrate verified web/Bot targets and implement deterministic seed, demo and reset targets.
+- [x] Run identity/authority backend unit, PostgreSQL integration and security tests.
+- [ ] Run negotiation state-machine, trust, deal and full end-to-end tests.
+- [x] Verify implemented API authorization and principal isolation.
+- [x] Verify migration upgrade, drift, downgrade and re-upgrade behavior from clean PostgreSQL in CI.
+- [ ] Verify deterministic seed and reset behavior from a clean environment.
+- [ ] Integrate and review Teammate B PR #7; currently blocked by failed required CI and unresolved review findings.
 - [ ] Freeze `main` before final rehearsal.
 
 ### Teammate B

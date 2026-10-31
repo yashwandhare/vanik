@@ -9,6 +9,7 @@ from starlette.middleware.base import RequestResponseEndpoint
 from starlette.responses import Response
 
 from app import __version__
+from app.api.agents import router as agents_router
 from app.api.auth import router as auth_router
 from app.api.health import router as health_router
 from app.api.principals import router as principals_router
@@ -66,4 +67,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(principals_router)
     app.include_router(verification_router)
     app.include_router(telegram_router)
+    app.include_router(agents_router)
     return app

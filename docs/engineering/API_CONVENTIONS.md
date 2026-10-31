@@ -18,7 +18,7 @@ The following identity routes are implemented:
 - `POST /v1/telegram/link/complete`
 - `DELETE /v1/telegram/link`
 
-Agent, verification, Telegram and commerce routes remain unimplemented. Published schemas do not imply that their routes exist.
+Agent create/list/Passport/pause/resume/revoke/key-rotation routes are implemented. Commerce, notifications, task mandates and signed negotiation-envelope processing remain unimplemented.
 
 ## Routes and responses
 
@@ -115,13 +115,13 @@ P0 uses email and password authentication. Mobile login is deferred; the PRD per
 | `POST /v1/principals/{principal_id}/identifiers` | `BusinessIdentifierCreateRequest` | `201 BusinessIdentifierResponse`; owner/admin only |
 | `POST /v1/principals/{principal_id}/verification/demo` | None | `200 DemoVerificationResponse`; owner/admin only |
 
-## Published but unimplemented agent routes
+## Implemented agent routes
 
-The initial Agent Passport schemas can support mock UI work. These routes are not implemented:
+See [Agent Passport handoff](../../teammateB/AGENT_PASSPORT_HANDOFF.md) for the complete endpoint table, permission catalogs and lifecycle rules. Creation and management require owner/admin membership and CSRF/Origin checks. The principal must be active and demo-verified before agent creation or activation.
 
-- `POST /v1/principals/{principal_id}/agents`
-- `GET /v1/principals/{principal_id}/agents`
-- `GET /v1/agents/{agent_id}/passport`
+`GET /v1/agents/{agent_id}/passport` exposes only the public identity subset; no private keys, nonce, audit actor or principal ceiling is returned. Roster lists require principal membership. Revoked Passports remain inspectable, but revoked or paused identities cannot sign accepted payloads.
+
+Signing-key encryption must be configured with a high-entropy secret of at least 32 characters. Missing/placeholder secrets return `503` rather than creating fake keys.
 
 Agent capabilities and tools are requests, not grants of authority. The backend validates them against principal policy.
 

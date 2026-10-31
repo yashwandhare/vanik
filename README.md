@@ -14,7 +14,7 @@ All surfaces use the same backend, identity system, marketplace registry, negoti
 
 ## Repository status
 
-The repository now includes registration, opaque sessions, logout, principal creation, membership-authorized reads, synthetic business identifiers, clearly labeled demo verification, secure Telegram account linking, PostgreSQL migrations, shared schemas and backend tests. It is **not a completed marketplace implementation**. Agents, commerce workflows, the web app, Telegram commands/notifications and demo data remain unimplemented.
+The repository now includes registration, principals, synthetic verification, Telegram linking, persistent Agent Passports, encrypted Ed25519 identities and lifecycle controls. It is **not a completed marketplace implementation**. Marketplace, task mandates, negotiation, settlement, Telegram commands and the web UI remain unintegrated or unimplemented.
 
 ## Core hierarchy
 
@@ -67,7 +67,7 @@ Start with the [documentation index](docs/README.md).
 - Database: PostgreSQL 16; Redis 7 is optional for coordination.
 - Web: Node.js 22.23.1, Next.js, React, TypeScript and Tailwind CSS.
 - Telegram: Python Telegram Bot; Mini App served by the web app.
-- Signing: Ed25519 through `cryptography`, to be implemented during Phase 1.
+- Signing: Ed25519 and AES-GCM through `cryptography`; private material stays server-side.
 - Local services: Docker Compose.
 
 See the [technology baseline](docs/engineering/TECHNOLOGY_BASELINE.md) for exact versions and implementation status.

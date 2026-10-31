@@ -1,7 +1,7 @@
 {
   "project": "VANIK",
-  "version": "0.4.0-telegram-linking",
-  "status": "identity-backend-implemented-verification-agents-and-commerce-pending",
+  "version": "0.5.0-agent-passports",
+  "status": "persistent-agent-identities-implemented-commerce-pending",
   "implemented_application": true,
   "implemented_identity_workflows": true,
   "implemented_commerce_workflows": false,
@@ -13,6 +13,8 @@
     "principal-creation-and-membership-authorized-reads",
     "synthetic-business-identifiers-and-demo-verification",
     "single-use-telegram-account-linking",
+    "persistent-agent-passports-and-encrypted-ed25519-keys",
+    "agent-lifecycle-and-append-only-audit-events",
     "identity-database-migration",
     "initial-identity-wire-contracts",
     "backend-contract-and-postgresql-integration-tests"
@@ -44,7 +46,8 @@
     "teammateB/TODO.md",
     "teammateB/WORKING_INSTRUCTIONS.md",
     "teammateB/PHASE_0_HANDOFF.md",
-    "teammateB/PHASE_1_IDENTITY_HANDOFF.md"
+    "teammateB/PHASE_1_IDENTITY_HANDOFF.md",
+    "teammateB/AGENT_PASSPORT_HANDOFF.md"
   ],
-  "important": "Registration, sessions, principals, simulated verification and Telegram linking are implemented. Agents and commerce endpoints remain unimplemented."
+  "important": "Identity, verification, Telegram linking and persistent agents are implemented. Marketplace, task mandates, negotiation and settlement remain pending."
 }
