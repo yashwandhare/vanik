@@ -184,3 +184,63 @@ export interface AgentListResponse {
   items: AgentPassportResponse[];
   pagination: PaginationMeta;
 }
+
+// Phase 2 Marketplace & Catalogue Contracts (mirroring packages/shared-schemas/v1)
+export interface ProductResponse {
+  id: string;
+  sku: string;
+  name: string;
+  category: string;
+  unit: string;
+  benchmark_price: string;
+  attributes: Record<string, unknown>;
+  active: boolean;
+}
+
+export interface ProductListResponse {
+  items: ProductResponse[];
+  pagination: PaginationMeta;
+}
+
+export interface SellerAgentSummary {
+  agent_id: string;
+  name: string;
+  strategy_profile: string;
+  status: string;
+}
+
+export interface SellerSummary {
+  principal_id: string;
+  trade_name: string;
+  verification_status: VerificationStatus;
+  coverage: string[];
+  delivery_days: number;
+  credit_days: number[];
+  available_sku_count: number;
+  reliability_evidence_count: number;
+  evidence_is_simulated: boolean;
+  reliability_score: string | null;
+  agents: SellerAgentSummary[];
+}
+
+export interface SellerListResponse {
+  items: SellerSummary[];
+  pagination: PaginationMeta;
+}
+
+export interface InventoryLineResponse {
+  product: ProductResponse;
+  available_qty: string;
+}
+
+export interface InventoryResponse {
+  principal_id: string;
+  agent_id: string;
+  items: InventoryLineResponse[];
+  pagination: PaginationMeta;
+}
+
+export interface InventoryUpdateRequest {
+  product_id: string;
+  stock_qty: number | string;
+}
