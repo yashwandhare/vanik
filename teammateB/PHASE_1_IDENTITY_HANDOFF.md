@@ -35,9 +35,19 @@ Use `BusinessIdentifierCreateRequest`, `BusinessIdentifierResponse` and `DemoVer
 
 The backend stores a keyed digest and a display-safe mask, not the raw identifier. One identifier of each type is allowed per principal.
 
+## Telegram linking endpoints
+
+These routes are now implemented:
+
+- `POST /v1/telegram/link/start`
+- `POST /v1/telegram/link/complete`
+- `DELETE /v1/telegram/link`
+
+The web start/unlink calls require the session cookie, Origin and CSRF token. Only the Bot worker can complete a link; it sends `X-Telegram-Bot-Secret`. Never use a Telegram username as ownership evidence. Link codes expire after ten minutes, are single-use and are stored only as digests.
+
 ## Still mock-only
 
-- Telegram linking.
+- Telegram commands and notifications.
 - Agent creation and Agent Passport persistence.
 - Marketplace, negotiation, approval and payment.
 

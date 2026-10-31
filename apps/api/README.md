@@ -15,12 +15,13 @@ Main owns this application, database revisions and API contracts.
 - Principal reads restricted to active members.
 - Synthetic identifier storage using keyed digests and display-safe masks.
 - Explicitly labeled demo verification for owner/admin members.
+- Single-use Telegram link codes, Bot-authenticated completion, relinking and unlinking.
 - Standard error responses and server-generated request IDs.
 - Alembic identity schema migration.
 - Versioned identity contracts, JSON schemas and synthetic fixtures.
 - Backend, contract and PostgreSQL integration tests.
 
-Telegram linking, agents, negotiation and settlement endpoints are not implemented. A published schema is not a working endpoint.
+Telegram commands/notifications, agents, negotiation and settlement endpoints are not implemented. A published schema is not a working endpoint.
 
 ## Setup
 

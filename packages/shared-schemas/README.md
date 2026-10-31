@@ -16,6 +16,7 @@ The initial pack includes:
 - Agent creation, Agent Passport and agent-list responses.
 - Synthetic business-identifier requests and responses.
 - Clearly labeled demo-verification responses.
+- Telegram link start, completion and response contracts.
 
 The `v1` directory is a contract namespace, not an implemented negotiation protocol. Mandate, offer, deal and signed-message wire contracts remain proposed until Main publishes their complete schemas.
 

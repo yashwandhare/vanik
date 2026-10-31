@@ -11,7 +11,8 @@ This is a logical model. Physical schema and migrations must be finalised during
 | `principals` | id, legal_name, trade_name, business_type, address, verification_status | Business identity |
 | `principal_members` | principal_id, user_id, role, status | Owner/admin/operator/viewer |
 | `business_identifiers` | id, principal_id, type, value_digest, masked_value, status | Store a digest and display-safe mask, never a raw real identifier |
-| `telegram_links` | id, user_id, telegram_user_id, linked_at, revoked_at | One-time link flow |
+| `telegram_link_tokens` | id, user_id, token_hash, expires_at, used_at | Short-lived and single-use; raw code is never stored |
+| `telegram_links` | id, user_id, telegram_user_id, linked_at, revoked_at | Telegram identity links to human user |
 | `agents` | id, principal_id, role, name, status, strategy_profile | Multiple agents per principal |
 | `agent_keys` | id, agent_id, public_key, fingerprint, key_version, status | Private key stays server-side |
 | `agent_capabilities` | agent_id, capability, config | Allowed actions/tools |
@@ -36,7 +37,7 @@ This is a logical model. Physical schema and migrations must be finalised during
 
 Migration `20261031_0001` implements users, sessions, principals, memberships and business identifiers. Migration `20261031_0002` adds demo-verification timestamps and one identifier per type. Application and database constraints enforce lifecycle and membership values. Authentication tokens and identifier values are stored only as keyed digests.
 
-Agents, keys, tasks, negotiations, deals and audit tables remain logical designs until their migrations are added.
+Migration `20261031_0003` adds single-use Telegram link tokens and revocable Telegram links.
 
 ## Identity constraints
 
