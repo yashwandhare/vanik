@@ -19,7 +19,7 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Create phased project and Teammate B checklists.
 - [x] Add repository ignore rules for secrets and generated files.
 - [x] Initialize Git and connect the project GitHub repository.
-- [ ] Configure `main` as the protected integration branch.
+- [x] Configure `main` as the protected integration branch.
 - [x] Select and record the initial backend, frontend, bot and cryptography versions.
 - [x] Define the Phase 1 authentication and session design.
 - [x] Define API route, pagination and error conventions.
