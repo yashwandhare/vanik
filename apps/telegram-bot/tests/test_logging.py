@@ -1,6 +1,9 @@
 """Regression test to ensure bot tokens are never leaked in logs."""
 
+import io
 import logging
+
+import pytest
 
 from bot.main import SecretTokenFilter, configure_logging
 
@@ -22,6 +25,27 @@ def test_token_filter_redacts_secret() -> None:
     token_filter.filter(record)
     assert secret not in str(record.msg)
     assert "[REDACTED_BOT_TOKEN]" in str(record.msg)
+
+
+def test_child_logger_arguments_and_traceback_are_redacted(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    secret = "synthetic-child-logger-token"
+    output = io.StringIO()
+    handler = logging.StreamHandler(output)
+    root = logging.getLogger()
+    monkeypatch.setattr(root, "handlers", [handler])
+    monkeypatch.setattr(root, "level", logging.INFO)
+    configure_logging(secret)
+    child = logging.getLogger("vanik.bot.redaction-test")
+    child.warning("request token %s", secret)
+    try:
+        raise RuntimeError(secret)
+    except RuntimeError:
+        child.exception("request failed")
+    text = output.getvalue()
+    assert secret not in text
+    assert text.count("[REDACTED_BOT_TOKEN]") >= 2
 
 
 def test_transport_loggers_silenced() -> None:

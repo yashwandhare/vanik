@@ -23,19 +23,25 @@ function AgentsContent() {
   const [creating, setCreating] = useState(false);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   // Resolved principal ID from search params, session storage, or default fallback
   const principalId =
     searchParams.get('principalId') ||
     searchParams.get('id') ||
-    (typeof window !== 'undefined' ? sessionStorage.getItem('vanik_principal_id') : null) ||
-    '20000000-0000-4000-8000-000000000001';
+    (typeof window !== 'undefined' ? sessionStorage.getItem('vanik_principal_id') : null);
 
   // Restore session and load agent roster
   useEffect(() => {
     async function loadAgents() {
       setLoading(true);
       setError(null);
+      if (!principalId) {
+        setAgents([]);
+        setLoading(false);
+        setError('Select or register a business principal before managing agents.');
+        return;
+      }
 
       // Restore session/CSRF state if active
       try {
@@ -70,9 +76,24 @@ function AgentsContent() {
   useEffect(() => {
     if (!showCreateModal) return;
 
+    const previousFocus = document.activeElement;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setShowCreateModal(false);
+      }
+      if (e.key === 'Tab') {
+        const controls = dialogRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]'
+        );
+        const first = controls?.[0];
+        const last = controls?.[controls.length - 1];
+        if (e.shiftKey && first && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && last && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
       }
     };
 
@@ -85,11 +106,16 @@ function AgentsContent() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       clearTimeout(timeout);
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus();
     };
   }, [showCreateModal]);
 
   const handleCreateAgent = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!principalId) {
+      setError('Select a business principal before creating an agent.');
+      return;
+    }
     setCreating(true);
     setError(null);
 
@@ -270,6 +296,7 @@ function AgentsContent() {
       {/* Spawn Agent Modal with accessible dialog semantics */}
       {showCreateModal && (
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-spawn-title"

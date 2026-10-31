@@ -23,8 +23,17 @@ class SecretTokenFilter(logging.Filter):
         self.token = token
 
     def filter(self, record: logging.LogRecord) -> bool:
-        if self.token and isinstance(record.msg, str) and self.token in record.msg:
-            record.msg = record.msg.replace(self.token, "[REDACTED_BOT_TOKEN]")
+        if not self.token:
+            return True
+        record.msg = record.getMessage().replace(self.token, "[REDACTED_BOT_TOKEN]")
+        record.args = ()
+        if record.exc_info:
+            record.exc_text = logging.Formatter().formatException(record.exc_info)
+            record.exc_info = None
+        if record.exc_text:
+            record.exc_text = record.exc_text.replace(self.token, "[REDACTED_BOT_TOKEN]")
+        if record.stack_info:
+            record.stack_info = record.stack_info.replace(self.token, "[REDACTED_BOT_TOKEN]")
         return True
 
 
@@ -42,7 +51,9 @@ def configure_logging(token: str = "") -> None:
 
     if token:
         token_filter = SecretTokenFilter(token)
-        logging.getLogger().addFilter(token_filter)
+        # Handler filters also see records propagated from child/transport loggers.
+        for handler in logging.getLogger().handlers:
+            handler.addFilter(token_filter)
 
 
 def build_application(
