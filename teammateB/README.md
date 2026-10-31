@@ -11,7 +11,8 @@ This directory contains the instructions and task tracking specific to Teammate 
 5. [Phase 0 handoff](PHASE_0_HANDOFF.md)
 6. [Phase 1 identity endpoint handoff](PHASE_1_IDENTITY_HANDOFF.md)
 7. [Agent Passport handoff](AGENT_PASSPORT_HANDOFF.md)
-8. [Project documentation index](../docs/README.md)
+8. [Marketplace handoff](MARKETPLACE_HANDOFF.md)
+9. [Project documentation index](../docs/README.md)
 
 ## Authority
 

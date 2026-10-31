@@ -204,3 +204,54 @@ def test_inventory_database_rejects_cross_principal_agent_mapping(
         )
         db.flush()
     db.rollback()
+
+
+def test_public_seller_profile_and_owner_update(
+    application: FastAPI, client: TestClient, db: Session
+) -> None:
+    settings = application.state.settings
+    seed_demo(db, settings)
+    principal_id = demo_id("principal", "seller-margin")
+    public = client.get(f"/v1/marketplace/sellers/{principal_id}")
+    assert public.status_code == 200
+    assert public.json()["seller"]["trade_name"] == "Mangal Wholesale"
+    assert "contact_email" not in public.json()
+    login = client.post(
+        "/v1/auth/login",
+        headers={"Origin": "http://localhost:3000"},
+        json={
+            "email": "seller-margin@example.com",
+            "password": settings.demo_account_password.get_secret_value(),
+        },
+    )
+    headers = {"Origin": "http://localhost:3000", "X-CSRF-Token": login.json()["csrf_token"]}
+    body = {
+        "coverage": ["Mumbai"],
+        "delivery_days": 4,
+        "credit_days": [0, 7],
+        "delivery_terms": "Synthetic delivery",
+        "payment_note": "Synthetic terms",
+    }
+    updated = client.post(
+        f"/v1/principals/{principal_id}/seller-profile", headers=headers, json=body
+    )
+    assert updated.status_code == 200
+    assert updated.json()["seller"]["coverage"] == ["Mumbai"]
+    assert updated.json()["seller"]["reliability_score"] is None
+    member = db.get(PrincipalMember, (principal_id, demo_id("user", "seller-margin")))
+    assert member is not None
+    member.role = "operator"
+    db.commit()
+    assert (
+        client.post(
+            f"/v1/principals/{principal_id}/seller-profile", headers=headers, json=body
+        ).status_code
+        == 403
+    )
+    body["credit_days"] = [90]
+    assert (
+        client.post(
+            f"/v1/principals/{principal_id}/seller-profile", headers=headers, json=body
+        ).status_code
+        == 422
+    )

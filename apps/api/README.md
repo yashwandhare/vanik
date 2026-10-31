@@ -20,6 +20,8 @@ Main owns this application, database revisions and API contracts.
 - Owner/admin lifecycle management and key rotation.
 - Encrypted Ed25519 keys and principal permission ceilings.
 - Append-only agent lifecycle audit rows.
+- Persistent catalogue, seller discovery, public inventory and member-authorized stock updates.
+- Safe idempotent seed command: 40 products, one buyer/four seller agents and synthetic owner accounts.
 - Standard error responses and server-generated request IDs.
 - Alembic identity schema migration.
 - Versioned identity contracts, JSON schemas and synthetic fixtures.
@@ -44,6 +46,8 @@ The committed `apps/api/uv.lock` pins all resolved backend dependencies. The loc
 Copy `.env.example` to the root `.env` if you need to override local defaults. Never commit `.env`.
 
 Agent creation requires a high-entropy `AGENT_KEY_ENCRYPTION_SECRET` of at least 32 characters. Generate one with `python -c 'import secrets; print(secrets.token_urlsafe(32))'`. The placeholder is rejected for key creation; never use this secret in frontend configuration.
+
+Before `make seed`, configure an uncommitted `DEMO_ACCOUNT_PASSWORD` of at least 12 characters. Seeding creates only missing fixtures; it never resets passwords, revoked identities or reservations. See [marketplace handoff](../../teammateB/MARKETPLACE_HANDOFF.md) for the account emails and API contracts.
 
 ## Run locally
 

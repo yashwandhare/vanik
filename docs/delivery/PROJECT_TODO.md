@@ -12,9 +12,10 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 
 ## Current snapshot
 
-- **Phase 0:** Main repository/contracts/backend foundation complete. B's web/Bot foundation is still in PR #7; clean web installation and required CI are failing, so B items remain unchecked.
-- **Phase 1:** Main identity, verification, Telegram linking and persistent Agent Passport backend complete and PostgreSQL-verified. B integration remains pending review.
-- **Phases 2–7:** Not complete. Agent signing primitives exist, but mandates, signed envelopes, negotiation, trust, deals, complete replay/memory, deterministic seed/reset and demo rehearsal remain pending.
+- **Phase 0:** Repository/contracts/backend and B web/Bot foundation are merged and CI-verified through PR #7.
+- **Phase 1:** Identity, verification, Telegram linking, Agent Passports and corresponding client screens are implemented. The complete live Web/Telegram demo checkpoint still requires rehearsal.
+- **Phase 2:** Catalogue/inventory/discovery and deterministic 40-SKU seeding are implemented; task-specific ranking and B marketplace wiring remain pending.
+- **Phases 3–7:** Not complete. The task draft is not exposed as an API; signed envelopes, negotiation, trust, deals, complete replay/memory, deterministic reset and rehearsal remain pending.
 
 ## Phase 0 — Repository, scope and contracts
 
@@ -43,7 +44,7 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Establish routes, layout, navigation, design tokens and API client boundaries.
 - [x] Create contract-aligned mock fixtures only after Main publishes schemas.
 - [x] Create the Telegram Bot skeleton after Main confirms the library and contract.
-- [ ] Merge the verified web/Bot foundation through PR #7 after clean install and required CI pass.
+- [x] Merge the verified web/Bot foundation through PR #7 after clean install and required CI pass.
 
 ### Checkpoint
 
@@ -82,13 +83,13 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 
 ### Main
 
-- [ ] Implement product, catalogue and inventory persistence.
-- [ ] Implement seller profiles and marketplace discovery APIs.
-- [ ] Implement search and filters for category, coverage, stock, delivery and credit.
+- [x] Implement product, catalogue and inventory persistence.
+- [x] Implement seller profiles and marketplace discovery APIs.
+- [x] Implement search and filters for category, coverage, stock, delivery and credit.
 - [ ] Implement explainable task-specific ranking inputs and responses.
-- [ ] Seed exactly 40 distinct Diwali SKUs with internally consistent prices and quantities.
-- [ ] Seed at least three legitimate seller principals and one adversarial principal.
-- [ ] Test principal grouping, catalogue arithmetic and discovery behavior.
+- [x] Seed exactly 40 distinct Diwali SKUs with internally consistent prices and quantities.
+- [x] Seed at least three legitimate seller principals and one adversarial principal.
+- [x] Test principal grouping, catalogue arithmetic and discovery behavior.
 
 ### Teammate B
 

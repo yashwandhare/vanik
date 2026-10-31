@@ -14,6 +14,8 @@ from app.contracts.marketplace import (
     ProductResponse,
     SellerAgentSummary,
     SellerListResponse,
+    SellerProfileRequest,
+    SellerProfileResponse,
     SellerSummary,
 )
 from app.contracts.pagination import Pagination
@@ -291,3 +293,97 @@ def list_sellers(
         items=results[offset : offset + limit],
         pagination=Pagination(limit=limit, offset=offset, total=len(results)),
     )
+
+
+def get_seller_profile(db: Session, principal_id: UUID) -> SellerProfileResponse:
+    principal = db.get(Principal, principal_id)
+    profile = db.get(SellerProfile, principal_id)
+    if principal is None or profile is None:
+        raise MarketplaceNotFoundError
+    agents = _active_seller_agents(db, principal)
+    if not agents:
+        raise MarketplaceNotFoundError
+    available = (
+        db.scalar(
+            select(func.count(func.distinct(Inventory.product_id)))
+            .join(Product, Product.id == Inventory.product_id)
+            .where(
+                Inventory.principal_id == principal_id,
+                Inventory.agent_id.in_([agent.id for agent in agents]),
+                Inventory.available_qty > Inventory.reserved_qty,
+                Product.active.is_(True),
+            )
+        )
+        or 0
+    )
+    seller = SellerSummary(
+        principal_id=principal_id,
+        trade_name=principal.trade_name,
+        verification_status=VerificationStatus(principal.verification_status),
+        coverage=profile.coverage,
+        delivery_days=profile.delivery_days,
+        credit_days=profile.credit_days,
+        available_sku_count=available,
+        reliability_score=profile.reliability_score,
+        reliability_evidence_count=profile.reliability_evidence_count,
+        evidence_is_simulated=profile.evidence_is_simulated,
+        agents=[
+            SellerAgentSummary(
+                agent_id=agent.id,
+                name=agent.name,
+                strategy_profile=agent.strategy_profile,
+                status=agent.status,
+            )
+            for agent in agents
+        ],
+    )
+    return SellerProfileResponse(
+        seller=seller,
+        legal_name=principal.legal_name,
+        business_type=principal.business_type,
+        address=principal.address,
+        public_policies=profile.public_policies,
+    )
+
+
+def set_seller_profile(
+    db: Session, context: AuthContext, principal_id: UUID, payload: SellerProfileRequest
+) -> SellerProfileResponse:
+    member = db.get(PrincipalMember, (principal_id, context.user.id))
+    principal = db.get(Principal, principal_id)
+    if member is None or member.status != "active" or principal is None:
+        raise MarketplaceNotFoundError
+    if member.role not in {"owner", "admin"}:
+        raise InventoryPermissionError
+    if not _active_seller_agents(db, principal):
+        raise InventoryConflictError
+    profile = db.get(SellerProfile, principal_id)
+    if profile is None:
+        profile = SellerProfile(
+            principal_id=principal_id,
+            reliability_evidence_count=0,
+            reliability_score=None,
+            evidence_is_simulated=True,
+        )
+        db.add(profile)
+    profile.coverage = list(payload.coverage)
+    profile.delivery_days = payload.delivery_days
+    profile.credit_days = list(payload.credit_days)
+    profile.public_policies = {
+        "delivery_terms": payload.delivery_terms,
+        "payment_note": payload.payment_note,
+        "synthetic": True,
+    }
+    db.add(
+        AuditEvent(
+            principal_id=principal_id,
+            actor_type="human",
+            actor_id=context.user.id,
+            event_type="seller.profile_updated",
+            entity_type="principal",
+            entity_id=principal_id,
+            payload={"delivery_days": payload.delivery_days, "credit_days": payload.credit_days},
+        )
+    )
+    db.commit()
+    return get_seller_profile(db, principal_id)
