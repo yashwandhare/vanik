@@ -8,6 +8,8 @@ This contract pack replaces mock catalogue, seller discovery and inventory views
 | --- | --- |
 | `GET /v1/catalogue/products` | `ProductListResponse`; `limit` default 40/max 100, `offset`, optional `category` and `query` |
 | `GET /v1/marketplace/sellers` | `SellerListResponse`; optional `category`, `coverage`, `min_credit_days`, `max_delivery_days`, `query`; default limit 20/max 100 |
+| `GET /v1/marketplace/sellers/{id}` | `SellerProfileResponse`; public business details, agent roster and public policies |
+| `POST /v1/principals/{id}/seller-profile` | `SellerProfileRequest` -> `SellerProfileResponse`; session, Origin, CSRF, owner/admin membership and an active verified seller agent required |
 | `GET /v1/principals/{id}/agents/{agent_id}/inventory` | `InventoryResponse`; public free-to-sell quantities for a matching active verified seller agent |
 | `POST /v1/principals/{id}/agents/{agent_id}/inventory` | `InventoryUpdateRequest` -> `InventoryLineResponse`; session, Origin, CSRF and owner/admin/operator membership required |
 

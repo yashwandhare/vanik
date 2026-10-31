@@ -21,6 +21,8 @@ from app.contracts.marketplace import (
     ProductListResponse,
     ProductResponse,
     SellerListResponse,
+    SellerProfileRequest,
+    SellerProfileResponse,
     SellerSummary,
 )
 from app.contracts.pagination import AgentListResponse
@@ -64,6 +66,8 @@ MODELS: dict[str, type[BaseModel]] = {
         InventoryUpdateRequest,
         SellerSummary,
         SellerListResponse,
+        SellerProfileRequest,
+        SellerProfileResponse,
     )
 }
 SCHEMA_DIRECTORY = Path(__file__).resolve().parents[3] / "packages/shared-schemas/v1"
