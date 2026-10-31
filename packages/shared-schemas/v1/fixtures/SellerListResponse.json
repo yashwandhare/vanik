@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "principal_id": "bbda2995-3a2e-5e3c-90a2-72a4373f960f",
+      "trade_name": "Mangal Wholesale",
+      "verification_status": "demo_verified",
+      "coverage": [
+        "Pune",
+        "Maharashtra"
+      ],
+      "delivery_days": 3,
+      "credit_days": [
+        7,
+        15
+      ],
+      "available_sku_count": 40,
+      "reliability_score": null,
+      "reliability_evidence_count": 0,
+      "evidence_is_simulated": true,
+      "agents": [
+        {
+          "agent_id": "1b100eef-7880-503f-b858-804b0c34696a",
+          "name": "Mangal Wholesale Seller Agent",
+          "strategy_profile": "margin",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "principal_id": "cd3e97f9-3b76-5949-acee-3565b079a36a",
+      "trade_name": "Suraksha Trade Co",
+      "verification_status": "demo_verified",
+      "coverage": [
+        "Pune",
+        "Maharashtra"
+      ],
+      "delivery_days": 2,
+      "credit_days": [
+        0,
+        7,
+        15,
+        30
+      ],
+      "available_sku_count": 40,
+      "reliability_score": null,
+      "reliability_evidence_count": 0,
+      "evidence_is_simulated": true,
+      "agents": [
+        {
+          "agent_id": "6733f472-dffd-55ea-b7bb-413d560b8ecd",
+          "name": "Suraksha Trade Co Seller Agent",
+          "strategy_profile": "payment_risk",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "principal_id": "3c91571c-ba00-5fe1-aa45-8f77471c160a",
+      "trade_name": "Synthetic Red Team Seller",
+      "verification_status": "demo_verified",
+      "coverage": [
+        "Pune",
+        "Maharashtra"
+      ],
+      "delivery_days": 4,
+      "credit_days": [
+        0
+      ],
+      "available_sku_count": 40,
+      "reliability_score": null,
+      "reliability_evidence_count": 0,
+      "evidence_is_simulated": true,
+      "agents": [
+        {
+          "agent_id": "6322d654-4f96-5663-829b-9861df1b3aca",
+          "name": "Synthetic Red Team Seller Seller Agent",
+          "strategy_profile": "adversarial",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "principal_id": "e5711af5-3253-56b4-bad8-5b88e924b5f3",
+      "trade_name": "Utsav Distributors",
+      "verification_status": "demo_verified",
+      "coverage": [
+        "Pune",
+        "Maharashtra"
+      ],
+      "delivery_days": 5,
+      "credit_days": [
+        0,
+        7
+      ],
+      "available_sku_count": 40,
+      "reliability_score": null,
+      "reliability_evidence_count": 0,
+      "evidence_is_simulated": true,
+      "agents": [
+        {
+          "agent_id": "01b1b22a-c8d4-5f27-ad88-0da5fd25d4bb",
+          "name": "Utsav Distributors Seller Agent",
+          "strategy_profile": "clearance",
+          "status": "active"
+        }
+      ]
+    }
+  ],
+  "pagination": {
+    "limit": 20,
+    "offset": 0,
+    "total": 4
+  }
+}

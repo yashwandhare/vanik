@@ -1,3 +1,4 @@
+# shellcheck disable=SC2037,SC2145,SC2276,SC2283
 UV ?= uv
 API = $(UV) --directory apps/api
 BOT = $(UV) --directory apps/telegram-bot
@@ -87,18 +88,13 @@ contracts:
 	$(API) run --locked python scripts/export_schemas.py
 
 migrate:
-	@test -n "$$(find apps/api/alembic/versions -name '*.py' -print -quit)" || \
+	test -n "$$(find apps/api/alembic/versions -name '*.py' -print -quit)" || \
 		{ echo "No schema migrations exist yet. Phase 1 must add real revisions." >&2; exit 1; }
 	$(API) run --locked alembic upgrade head
 
 seed:
-	@echo "Deterministic seeding not implemented yet" >&2
-	@exit 1
+	$(API) run --locked python -m app.seed
 
-demo:
-	@echo "Demo runner not implemented yet" >&2
-	@exit 1
-
-reset-demo:
-	@echo "Demo reset not implemented yet" >&2
+demo reset-demo:
+	@echo "Demo and reset commands are not implemented yet; no demo state was changed." >&2
 	@exit 1
