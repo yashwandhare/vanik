@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import JSON, CheckConstraint, DateTime, ForeignKey, Index, String, Uuid, func
+from sqlalchemy import JSON, CheckConstraint, DateTime, ForeignKey, Index, String, Uuid, func, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.session import Base
@@ -46,6 +46,51 @@ class UserSession(Base):
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
 
 
+class TelegramLinkToken(Base):
+    __tablename__ = "telegram_link_tokens"
+
+    id: Mapped[UUID] = mapped_column(Uuid, primary_key=True, default=uuid4)
+    user_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utc_now, server_default=func.now()
+    )
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class TelegramLink(Base):
+    __tablename__ = "telegram_links"
+    __table_args__ = (
+        Index(
+            "uq_telegram_links_active_user",
+            "user_id",
+            unique=True,
+            postgresql_where=text("revoked_at IS NULL"),
+            sqlite_where=text("revoked_at IS NULL"),
+        ),
+        Index(
+            "uq_telegram_links_active_telegram",
+            "telegram_user_id",
+            unique=True,
+            postgresql_where=text("revoked_at IS NULL"),
+            sqlite_where=text("revoked_at IS NULL"),
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(Uuid, primary_key=True, default=uuid4)
+    user_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    telegram_user_id: Mapped[str] = mapped_column(String(20), index=True)
+    linked_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utc_now, server_default=func.now()
+    )
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class Principal(Base):
     __tablename__ = "principals"
     __table_args__ = (
@@ -68,6 +113,7 @@ class Principal(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=utc_now, server_default=func.now()
     )
+    verification_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class PrincipalMember(Base):
@@ -95,7 +141,12 @@ class BusinessIdentifier(Base):
     __tablename__ = "business_identifiers"
     __table_args__ = (
         CheckConstraint("status IN ('pending', 'demo_verified', 'rejected')", name="status"),
-        Index("ix_business_identifiers_principal_type", "principal_id", "identifier_type"),
+        Index(
+            "ix_business_identifiers_principal_type",
+            "principal_id",
+            "identifier_type",
+            unique=True,
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid, primary_key=True, default=uuid4)

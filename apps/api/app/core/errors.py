@@ -66,6 +66,7 @@ def install_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(HTTPException)
     async def http_error(request: Request, exc: HTTPException) -> JSONResponse:
         code = {
+            400: "invalid_request",
             401: "unauthenticated",
             403: "forbidden",
             404: "not_found",

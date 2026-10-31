@@ -2,7 +2,7 @@
 
 ## Contract status
 
-Health, registration, session, logout, principal creation and membership-authorized principal reads are implemented. Their version 1 schemas are published in [`packages/shared-schemas/v1`](../../packages/shared-schemas/v1), with route mappings in [API conventions](API_CONVENTIONS.md).
+Health, registration, session, logout, principal creation, membership-authorized principal reads, synthetic identifiers, demo verification and Telegram linking are implemented. Their version 1 schemas are published in [`packages/shared-schemas/v1`](../../packages/shared-schemas/v1), with route mappings in [API conventions](API_CONVENTIONS.md).
 
 Agent, verification, Telegram, negotiation and commerce examples remain proposals, not complete implemented wire contracts. All resource identifiers use UUID strings. Money uses decimal strings in JSON.
 

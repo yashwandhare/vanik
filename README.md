@@ -14,7 +14,7 @@ All surfaces use the same backend, identity system, marketplace registry, negoti
 
 ## Repository status
 
-The repository now includes a working FastAPI identity foundation: registration, opaque sessions, logout, principal creation, membership-authorized principal reads, PostgreSQL migrations, shared schemas and backend tests. It is **not a completed marketplace implementation**. Verification, agents, commerce workflows, the web app, Telegram clients and demo data remain unimplemented.
+The repository now includes registration, opaque sessions, logout, principal creation, membership-authorized reads, synthetic business identifiers, clearly labeled demo verification, secure Telegram account linking, PostgreSQL migrations, shared schemas and backend tests. It is **not a completed marketplace implementation**. Agents, commerce workflows, the web app, Telegram commands/notifications and demo data remain unimplemented.
 
 ## Core hierarchy
 
@@ -100,7 +100,7 @@ Copy `.env.example` to `.env` if you need to override development defaults. Neve
 
 Current application Make targets cover the API only. The web and Bot will get their own commands when B creates them. `make migrate` applies the identity schema. `seed`, `demo` and `reset-demo` fail explicitly instead of reporting fake success.
 
-See [API setup](apps/api/README.md) and the [B handoff](teammateB/PHASE_0_HANDOFF.md) for the next steps.
+See [API setup](apps/api/README.md) and the [Phase 1 B handoff](teammateB/PHASE_1_IDENTITY_HANDOFF.md) for the next steps.
 
 ## Useful commands
 

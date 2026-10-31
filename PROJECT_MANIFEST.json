@@ -1,6 +1,6 @@
 {
   "project": "VANIK",
-  "version": "0.2.0-identity-backend",
+  "version": "0.4.0-telegram-linking",
   "status": "identity-backend-implemented-verification-agents-and-commerce-pending",
   "implemented_application": true,
   "implemented_identity_workflows": true,
@@ -11,6 +11,8 @@
     "database-session-lifecycle",
     "email-password-registration-and-opaque-sessions",
     "principal-creation-and-membership-authorized-reads",
+    "synthetic-business-identifiers-and-demo-verification",
+    "single-use-telegram-account-linking",
     "identity-database-migration",
     "initial-identity-wire-contracts",
     "backend-contract-and-postgresql-integration-tests"
@@ -44,5 +46,5 @@
     "teammateB/PHASE_0_HANDOFF.md",
     "teammateB/PHASE_1_IDENTITY_HANDOFF.md"
   ],
-  "important": "Registration, sessions and principal membership reads are implemented. Verification, Telegram linking, agents and commerce endpoints remain unimplemented."
+  "important": "Registration, sessions, principals, simulated verification and Telegram linking are implemented. Agents and commerce endpoints remain unimplemented."
 }

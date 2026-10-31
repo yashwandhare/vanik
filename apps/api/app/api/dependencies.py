@@ -1,3 +1,4 @@
+import hmac
 from typing import Annotated, cast
 
 from fastapi import Cookie, Depends, Header, HTTPException, Request
@@ -27,6 +28,16 @@ def require_auth_attempt_allowed(
     client = request.client.host if request.client is not None else "unknown"
     if not limiter.allow(client):
         raise HTTPException(status_code=429, headers={"Retry-After": "60"})
+
+
+def require_telegram_bot(request: Request) -> None:
+    settings = get_settings(request)
+    supplied = request.headers.get("X-Telegram-Bot-Secret", "")
+    expected = settings.telegram_webhook_secret.get_secret_value()
+    if not settings.telegram_bot_enabled:
+        raise HTTPException(status_code=503)
+    if not expected or not hmac.compare_digest(supplied, expected):
+        raise HTTPException(status_code=401)
 
 
 def get_auth_context(

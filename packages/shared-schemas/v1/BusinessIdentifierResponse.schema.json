@@ -1,0 +1,71 @@
+{
+  "$defs": {
+    "IdentifierType": {
+      "enum": [
+        "pan",
+        "gstin",
+        "udyam",
+        "cin",
+        "llpin"
+      ],
+      "title": "IdentifierType",
+      "type": "string"
+    },
+    "VerificationStatus": {
+      "enum": [
+        "not_submitted",
+        "pending",
+        "demo_verified",
+        "rejected"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/BusinessIdentifierResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "identifier_type": {
+      "$ref": "#/$defs/IdentifierType"
+    },
+    "is_synthetic": {
+      "const": true,
+      "default": true,
+      "title": "Is Synthetic",
+      "type": "boolean"
+    },
+    "masked_value": {
+      "title": "Masked Value",
+      "type": "string"
+    },
+    "principal_id": {
+      "format": "uuid",
+      "title": "Principal Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/VerificationStatus"
+    }
+  },
+  "required": [
+    "id",
+    "principal_id",
+    "identifier_type",
+    "masked_value",
+    "status",
+    "created_at"
+  ],
+  "title": "BusinessIdentifierResponse",
+  "type": "object"
+}
