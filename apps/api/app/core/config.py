@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     session_duration_hours: int = Field(default=8, ge=8, le=8)
     session_cookie_name: Literal["vanik_session"] = "vanik_session"
     auth_attempts_per_minute: int = Field(default=30, ge=1, le=120)
+    telegram_bot_enabled: bool = False
+    telegram_webhook_secret: SecretStr = SecretStr("")
+    telegram_link_ttl_minutes: int = Field(default=10, ge=1, le=30)
     cors_allowed_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
     mock_upi_enabled: bool = True
     demo_verification_enabled: bool = True
@@ -48,6 +51,8 @@ class Settings(BaseSettings):
                 raise ValueError("CORS_ALLOWED_ORIGINS must contain exact HTTP(S) origins")
             if self.app_env == "production" and parsed.scheme != "https":
                 raise ValueError("Production CORS origins must use HTTPS")
+        if self.telegram_bot_enabled and len(self.telegram_webhook_secret.get_secret_value()) < 32:
+            raise ValueError("Enabled Telegram Bot requires a 32-character webhook secret")
         if self.app_env == "production":
             for secret in (self.app_secret_key, self.agent_key_encryption_secret):
                 if len(secret.get_secret_value()) < 32:

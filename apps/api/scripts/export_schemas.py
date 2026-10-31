@@ -16,6 +16,11 @@ from app.contracts.identity import (
 )
 from app.contracts.pagination import AgentListResponse
 from app.contracts.passport import AgentPassportResponse
+from app.contracts.telegram import (
+    TelegramLinkCompleteRequest,
+    TelegramLinkResponse,
+    TelegramLinkStartResponse,
+)
 from app.contracts.verification import (
     BusinessIdentifierCreateRequest,
     BusinessIdentifierResponse,
@@ -40,6 +45,9 @@ MODELS: dict[str, type[BaseModel]] = {
         BusinessIdentifierCreateRequest,
         BusinessIdentifierResponse,
         DemoVerificationResponse,
+        TelegramLinkCompleteRequest,
+        TelegramLinkResponse,
+        TelegramLinkStartResponse,
     )
 }
 SCHEMA_DIRECTORY = Path(__file__).resolve().parents[3] / "packages/shared-schemas/v1"

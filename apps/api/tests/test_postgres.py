@@ -3,6 +3,7 @@ from uuid import uuid4
 
 import pytest  # type: ignore[import-not-found, unused-ignore]
 from fastapi.testclient import TestClient
+from pydantic import SecretStr
 from sqlalchemy import inspect, text
 
 from app.core.config import Settings
@@ -28,6 +29,8 @@ def test_real_postgres_connection_and_schema() -> None:
             "principals",
             "principal_members",
             "business_identifiers",
+            "telegram_link_tokens",
+            "telegram_links",
         } <= tables
     finally:
         engine.dispose()
@@ -36,7 +39,12 @@ def test_real_postgres_connection_and_schema() -> None:
 def test_identity_flow_with_real_postgres() -> None:
     email = f"ci-{uuid4()}@example.com"
     origin = "http://localhost:3000"
-    with TestClient(create_app(Settings(app_env="test"))) as client:
+    settings = Settings(
+        app_env="test",
+        telegram_bot_enabled=True,
+        telegram_webhook_secret=SecretStr("synthetic-ci-telegram-secret-12345"),
+    )
+    with TestClient(create_app(settings)) as client:
         registered = client.post(
             "/v1/auth/register",
             json={"email": email, "password": "ci-not-a-real-password", "display_name": "CI"},
@@ -76,6 +84,16 @@ def test_identity_flow_with_real_postgres() -> None:
         assert verified.json()["label"] == "SIMULATED / DEMO"
         principal = client.get(f"/v1/principals/{principal_id}")
         assert principal.json()["verification_status"] == "demo_verified"
+        link_start = client.post(
+            "/v1/telegram/link/start", headers={"Origin": origin, "X-CSRF-Token": csrf}
+        )
+        assert link_start.status_code == 200
+        linked = client.post(
+            "/v1/telegram/link/complete",
+            json={"link_code": link_start.json()["link_code"], "telegram_user_id": "987654321"},
+            headers={"X-Telegram-Bot-Secret": "synthetic-ci-telegram-secret-12345"},
+        )
+        assert linked.status_code == 200
         assert (
             client.post(
                 "/v1/auth/logout",

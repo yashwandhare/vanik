@@ -1,0 +1,34 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/TelegramLinkResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "linked_at": {
+      "format": "date-time",
+      "title": "Linked At",
+      "type": "string"
+    },
+    "telegram_user_id": {
+      "title": "Telegram User Id",
+      "type": "string"
+    },
+    "user_id": {
+      "format": "uuid",
+      "title": "User Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "user_id",
+    "telegram_user_id",
+    "linked_at"
+  ],
+  "title": "TelegramLinkResponse",
+  "type": "object"
+}

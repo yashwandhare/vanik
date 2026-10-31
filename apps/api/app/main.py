@@ -12,6 +12,7 @@ from app import __version__
 from app.api.auth import router as auth_router
 from app.api.health import router as health_router
 from app.api.principals import router as principals_router
+from app.api.telegram import router as telegram_router
 from app.api.verification import router as verification_router
 from app.core.config import Settings
 from app.core.errors import install_error_handlers, unexpected_error_response
@@ -64,4 +65,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(auth_router)
     app.include_router(principals_router)
     app.include_router(verification_router)
+    app.include_router(telegram_router)
     return app

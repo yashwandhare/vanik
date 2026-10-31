@@ -14,6 +14,9 @@ The following identity routes are implemented:
 - `GET /v1/principals/{principal_id}`
 - `POST /v1/principals/{principal_id}/identifiers`
 - `POST /v1/principals/{principal_id}/verification/demo`
+- `POST /v1/telegram/link/start`
+- `POST /v1/telegram/link/complete`
+- `DELETE /v1/telegram/link`
 
 Agent, verification, Telegram and commerce routes remain unimplemented. Published schemas do not imply that their routes exist.
 
@@ -122,13 +125,13 @@ The initial Agent Passport schemas can support mock UI work. These routes are no
 
 Agent capabilities and tools are requests, not grants of authority. The backend validates them against principal policy.
 
-Telegram identity is linked to a human user by a server-validated one-time token. The Bot must not accept a Telegram username as ownership proof. Main will publish the Bot service authentication and linking wire contracts before B integrates commands.
+Telegram linking uses a short-lived code stored only as a digest. Starting and unlinking require the human session, Origin and CSRF token. Completion requires the configured Bot secret and a numeric Telegram user ID; a Telegram username is never ownership proof.
 
 ## Remaining contract work
 
 The following remain proposed and must not be treated as implemented or frozen schemas:
 
-- Telegram linking and notifications.
+- Telegram notifications.
 - Seller discovery, inventory and ranking results.
 - Mandates, signed messages, offers and negotiation action responses.
 - Deal versions, approval challenges and mock receipts.

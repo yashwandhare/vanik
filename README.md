@@ -14,7 +14,7 @@ All surfaces use the same backend, identity system, marketplace registry, negoti
 
 ## Repository status
 
-The repository now includes registration, opaque sessions, logout, principal creation, membership-authorized reads, synthetic business identifiers, clearly labeled demo verification, PostgreSQL migrations, shared schemas and backend tests. It is **not a completed marketplace implementation**. Telegram linking, agents, commerce workflows, the web app, Telegram clients and demo data remain unimplemented.
+The repository now includes registration, opaque sessions, logout, principal creation, membership-authorized reads, synthetic business identifiers, clearly labeled demo verification, secure Telegram account linking, PostgreSQL migrations, shared schemas and backend tests. It is **not a completed marketplace implementation**. Agents, commerce workflows, the web app, Telegram commands/notifications and demo data remain unimplemented.
 
 ## Core hierarchy
 
