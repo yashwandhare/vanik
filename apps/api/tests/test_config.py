@@ -1,4 +1,4 @@
-import pytest
+import pytest  # type: ignore[import-not-found, unused-ignore]
 from pydantic import SecretStr, ValidationError
 
 from app.core.config import Settings
@@ -38,7 +38,7 @@ def test_production_accepts_distinct_secrets_and_https() -> None:
     assert settings.app_env == "production"
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator, unused-ignore]
     "origin",
     ["*", "https://user:password@example.com", "https://example.com/path", "file://example.com"],
 )

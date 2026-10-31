@@ -1,7 +1,7 @@
 import sqlite3
 from collections.abc import Iterator
 
-import pytest
+import pytest  # type: ignore[import-not-found, unused-ignore]
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import Engine, create_engine, event
@@ -13,14 +13,14 @@ from app.db.session import Base, get_session
 from app.main import create_app
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True)  # type: ignore[untyped-decorator, unused-ignore]
 def isolate_settings(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setitem(Settings.model_config, "env_file", None)
     for field in Settings.model_fields:
         monkeypatch.delenv(field.upper(), raising=False)
 
 
-@pytest.fixture
+@pytest.fixture  # type: ignore[untyped-decorator, unused-ignore]
 def database_engine() -> Iterator[Engine]:
     engine = create_engine(
         "sqlite+pysqlite://",
@@ -43,13 +43,13 @@ def database_engine() -> Iterator[Engine]:
         engine.dispose()
 
 
-@pytest.fixture
+@pytest.fixture  # type: ignore[untyped-decorator, unused-ignore]
 def db(database_engine: Engine) -> Iterator[Session]:
     with Session(database_engine) as session:
         yield session
 
 
-@pytest.fixture
+@pytest.fixture  # type: ignore[untyped-decorator, unused-ignore]
 def application(database_engine: Engine) -> FastAPI:
     application = create_app(Settings(app_env="test"))
 
@@ -61,7 +61,7 @@ def application(database_engine: Engine) -> FastAPI:
     return application
 
 
-@pytest.fixture
+@pytest.fixture  # type: ignore[untyped-decorator, unused-ignore]
 def client(application: FastAPI) -> Iterator[TestClient]:
     with TestClient(application) as client:
         yield client
