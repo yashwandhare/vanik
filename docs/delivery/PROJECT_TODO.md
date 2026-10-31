@@ -25,7 +25,7 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [x] Define API route, pagination and error conventions.
 - [x] Publish initial identity schemas and representative JSON fixtures.
 - [x] Create the backend skeleton, configuration and database connection code.
-- [ ] Verify the real PostgreSQL integration tests in CI or a local service.
+- [x] Verify the real PostgreSQL integration tests in CI.
 - [ ] Publish the remaining Telegram, marketplace and commerce contract packs before their dependent client work.
 
 ### Teammate B
@@ -54,7 +54,7 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 - [ ] Generate and protect Ed25519 signing identities.
 - [ ] Implement Agent Passport responses and principal authority ceilings.
 - [x] Add unit tests for authentication, CSRF and principal authority boundaries.
-- [ ] Verify the identity migration and integration flow against PostgreSQL in CI.
+- [x] Verify the identity migration and integration flow against PostgreSQL in CI.
 
 ### Teammate B
 
