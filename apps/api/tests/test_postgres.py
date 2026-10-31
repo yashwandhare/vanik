@@ -1,7 +1,7 @@
 import os
 from uuid import uuid4
 
-import pytest
+import pytest  # type: ignore[import-not-found, unused-ignore]
 from fastapi.testclient import TestClient
 from sqlalchemy import inspect, text
 
