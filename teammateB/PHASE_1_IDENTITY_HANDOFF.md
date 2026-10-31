@@ -24,9 +24,19 @@ Use the existing version 1 schemas. The server returns the common error envelope
 - Do not infer that a hidden principal exists when its read returns `404`.
 - All versioned API responses use `Cache-Control: no-store`.
 
+## Verification endpoints
+
+These routes are now implemented:
+
+- `POST /v1/principals/{id}/identifiers`
+- `POST /v1/principals/{id}/verification/demo`
+
+Use `BusinessIdentifierCreateRequest`, `BusinessIdentifierResponse` and `DemoVerificationResponse`. The identifier request must set `is_synthetic` to `true`. The UI must display the returned `SIMULATED / DEMO` label and must never request a real identity document.
+
+The backend stores a keyed digest and a display-safe mask, not the raw identifier. One identifier of each type is allowed per principal.
+
 ## Still mock-only
 
-- Simulated verification actions and identifiers.
 - Telegram linking.
 - Agent creation and Agent Passport persistence.
 - Marketplace, negotiation, approval and payment.

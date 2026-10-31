@@ -1,0 +1,9 @@
+{
+  "id": "90000000-0000-4000-8000-000000000001",
+  "principal_id": "20000000-0000-4000-8000-000000000001",
+  "identifier_type": "gstin",
+  "masked_value": "***************1234",
+  "status": "pending",
+  "is_synthetic": true,
+  "created_at": "2026-10-31T10:00:00Z"
+}

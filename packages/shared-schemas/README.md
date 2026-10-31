@@ -14,6 +14,8 @@ The initial pack includes:
 - User and session responses.
 - Principal creation and principal response.
 - Agent creation, Agent Passport and agent-list responses.
+- Synthetic business-identifier requests and responses.
+- Clearly labeled demo-verification responses.
 
 The `v1` directory is a contract namespace, not an implemented negotiation protocol. Mandate, offer, deal and signed-message wire contracts remain proposed until Main publishes their complete schemas.
 

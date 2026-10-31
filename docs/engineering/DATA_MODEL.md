@@ -34,7 +34,7 @@ This is a logical model. Physical schema and migrations must be finalised during
 
 ## Phase 1 physical schema
 
-Migration `20261031_0001` implements users, sessions, principals, memberships and business identifiers. Application and database constraints enforce lifecycle and membership values. Authentication tokens and identifier values are stored only as digests.
+Migration `20261031_0001` implements users, sessions, principals, memberships and business identifiers. Migration `20261031_0002` adds demo-verification timestamps and one identifier per type. Application and database constraints enforce lifecycle and membership values. Authentication tokens and identifier values are stored only as keyed digests.
 
 Agents, keys, tasks, negotiations, deals and audit tables remain logical designs until their migrations are added.
 

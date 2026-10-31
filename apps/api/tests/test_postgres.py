@@ -64,7 +64,18 @@ def test_identity_flow_with_real_postgres() -> None:
         )
         assert created.status_code == 201
         principal_id = created.json()["id"]
-        assert client.get(f"/v1/principals/{principal_id}").status_code == 200
+        headers = {"Origin": origin, "X-CSRF-Token": csrf}
+        identifier = client.post(
+            f"/v1/principals/{principal_id}/identifiers",
+            json={"identifier_type": "gstin", "value": "SYNTHETICCI1234", "is_synthetic": True},
+            headers=headers,
+        )
+        assert identifier.status_code == 201
+        verified = client.post(f"/v1/principals/{principal_id}/verification/demo", headers=headers)
+        assert verified.status_code == 200
+        assert verified.json()["label"] == "SIMULATED / DEMO"
+        principal = client.get(f"/v1/principals/{principal_id}")
+        assert principal.json()["verification_status"] == "demo_verified"
         assert (
             client.post(
                 "/v1/auth/logout",

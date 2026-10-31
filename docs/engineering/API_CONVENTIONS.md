@@ -12,6 +12,8 @@ The following identity routes are implemented:
 - `POST /v1/auth/logout`
 - `POST /v1/principals`
 - `GET /v1/principals/{principal_id}`
+- `POST /v1/principals/{principal_id}/identifiers`
+- `POST /v1/principals/{principal_id}/verification/demo`
 
 Agent, verification, Telegram and commerce routes remain unimplemented. Published schemas do not imply that their routes exist.
 
@@ -107,6 +109,8 @@ P0 uses email and password authentication. Mobile login is deferred; the PRD per
 | `POST /v1/auth/logout` | Origin, session cookie and CSRF header | `204` |
 | `POST /v1/principals` | `PrincipalCreateRequest` | `201 PrincipalResponse` |
 | `GET /v1/principals/{principal_id}` | None | `200 PrincipalResponse` for an authorized member |
+| `POST /v1/principals/{principal_id}/identifiers` | `BusinessIdentifierCreateRequest` | `201 BusinessIdentifierResponse`; owner/admin only |
+| `POST /v1/principals/{principal_id}/verification/demo` | None | `200 DemoVerificationResponse`; owner/admin only |
 
 ## Published but unimplemented agent routes
 
@@ -124,7 +128,6 @@ Telegram identity is linked to a human user by a server-validated one-time token
 
 The following remain proposed and must not be treated as implemented or frozen schemas:
 
-- Verification and business-identifier requests.
 - Telegram linking and notifications.
 - Seller discovery, inventory and ranking results.
 - Mandates, signed messages, offers and negotiation action responses.

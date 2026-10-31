@@ -17,7 +17,7 @@ def test_liveness_does_not_need_a_database(client: TestClient) -> None:
     assert response.status_code == 200
     health = HealthResponse.model_validate(response.json())
     assert health.service == "VANIK API"
-    assert health.version == "0.2.0"
+    assert health.version == "0.3.0"
     UUID(response.headers["X-Request-ID"])
 
 

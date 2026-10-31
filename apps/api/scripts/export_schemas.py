@@ -16,6 +16,11 @@ from app.contracts.identity import (
 )
 from app.contracts.pagination import AgentListResponse
 from app.contracts.passport import AgentPassportResponse
+from app.contracts.verification import (
+    BusinessIdentifierCreateRequest,
+    BusinessIdentifierResponse,
+    DemoVerificationResponse,
+)
 
 MODELS: dict[str, type[BaseModel]] = {
     model.__name__: model
@@ -32,6 +37,9 @@ MODELS: dict[str, type[BaseModel]] = {
         AgentCreateRequest,
         AgentPassportResponse,
         AgentListResponse,
+        BusinessIdentifierCreateRequest,
+        BusinessIdentifierResponse,
+        DemoVerificationResponse,
     )
 }
 SCHEMA_DIRECTORY = Path(__file__).resolve().parents[3] / "packages/shared-schemas/v1"

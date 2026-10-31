@@ -1,0 +1,35 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/DemoVerificationResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "label": {
+      "const": "SIMULATED / DEMO",
+      "default": "SIMULATED / DEMO",
+      "title": "Label",
+      "type": "string"
+    },
+    "principal_id": {
+      "format": "uuid",
+      "title": "Principal Id",
+      "type": "string"
+    },
+    "verification_status": {
+      "const": "demo_verified",
+      "title": "Verification Status",
+      "type": "string"
+    },
+    "verified_at": {
+      "format": "date-time",
+      "title": "Verified At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "principal_id",
+    "verification_status",
+    "verified_at"
+  ],
+  "title": "DemoVerificationResponse",
+  "type": "object"
+}

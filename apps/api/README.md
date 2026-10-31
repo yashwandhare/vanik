@@ -13,12 +13,14 @@ Main owns this application, database revisions and API contracts.
 - Per-worker authentication-attempt limiting.
 - Principal creation with atomic owner membership.
 - Principal reads restricted to active members.
+- Synthetic identifier storage using keyed digests and display-safe masks.
+- Explicitly labeled demo verification for owner/admin members.
 - Standard error responses and server-generated request IDs.
 - Alembic identity schema migration.
 - Versioned identity contracts, JSON schemas and synthetic fixtures.
 - Backend, contract and PostgreSQL integration tests.
 
-Verification actions, Telegram linking, agents, negotiation and settlement endpoints are not implemented. A published schema is not a working endpoint.
+Telegram linking, agents, negotiation and settlement endpoints are not implemented. A published schema is not a working endpoint.
 
 ## Setup
 
