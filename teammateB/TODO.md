@@ -4,14 +4,14 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 
 ## Phase 0 — Setup and contracts
 
-- [ ] Read all files listed in `teammateB/ONBOARDING.md`.
-- [ ] Track or create `devb` and confirm it is the only B working and push branch.
-- [ ] Confirm the frontend framework, Node version, package manager and test tools.
-- [ ] Create the Next.js, TypeScript and Tailwind skeleton after authorization.
-- [ ] Configure lint, type-check, test and build commands.
-- [ ] Establish route groups, layout, navigation and design tokens.
-- [ ] Create a typed API client boundary.
-- [ ] Create mock fixtures only from Main-approved schemas.
+- [x] Read all files listed in `teammateB/ONBOARDING.md`.
+- [x] Track or create `devb` and confirm it is the only B working and push branch.
+- [x] Confirm the frontend framework, Node version, package manager and test tools.
+- [x] Create the Next.js, TypeScript and Tailwind skeleton after authorization.
+- [x] Configure lint, type-check, test and build commands.
+- [x] Establish route groups, layout, navigation and design tokens.
+- [x] Create a typed API client boundary.
+- [x] Create mock fixtures only from Main-approved schemas.
 - [ ] Create the Telegram Bot skeleton after Main confirms the library.
 
 **Dependency:** Main must publish authentication, errors, routes and shared schemas.
