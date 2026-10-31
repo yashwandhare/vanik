@@ -46,14 +46,15 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 
 ### Main
 
-- [ ] Implement users, principals, memberships and business roles.
-- [ ] Implement authentication, session expiry and logout.
+- [x] Implement users, principals, memberships and business roles.
+- [x] Implement authentication, session expiry and logout.
 - [ ] Implement explicitly simulated verification states.
 - [ ] Implement short-lived, single-use Telegram linking tokens.
 - [ ] Implement agent creation, lifecycle and ownership checks.
 - [ ] Generate and protect Ed25519 signing identities.
 - [ ] Implement Agent Passport responses and principal authority ceilings.
-- [ ] Add unit and integration tests for authority and identity boundaries.
+- [x] Add unit tests for authentication, CSRF and principal authority boundaries.
+- [ ] Verify the identity migration and integration flow against PostgreSQL in CI.
 
 ### Teammate B
 

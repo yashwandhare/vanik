@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     agent_key_encryption_secret: SecretStr = SecretStr("replace-me")
     database_url: SecretStr = SecretStr("postgresql+psycopg://vanik:vanik@localhost:5432/vanik")
     database_connect_timeout: int = Field(default=5, ge=1, le=30)
+    session_duration_hours: int = Field(default=8, ge=8, le=8)
+    session_cookie_name: Literal["vanik_session"] = "vanik_session"
+    auth_attempts_per_minute: int = Field(default=30, ge=1, le=120)
     cors_allowed_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
     mock_upi_enabled: bool = True
     demo_verification_enabled: bool = True

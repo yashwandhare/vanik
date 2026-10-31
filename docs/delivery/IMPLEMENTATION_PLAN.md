@@ -122,4 +122,4 @@ Expected behaviour:
 
 Current application targets implement backend install, development, tests, lint, format, type checks and contract export. Infrastructure start/stop targets require Docker. Web and Bot commands will be added with those applications.
 
-`migrate` fails until a real revision exists. `seed`, `demo` and `reset-demo` fail explicitly until their workflows are implemented. Do not mistake an empty migration history for a working database schema.
+`migrate` applies the current identity revision. `seed`, `demo` and `reset-demo` fail explicitly until their workflows are implemented. A successful migration does not imply that demo data or later commerce tables exist.

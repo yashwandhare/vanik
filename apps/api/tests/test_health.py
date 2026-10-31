@@ -17,7 +17,7 @@ def test_liveness_does_not_need_a_database(client: TestClient) -> None:
     assert response.status_code == 200
     health = HealthResponse.model_validate(response.json())
     assert health.service == "VANIK API"
-    assert health.version == "0.1.0"
+    assert health.version == "0.2.0"
     UUID(response.headers["X-Request-ID"])
 
 
@@ -51,8 +51,8 @@ def test_database_failure_is_unavailable_without_credentials(
     assert "secret" not in response.text
 
 
-def test_unimplemented_authentication_is_not_a_fake_success(client: TestClient) -> None:
-    response = client.post("/v1/auth/login", json={})
+def test_unimplemented_commerce_is_not_a_fake_success(client: TestClient) -> None:
+    response = client.post("/v1/tasks", json={})
     assert response.status_code == 404
     assert response.json()["error"]["code"] == "not_found"
 

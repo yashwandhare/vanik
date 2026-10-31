@@ -2,19 +2,23 @@
 
 Main owns this application, database revisions and API contracts.
 
-## Implemented in Phase 0
+## Implemented
 
 - FastAPI application factory and resource lifecycle.
 - Environment-based settings with production secret and CORS checks.
 - Lazy PostgreSQL connection and request-scoped sessions.
-- `GET /health` for process liveness.
-- `GET /health/ready` for database connectivity.
+- Liveness and database-readiness endpoints.
+- Email/password registration with Argon2id password hashing.
+- Opaque HttpOnly sessions, session expiry, CSRF validation and logout.
+- Per-worker authentication-attempt limiting.
+- Principal creation with atomic owner membership.
+- Principal reads restricted to active members.
 - Standard error responses and server-generated request IDs.
-- Alembic configuration, without database revisions yet.
-- Initial identity contracts, exported JSON schemas and synthetic fixtures.
-- Backend and contract tests, Ruff checks and strict Mypy checks.
+- Alembic identity schema migration.
+- Versioned identity contracts, JSON schemas and synthetic fixtures.
+- Backend, contract and PostgreSQL integration tests.
 
-Authentication, business persistence, agents, negotiation and settlement endpoints are not implemented. A published schema is not a working endpoint.
+Verification actions, Telegram linking, agents, negotiation and settlement endpoints are not implemented. A published schema is not a working endpoint.
 
 ## Setup
 
@@ -38,6 +42,7 @@ Start PostgreSQL and Redis if Docker is available:
 
 ```bash
 make infra
+make migrate
 make dev
 ```
 
@@ -62,7 +67,11 @@ Generated schemas and synthetic examples are checked in under [`packages/shared-
 
 ## Database revisions
 
-Alembic reads the same `DATABASE_URL` as the API. No revision creates database tables yet. `make migrate` fails clearly until Phase 1 adds real revisions.
+Alembic reads the same `DATABASE_URL` as the API. Apply the identity schema with:
+
+```bash
+make migrate
+```
 
 Do not run a destructive downgrade or demo reset without explicit approval.
 

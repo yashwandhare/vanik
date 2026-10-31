@@ -6,10 +6,11 @@ This is a logical model. Physical schema and migrations must be finalised during
 
 | Entity | Key fields | Notes |
 | --- | --- | --- |
-| `users` | id, email, phone, auth_provider, status | Human account |
+| `users` | id, email, password_hash, auth_provider, status | Human account; normalized email and Argon2id hash |
+| `user_sessions` | id, user_id, token_hash, csrf_hash, expires_at, revoked_at | Opaque, revocable, eight-hour session |
 | `principals` | id, legal_name, trade_name, business_type, address, verification_status | Business identity |
 | `principal_members` | principal_id, user_id, role, status | Owner/admin/operator/viewer |
-| `business_identifiers` | id, principal_id, type, value_hash_or_demo_value, status | Synthetic identifiers in demo |
+| `business_identifiers` | id, principal_id, type, value_digest, masked_value, status | Store a digest and display-safe mask, never a raw real identifier |
 | `telegram_links` | id, user_id, telegram_user_id, linked_at, revoked_at | One-time link flow |
 | `agents` | id, principal_id, role, name, status, strategy_profile | Multiple agents per principal |
 | `agent_keys` | id, agent_id, public_key, fingerprint, key_version, status | Private key stays server-side |
@@ -30,6 +31,12 @@ This is a logical model. Physical schema and migrations must be finalised during
 | `supplier_memory` | id, buyer_principal_id, seller_principal_id, event_id, memory_type, evidence, confidence | Cross-session supplier history |
 | `security_incidents` | id, principal_id, agent_id, event_id, incident_type, severity, status | Security separate from rating |
 | `telegram_notifications` | id, user_id, event_id, delivery_status | Notification delivery |
+
+## Phase 1 physical schema
+
+Migration `20261031_0001` implements users, sessions, principals, memberships and business identifiers. Application and database constraints enforce lifecycle and membership values. Authentication tokens and identifier values are stored only as digests.
+
+Agents, keys, tasks, negotiations, deals and audit tables remain logical designs until their migrations are added.
 
 ## Identity constraints
 

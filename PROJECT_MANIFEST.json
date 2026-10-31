@@ -1,15 +1,19 @@
 {
   "project": "VANIK",
-  "version": "0.1.0-api-foundation",
-  "status": "backend-foundation-business-workflows-pending",
+  "version": "0.2.0-identity-backend",
+  "status": "identity-backend-implemented-verification-agents-and-commerce-pending",
   "implemented_application": true,
-  "implemented_business_workflows": false,
+  "implemented_identity_workflows": true,
+  "implemented_commerce_workflows": false,
   "implemented_components": [
     "api-liveness-and-database-readiness",
-    "configuration-and-error-boundary",
+    "configuration-error-and-rate-limit-boundaries",
     "database-session-lifecycle",
+    "email-password-registration-and-opaque-sessions",
+    "principal-creation-and-membership-authorized-reads",
+    "identity-database-migration",
     "initial-identity-wire-contracts",
-    "backend-and-contract-tests"
+    "backend-contract-and-postgresql-integration-tests"
   ],
   "implemented_infrastructure": [
     "postgresql-compose-service",
@@ -37,7 +41,8 @@
     "teammateB/GIT_PROTOCOL.md",
     "teammateB/TODO.md",
     "teammateB/WORKING_INSTRUCTIONS.md",
-    "teammateB/PHASE_0_HANDOFF.md"
+    "teammateB/PHASE_0_HANDOFF.md",
+    "teammateB/PHASE_1_IDENTITY_HANDOFF.md"
   ],
-  "important": "Only health endpoints are implemented. Identity schemas are published; authentication and commerce endpoints are not implemented."
+  "important": "Registration, sessions and principal membership reads are implemented. Verification, Telegram linking, agents and commerce endpoints remain unimplemented."
 }
