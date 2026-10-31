@@ -1,4 +1,6 @@
 import os
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
 from uuid import UUID, uuid4
 
 import pytest  # type: ignore[import-not-found, unused-ignore]
@@ -107,6 +109,23 @@ def test_identity_flow_with_real_postgres() -> None:
         rotated = client.post(f"/v1/agents/{agent_id}/keys/rotate", headers=headers)
         assert rotated.status_code == 200
         assert rotated.json()["signing_key"]["key_version"] == 2
+        session_token = client.cookies.get("vanik_session")
+        assert session_token is not None
+        rotation_barrier = Barrier(2)
+
+        def rotate_concurrently() -> int:
+            with TestClient(create_app(settings)) as parallel:
+                rotation_barrier.wait(timeout=10)
+                result = parallel.post(
+                    f"/v1/agents/{agent_id}/keys/rotate",
+                    headers={**headers, "Cookie": f"vanik_session={session_token}"},
+                )
+                assert result.status_code == 200
+                return int(result.json()["signing_key"]["key_version"])
+
+        with ThreadPoolExecutor(max_workers=2) as workers:
+            versions = list(workers.map(lambda _: rotate_concurrently(), range(2)))
+        assert sorted(versions) == [3, 4]
         assert client.post(f"/v1/agents/{agent_id}/revoke", headers=headers).status_code == 200
         engine = create_database_engine(settings)
         try:
