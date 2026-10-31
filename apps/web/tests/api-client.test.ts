@@ -47,12 +47,12 @@ describe('ApiClient', () => {
 
     const client = new ApiClient({ baseUrl: 'http://localhost:8000', useMockFallback: false });
 
-    await expect(client.register({ email: 'bad-email', password: '123' })).rejects.toThrow(
-      'Invalid email format.'
-    );
+    await expect(
+      client.register({ email: 'bad-email', password: '123', display_name: 'Test' })
+    ).rejects.toThrow('Invalid email format.');
 
     try {
-      await client.register({ email: 'bad-email', password: '123' });
+      await client.register({ email: 'bad-email', password: '123', display_name: 'Test' });
     } catch (err) {
       expect(err).toBeInstanceOf(ApiClientError);
       const apiErr = err as ApiClientError;
@@ -82,7 +82,16 @@ describe('ApiClient', () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => ({ session_id: '123', user_id: '456', expires_at: '2026-10-31', csrf_token: 'csrf-abc' }),
+      json: async () => ({
+        user: {
+          id: '456',
+          email: 'test@example.com',
+          display_name: 'Test User',
+          created_at: '2026-10-31T10:00:00Z',
+        },
+        expires_at: '2026-10-31T18:00:00Z',
+        csrf_token: 'csrf-abc',
+      }),
       headers: new Headers(),
     });
     global.fetch = mockFetch;
@@ -92,8 +101,10 @@ describe('ApiClient', () => {
 
     await client.createPrincipal({
       legal_name: 'Test Corp',
+      trade_name: 'Test Brand',
       business_type: 'retail',
       address: 'Pune',
+      contact_email: 'test@example.com',
       roles: ['buyer'],
     });
 

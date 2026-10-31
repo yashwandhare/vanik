@@ -21,15 +21,12 @@ export const FIXTURE_READINESS: ReadinessResponse = {
 export const FIXTURE_USER: UserResponse = {
   id: '10000000-0000-4000-8000-000000000001',
   email: 'demo@example.com',
-  phone: '+919876543210',
-  status: 'active',
+  display_name: 'Demo Principal Owner',
   created_at: '2026-10-31T10:00:00Z',
-  updated_at: '2026-10-31T10:00:00Z',
 };
 
 export const FIXTURE_SESSION: SessionResponse = {
-  session_id: '90000000-0000-4000-8000-000000000001',
-  user_id: '10000000-0000-4000-8000-000000000001',
+  user: FIXTURE_USER,
   expires_at: '2026-10-31T18:00:00Z',
   csrf_token: 'synthetic-csrf-token-000000000001',
 };
@@ -101,7 +98,7 @@ export const FIXTURE_ERROR: ErrorResponse = {
       {
         field: 'body.email',
         code: 'value_error',
-        message: 'Invalid or missing value.',
+        message: 'Must be a valid email address.',
       },
     ],
     request_id: '40000000-0000-4000-8000-000000000001',

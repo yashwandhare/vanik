@@ -60,6 +60,10 @@ export class ApiClient {
     this.csrfToken = token;
   }
 
+  public getCsrfToken(): string | undefined {
+    return this.csrfToken;
+  }
+
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
@@ -70,6 +74,11 @@ export class ApiClient {
       Accept: 'application/json',
       ...((options.headers as Record<string, string>) || {}),
     };
+
+    // Server-side runtimes (Next SSR / Vitest) do not supply browser Origin automatically
+    if (typeof window === 'undefined' && !headers['Origin']) {
+      headers['Origin'] = process.env.NEXT_PUBLIC_APP_ORIGIN || 'http://localhost:3000';
+    }
 
     if (this.csrfToken && options.method && !['GET', 'HEAD'].includes(options.method.toUpperCase())) {
       headers['X-CSRF-Token'] = this.csrfToken;
@@ -113,7 +122,7 @@ export class ApiClient {
       return { data, isMock: false };
     } catch (err) {
       if (err instanceof ApiClientError) {
-        // If it's a 404 or backend business workflow not implemented yet, and mock fallback is enabled:
+        // If it's a 404 or backend route not implemented yet, and mock fallback is enabled:
         if (this.useMockFallback && mockFallback && [404, 501, 502, 503].includes(err.status)) {
           return { data: mockFallback(), isMock: true };
         }
@@ -138,7 +147,7 @@ export class ApiClient {
     return this.request<ReadinessResponse>('/health/ready', { method: 'GET' }, () => FIXTURE_READINESS);
   }
 
-  // Phase 1 Identity Routes (Contracts published, backend endpoints pending)
+  // Phase 1 Identity Routes (Implemented in backend)
   public async register(payload: RegisterRequest): Promise<{ data: UserResponse; isMock: boolean }> {
     return this.request<UserResponse>(
       '/v1/auth/register',
@@ -149,7 +158,7 @@ export class ApiClient {
       () => ({
         ...FIXTURE_USER,
         email: payload.email,
-        phone: payload.phone || null,
+        display_name: payload.display_name,
       })
     );
   }
@@ -170,7 +179,11 @@ export class ApiClient {
   }
 
   public async getSession(): Promise<{ data: SessionResponse; isMock: boolean }> {
-    return this.request<SessionResponse>('/v1/auth/session', { method: 'GET' }, () => FIXTURE_SESSION);
+    const res = await this.request<SessionResponse>('/v1/auth/session', { method: 'GET' }, () => FIXTURE_SESSION);
+    if (res.data?.csrf_token) {
+      this.setCsrfToken(res.data.csrf_token);
+    }
+    return res;
   }
 
   public async logout(): Promise<{ data: void; isMock: boolean }> {
@@ -179,7 +192,7 @@ export class ApiClient {
     return res;
   }
 
-  // Principals
+  // Principals (Implemented in backend)
   public async createPrincipal(payload: PrincipalCreateRequest): Promise<{ data: PrincipalResponse; isMock: boolean }> {
     return this.request<PrincipalResponse>(
       '/v1/principals',
@@ -190,8 +203,10 @@ export class ApiClient {
       () => ({
         ...FIXTURE_PRINCIPAL,
         legal_name: payload.legal_name,
-        trade_name: payload.trade_name || null,
+        trade_name: payload.trade_name,
         business_type: payload.business_type,
+        address: payload.address,
+        contact_email: payload.contact_email,
         roles: payload.roles,
       })
     );
@@ -205,7 +220,7 @@ export class ApiClient {
     );
   }
 
-  // Agents & Passports
+  // Agents & Passports (Phase 2 - Mock fallback until backend persistence published)
   public async createAgent(
     principalId: string,
     payload: AgentCreateRequest
@@ -243,7 +258,7 @@ export class ApiClient {
   }
 }
 
-// Default singleton instance with mock fallback enabled for development
+// Default singleton instance with mock fallback enabled for development & graceful demo degradation
 export const apiClient = new ApiClient({
   baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
   useMockFallback: true,

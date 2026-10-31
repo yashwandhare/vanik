@@ -28,7 +28,7 @@ describe('Web Components', () => {
     expect(screen.getByText('validation_error')).toBeDefined();
     expect(screen.getByText('Request validation failed.')).toBeDefined();
     expect(screen.getByText('body.email')).toBeDefined();
-    expect(screen.getByText('Invalid or missing value.')).toBeDefined();
+    expect(screen.getByText('Must be a valid email address.')).toBeDefined();
     expect(screen.getByText(/Request ID: 40000000-0000-4000-8000-000000000001/i)).toBeDefined();
   });
 });

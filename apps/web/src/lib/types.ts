@@ -32,7 +32,7 @@ export interface ReadinessResponse {
 export interface RegisterRequest {
   email: string;
   password: string;
-  phone?: string | null;
+  display_name: string;
 }
 
 export interface LoginRequest {
@@ -43,40 +43,39 @@ export interface LoginRequest {
 export interface UserResponse {
   id: string;
   email: string;
-  phone?: string | null;
-  status: string;
+  display_name: string;
   created_at: string;
-  updated_at: string;
 }
 
 export interface SessionResponse {
-  session_id: string;
-  user_id: string;
+  user: UserResponse;
   expires_at: string;
   csrf_token: string;
 }
 
 export type BusinessRole = 'buyer' | 'seller';
+export type MembershipRole = 'owner' | 'admin' | 'operator' | 'viewer';
 export type VerificationStatus = 'not_submitted' | 'pending' | 'demo_verified' | 'rejected';
 
 export interface PrincipalCreateRequest {
   legal_name: string;
-  trade_name?: string | null;
+  trade_name: string;
   business_type: string;
   address: string;
+  contact_email: string;
   roles: BusinessRole[];
 }
 
 export interface PrincipalResponse {
   id: string;
   legal_name: string;
-  trade_name?: string | null;
+  trade_name: string;
   business_type: string;
   address: string;
   contact_email: string;
   roles: BusinessRole[];
   verification_status: VerificationStatus;
-  membership_role: string;
+  membership_role: MembershipRole;
   created_at: string;
 }
 

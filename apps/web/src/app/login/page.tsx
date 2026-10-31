@@ -68,8 +68,8 @@ export default function LoginPage() {
                 </div>
                 <p className="text-xs text-[#003d21] font-semibold">Authentication token verified.</p>
                 <div className="text-[11px] font-mono text-[#202020] pt-2 border-t border-[#c0c2a9] space-y-1">
-                  <div>User ID: <span className="font-bold">{session.user_id}</span></div>
-                  <div>Session ID: <span className="font-bold">{session.session_id}</span></div>
+                  <div>User ID: <span className="font-bold select-all">{session.user.id}</span></div>
+                  <div>User: <span className="font-bold">{session.user.display_name} ({session.user.email})</span></div>
                   <div>Expires: <span className="font-bold">{new Date(session.expires_at).toLocaleString()}</span></div>
                 </div>
               </div>

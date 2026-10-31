@@ -20,14 +20,14 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 
 ## Phase 1 — Registration and Agent Passport
 
-- [ ] Build registration and login screens.
-- [ ] Build business profile and role-selection screens.
-- [ ] Build clearly labeled simulated-verification states.
-- [ ] Build Telegram linking instructions and status.
-- [ ] Build agent creation and agent list screens.
-- [ ] Build Agent Passport details and public-key fingerprint presentation.
-- [ ] Add loading, validation, empty, forbidden and error states.
-- [ ] Add UI tests for the complete onboarding flow.
+- [x] Build registration and login screens.
+- [x] Build business profile and role-selection screens.
+- [x] Build clearly labeled simulated-verification states.
+- [x] Build Telegram linking instructions and status.
+- [x] Build agent creation and agent list screens.
+- [x] Build Agent Passport details and public-key fingerprint presentation.
+- [x] Add loading, validation, empty, forbidden and error states.
+- [x] Add UI tests for the complete onboarding flow.
 
 **Dependency:** Main must provide identity, principal, verification, Telegram-link and agent endpoints.
 
