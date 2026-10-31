@@ -31,4 +31,29 @@ describe('Web Components', () => {
     expect(screen.getByText('Must be a valid email address.')).toBeDefined();
     expect(screen.getByText(/Request ID: 40000000-0000-4000-8000-000000000001/i)).toBeDefined();
   });
+
+  it('renders ErrorAlert with accessible dismiss button', () => {
+    let dismissed = false;
+    render(<ErrorAlert error="Test error message" onDismiss={() => { dismissed = true; }} />);
+    const dismissBtn = screen.getByRole('button', { name: /dismiss error notification/i });
+    expect(dismissBtn).toBeDefined();
+    dismissBtn.click();
+    expect(dismissed).toBe(true);
+  });
+
+  it('renders PassportCard with unverified status and active status pill', () => {
+    const unverifiedPassport = {
+      ...FIXTURE_AGENT_PASSPORT,
+      name: 'Seller Agent Test',
+      role: 'seller' as const,
+      verification_status: 'not_submitted' as const,
+      agent_status: 'active' as const,
+    };
+    render(<PassportCard passport={unverifiedPassport} isMock={false} />);
+    expect(screen.getByText('Seller Agent Test')).toBeDefined();
+    expect(screen.getByText('seller')).toBeDefined();
+    expect(screen.getByText('active')).toBeDefined();
+    expect(screen.getByText('not submitted')).toBeDefined();
+    expect(screen.queryByText('FIXTURE')).toBeNull();
+  });
 });

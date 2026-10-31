@@ -30,17 +30,17 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 
 ### Teammate B
 
-- [ ] Complete the reading sequence in `teammateB/ONBOARDING.md`.
-- [ ] Confirm ownership and contract boundaries with Main.
-- [ ] Create the Next.js, TypeScript and Tailwind application skeleton after authorization.
-- [ ] Establish routes, layout, navigation, design tokens and API client boundaries.
-- [ ] Create contract-aligned mock fixtures only after Main publishes schemas.
-- [ ] Create the Telegram Bot skeleton after Main confirms the library and contract.
+- [x] Complete the reading sequence in `teammateB/ONBOARDING.md`.
+- [x] Confirm ownership and contract boundaries with Main.
+- [x] Create the Next.js, TypeScript and Tailwind application skeleton after authorization.
+- [x] Establish routes, layout, navigation, design tokens and API client boundaries.
+- [x] Create contract-aligned mock fixtures only after Main publishes schemas.
+- [x] Create the Telegram Bot skeleton after Main confirms the library and contract.
 
 ### Checkpoint
 
-- [ ] Both developers confirm the same routes, fields, state names and error format.
-- [ ] Backend, web and bot skeletons pass their initial lint and test commands.
+- [x] Both developers confirm the same routes, fields, state names and error format.
+- [x] Backend, web and bot skeletons pass their initial lint and test commands.
 
 ## Phase 1 — Identity, registration and Agent Passport
 
@@ -58,13 +58,13 @@ This checklist tracks delivery of the P0 hackathon scope. It does not indicate t
 
 ### Teammate B
 
-- [ ] Build registration and login screens.
-- [ ] Build business profile, role selection and simulated verification views.
-- [ ] Build Telegram linking instructions and status views.
-- [ ] Build agent creation and agent list screens.
-- [ ] Build Agent Passport views.
-- [ ] Add loading, validation, empty, permission and error states.
-- [ ] Add UI tests for the identity flow.
+- [x] Build registration and login screens.
+- [x] Build business profile, role selection and simulated verification views.
+- [x] Build Telegram linking instructions and status views.
+- [x] Build agent creation and agent list screens.
+- [x] Build Agent Passport views.
+- [x] Add loading, validation, empty, permission and error states.
+- [x] Add UI tests for the identity flow.
 
 ### Checkpoint
 

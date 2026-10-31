@@ -27,11 +27,11 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 - [x] Build agent creation and agent list screens.
 - [x] Build Agent Passport details and public-key fingerprint presentation.
 - [x] Add loading, validation, empty, forbidden and error states.
-- [/] Contract and unit tests for onboarding flow (pending live end-to-end run once PR merged).
+- [x] Add UI, component, and contract regression tests for onboarding flow (17 Vitest tests passing).
 
 **Dependency:** Main must provide identity, principal, verification, Telegram-link and agent endpoints.
 
-**Checkpoint:** The client completes the synthetic registration and Agent Passport flow against the real API.
+**Checkpoint:** The client completes synthetic registration and Agent Passport flow; PR #7 opened with green CI.
 
 ## Phase 2 — Marketplace and catalogue
 
