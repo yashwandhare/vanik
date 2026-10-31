@@ -84,10 +84,13 @@ export default function NegotiationsPage() {
         </div>
 
         {/* Tab Controls */}
-        <div className="flex flex-wrap gap-2 text-xs font-mono self-start sm:self-auto">
+        <div className="flex flex-wrap gap-2 text-xs font-mono self-start sm:self-auto" role="tablist" aria-label="Negotiation views">
           <button
+            type="button"
+            role="tab"
+            aria-selected={selectedTab === 'timeline'}
             onClick={() => setSelectedTab('timeline')}
-            className={`px-3.5 py-1.5 rounded-full font-bold transition-all border ${
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
               selectedTab === 'timeline'
                 ? 'bg-[#202020] text-white border-[#000000]'
                 : 'bg-[#ffffff] text-[#5a5a4f] hover:text-[#000000] border-[#c0c2a9]'
@@ -96,8 +99,11 @@ export default function NegotiationsPage() {
             Parallel Rounds
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={selectedTab === 'comparison'}
             onClick={() => setSelectedTab('comparison')}
-            className={`px-3.5 py-1.5 rounded-full font-bold transition-all border ${
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
               selectedTab === 'comparison'
                 ? 'bg-[#202020] text-white border-[#000000]'
                 : 'bg-[#ffffff] text-[#5a5a4f] hover:text-[#000000] border-[#c0c2a9]'
@@ -106,8 +112,11 @@ export default function NegotiationsPage() {
             Offer Comparison
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={selectedTab === 'security'}
             onClick={() => setSelectedTab('security')}
-            className={`px-3.5 py-1.5 rounded-full font-bold transition-all border ${
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
               selectedTab === 'security'
                 ? 'bg-[#ffc0e6] text-[#3f0929] border-[#000000]'
                 : 'bg-[#ffffff] text-[#3f0929] hover:bg-[#ffc0e6]/40 border-[#c0c2a9]'

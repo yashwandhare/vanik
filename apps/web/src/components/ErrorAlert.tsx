@@ -17,7 +17,8 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, onDismiss }) => {
         {onDismiss && (
           <button
             onClick={onDismiss}
-            className="text-[#3f0929] hover:text-[#000000] font-mono font-bold text-xs px-2 py-1"
+            aria-label="Dismiss error notification"
+            className="text-[#3f0929] hover:text-[#000000] font-mono font-bold text-xs px-2 py-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
           >
             ✕
           </button>
@@ -38,7 +39,8 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, onDismiss }) => {
         {onDismiss && (
           <button
             onClick={onDismiss}
-            className="text-[#3f0929] hover:text-[#000000] font-mono font-bold text-xs px-2 py-1"
+            aria-label="Dismiss error notification"
+            className="text-[#3f0929] hover:text-[#000000] font-mono font-bold text-xs px-2 py-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
           >
             ✕
           </button>
@@ -49,7 +51,11 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, onDismiss }) => {
         <ul className="mt-3 pl-3 border-l-2 border-[#000000] space-y-1 text-xs font-mono">
           {error.details.map((detail, idx) => (
             <li key={idx}>
-              {detail.field && <code className="bg-[#ffffff] px-1.5 py-0.5 rounded mr-1.5 font-bold border border-[#000000]">{detail.field}</code>}
+              {detail.field && (
+                <code className="bg-[#ffffff] px-1.5 py-0.5 rounded mr-1.5 font-bold border border-[#000000]">
+                  {detail.field}
+                </code>
+              )}
               <span className="text-[#3f0929] font-medium">{detail.message}</span>
             </li>
           ))}

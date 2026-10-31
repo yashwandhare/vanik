@@ -68,18 +68,20 @@ export default function CataloguePage() {
       <div className="flex flex-wrap items-center gap-3 bg-[#ffffff] border-[1.5px] border-[#000000] p-4 rounded-[16px]">
         <input
           type="text"
+          aria-label="Filter catalogue by SKU or product name"
           placeholder="Filter by SKU code or product name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-[200px] px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs text-[#000000] font-medium focus:outline-none focus:border-[#000000]"
+          className="flex-1 min-w-[200px] px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs text-[#000000] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
         />
 
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5" role="toolbar" aria-label="Filter by product category">
           {categories.map((c) => (
             <button
               key={c}
+              type="button"
               onClick={() => setCategory(c)}
-              className={`px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
                 category === c
                   ? 'bg-[#202020] text-white border border-[#000000]'
                   : 'bg-[#f8f9eb] text-[#5a5a4f] hover:text-[#000000] border border-[#c0c2a9]'

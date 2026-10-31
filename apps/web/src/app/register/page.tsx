@@ -27,6 +27,11 @@ export default function RegisterPage() {
   const [userRes, setUserRes] = useState<UserResponse | null>(null);
   const [principalRes, setPrincipalRes] = useState<PrincipalResponse | null>(null);
 
+  // Step 3 Synthetic Verification State
+  const [verifying, setVerifying] = useState(false);
+  const [verificationError, setVerificationError] = useState<string | null>(null);
+  const [verificationSuccess, setVerificationSuccess] = useState<string | null>(null);
+
   const handleStep1 = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -75,6 +80,11 @@ export default function RegisterPage() {
         roles,
       });
       setPrincipalRes(res.data);
+
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('vanik_principal_id', res.data.id);
+      }
+
       setStep(3);
     } catch (err: unknown) {
       if (err instanceof ApiClientError) {
@@ -89,6 +99,35 @@ export default function RegisterPage() {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePerformSyntheticVerification = async () => {
+    if (!principalRes) return;
+    setVerifying(true);
+    setVerificationError(null);
+    setVerificationSuccess(null);
+
+    try {
+      // 1. Record synthetic business identifier
+      await apiClient.addBusinessIdentifier(principalRes.id, {
+        identifier_type: 'pan',
+        value: 'ABCDE1234F',
+        is_synthetic: true,
+      });
+
+      // 2. Execute demo verification against backend
+      const verifyRes = await apiClient.verifyPrincipalDemo(principalRes.id);
+
+      setPrincipalRes({
+        ...principalRes,
+        verification_status: verifyRes.data.verification_status,
+      });
+      setVerificationSuccess(`Principal authority cryptographically sealed under label "${verifyRes.data.label}".`);
+    } catch (err: unknown) {
+      setVerificationError(err instanceof Error ? err.message : 'Verification failed');
+    } finally {
+      setVerifying(false);
     }
   };
 
@@ -150,7 +189,7 @@ export default function RegisterPage() {
             >
               3
             </span>
-            <span>Verified</span>
+            <span>Status</span>
           </div>
         </div>
 
@@ -167,44 +206,56 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">
+                <label
+                  htmlFor="reg-display-name"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
                   Display Name
                 </label>
                 <input
+                  id="reg-display-name"
                   type="text"
                   required
                   maxLength={120}
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">
+                <label
+                  htmlFor="reg-email"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
                   Email Address
                 </label>
                 <input
+                  id="reg-email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">
+                <label
+                  htmlFor="reg-password"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
                   Password (min 12 characters)
                 </label>
                 <input
+                  id="reg-password"
                   type="password"
                   required
                   minLength={12}
                   maxLength={128}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                 />
               </div>
 
@@ -212,7 +263,7 @@ export default function RegisterPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
+                  className="w-full py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
                   {loading ? 'Creating Account & Starting Session...' : 'Continue to Business Profile →'}
                 </button>
@@ -230,58 +281,74 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">
+                <label
+                  htmlFor="reg-legal-name"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
                   Legal Registered Name
                 </label>
                 <input
+                  id="reg-legal-name"
                   type="text"
                   required
                   maxLength={120}
                   value={legalName}
                   onChange={(e) => setLegalName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">
+                <label
+                  htmlFor="reg-trade-name"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
                   Trade Display Name
                 </label>
                 <input
+                  id="reg-trade-name"
                   type="text"
                   required
                   maxLength={120}
                   value={tradeName}
                   onChange={(e) => setTradeName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">
+                  <label
+                    htmlFor="reg-biz-type"
+                    className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                  >
                     Business Type
                   </label>
                   <input
+                    id="reg-biz-type"
                     type="text"
                     required
                     maxLength={80}
                     value={businessType}
                     onChange={(e) => setBusinessType(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                    className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">
+                  <label
+                    htmlFor="reg-contact-email"
+                    className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                  >
                     Contact Email
                   </label>
                   <input
+                    id="reg-contact-email"
                     type="email"
                     required
                     value={contactEmail}
                     onChange={(e) => setContactEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                    className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                   />
                 </div>
               </div>
@@ -294,7 +361,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => toggleRole('buyer')}
-                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
                       roles.includes('buyer')
                         ? 'bg-[#aafdc0] text-[#003d21] border-[#000000]'
                         : 'bg-[#f8f9eb] text-[#5a5a4f] border-[#c0c2a9]'
@@ -305,7 +372,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => toggleRole('seller')}
-                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
                       roles.includes('seller')
                         ? 'bg-[#b0f4ff] text-[#041668] border-[#000000]'
                         : 'bg-[#f8f9eb] text-[#5a5a4f] border-[#c0c2a9]'
@@ -317,16 +384,20 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">
+                <label
+                  htmlFor="reg-address"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
                   Registered Commercial Address
                 </label>
                 <textarea
+                  id="reg-address"
                   rows={2}
                   required
                   maxLength={500}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                 />
               </div>
 
@@ -334,16 +405,16 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="px-4 py-2.5 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] text-xs font-semibold border border-[#c0c2a9]"
+                  className="px-4 py-2.5 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] text-xs font-semibold border border-[#c0c2a9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 py-2.5 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
+                  className="flex-1 py-2.5 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
-                  {loading ? 'Registering Principal...' : 'Register Principal & Seal →'}
+                  {loading ? 'Registering Principal...' : 'Register Principal & Continue →'}
                 </button>
               </div>
             </form>
@@ -351,13 +422,21 @@ export default function RegisterPage() {
 
           {step === 3 && principalRes && (
             <div className="space-y-6">
-              <div className="p-6 bg-[#aafdc0]/30 border-[1.5px] border-[#000000] rounded-[20px] space-y-4">
+              <div className="p-6 bg-[#f8f9eb] border-[1.5px] border-[#000000] rounded-[20px] space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs uppercase font-extrabold text-[#003d21] tracking-wider">
-                    Registration Successful
+                  <span className="font-mono text-xs uppercase font-extrabold text-[#000000] tracking-wider">
+                    Principal Created
                   </span>
-                  <span className="px-3 py-1 rounded-full bg-[#aafdc0] text-[#003d21] border border-[#000000] text-xs font-mono font-bold uppercase">
-                    DEMO VERIFIED
+                  <span
+                    className={`px-3 py-1 rounded-full border border-[#000000] text-xs font-mono font-bold uppercase ${
+                      principalRes.verification_status === 'demo_verified'
+                        ? 'bg-[#aafdc0] text-[#003d21]'
+                        : 'bg-[#edeee1] text-[#5a5a4f]'
+                    }`}
+                  >
+                    {principalRes.verification_status === 'demo_verified'
+                      ? 'DEMO VERIFIED'
+                      : 'NOT SUBMITTED (PENDING VERIFICATION)'}
                   </span>
                 </div>
 
@@ -380,27 +459,56 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div className="p-4 bg-[#f8f9eb] rounded-[14px] border border-[#c0c2a9] text-xs text-[#5a5a4f] space-y-1">
-                <span className="font-mono font-bold text-[#000000] text-xs uppercase block">
-                  Next Steps for Principal:
-                </span>
-                <p className="leading-relaxed">
-                  You can now spawn persistent AI agents under this principal, assign them Ed25519 cryptographic signing identities, and publish task mandates.
-                </p>
-              </div>
+              {/* Real Demo Verification Action */}
+              {principalRes.verification_status !== 'demo_verified' && (
+                <div className="p-5 bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[18px] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs uppercase font-bold text-[#003d21]">
+                      [ COMPLIANCE STEP REQUIRED ]
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#aafdc0] text-[#003d21] font-bold border border-[#000000]">
+                      SIMULATED / DEMO
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#5a5a4f] leading-relaxed">
+                    VANIK principals require compliance verification before agent delegation. Run the local synthetic demo verifier to test the real backend verification pipeline.
+                  </p>
+
+                  {verificationError && (
+                    <div className="p-3 bg-[#ffc0e6] border border-[#000000] rounded-[9px] text-xs text-[#3f0929] font-mono">
+                      ✕ {verificationError}
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={handlePerformSyntheticVerification}
+                    disabled={verifying}
+                    className="w-full py-2.5 px-4 rounded-[11px] bg-[#003d21] hover:bg-[#002815] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+                  >
+                    {verifying ? 'Submitting Synthetic PAN & Verifying...' : 'Execute Synthetic Demo Verification →'}
+                  </button>
+                </div>
+              )}
+
+              {verificationSuccess && (
+                <div className="p-4 bg-[#aafdc0]/30 border border-[#003d21] rounded-[14px] text-xs text-[#003d21] font-mono font-bold">
+                  ✓ {verificationSuccess}
+                </div>
+              )}
 
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link
-                  href="/agents"
-                  className="flex-1 text-center py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
+                  href={`/principals?principalId=${principalRes.id}`}
+                  className="flex-1 text-center py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
-                  Create & View Agent Passports →
+                  View Principal Profile →
                 </Link>
                 <Link
-                  href="/catalogue"
-                  className="py-3 px-4 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] text-xs font-semibold border border-[#c0c2a9]"
+                  href={`/agents?principalId=${principalRes.id}`}
+                  className="py-3 px-4 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] text-xs font-semibold border border-[#c0c2a9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
-                  Browse Catalogue
+                  Agent Passports
                 </Link>
               </div>
             </div>

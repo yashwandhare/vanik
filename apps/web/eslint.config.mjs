@@ -1,4 +1,4 @@
-import babelParser from '@babel/eslint-parser';
+import tsParser from '@typescript-eslint/parser';
 
 export default [
   {
@@ -7,14 +7,12 @@ export default [
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
-      parser: babelParser,
+      parser: tsParser,
       parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          presets: [
-            '@babel/preset-typescript',
-            ['@babel/preset-react', { runtime: 'automatic' }],
-          ],
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
         },
       },
     },

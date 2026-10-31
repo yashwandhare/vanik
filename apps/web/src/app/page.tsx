@@ -22,7 +22,7 @@ export default function HomePage() {
         setIsHealthMock(hRes.isMock);
         setReadiness(rRes.data);
       } catch {
-        setHealth({ status: 'offline' });
+        setHealth({ status: 'offline', service: 'VANIK API', version: '0.4.0' });
         setIsHealthMock(true);
       } finally {
         setLoading(false);
@@ -88,7 +88,7 @@ export default function HomePage() {
             <span className="inline-flex items-center gap-2 bg-[#ffffff] px-2.5 py-0.5 rounded-full border border-[#c0c2a9]">
               <span
                 className={`w-2 h-2 rounded-full ${
-                  health?.status === 'healthy' ? 'bg-[#003d21]' : 'bg-[#dc341e]'
+                  health?.status === 'ok' ? 'bg-[#003d21]' : 'bg-[#dc341e]'
                 }`}
               />
               <span className="font-bold text-[#000000]">

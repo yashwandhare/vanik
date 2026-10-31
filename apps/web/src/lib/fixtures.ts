@@ -14,12 +14,14 @@ import type {
 } from './types';
 
 export const FIXTURE_HEALTH: HealthResponse = {
-  status: 'healthy',
+  status: 'ok',
+  service: 'VANIK API',
+  version: '0.4.0',
 };
 
 export const FIXTURE_READINESS: ReadinessResponse = {
   status: 'ready',
-  database: 'connected',
+  database: 'ok',
 };
 
 export const FIXTURE_USER: UserResponse = {

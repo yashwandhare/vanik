@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { apiClient, ApiClientError } from '../../lib/api-client';
 import { PassportCard } from '../../components/PassportCard';
 import { ErrorAlert } from '../../components/ErrorAlert';
 import type { AgentPassportResponse, BusinessRole, ErrorEnvelope } from '../../lib/types';
 
-export default function AgentsPage() {
+function AgentsContent() {
+  const searchParams = useSearchParams();
   const [agents, setAgents] = useState<AgentPassportResponse[]>([]);
   const [isMock, setIsMock] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -19,10 +21,28 @@ export default function AgentsPage() {
   const [description, setDescription] = useState('Procurement agent for 40-SKU Diwali restock basket');
   const [creating, setCreating] = useState(false);
 
-  const principalId = '20000000-0000-4000-8000-000000000001';
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
+  // Resolved principal ID from search params, session storage, or default fallback
+  const principalId =
+    searchParams.get('principalId') ||
+    searchParams.get('id') ||
+    (typeof window !== 'undefined' ? sessionStorage.getItem('vanik_principal_id') : null) ||
+    '20000000-0000-4000-8000-000000000001';
+
+  // Restore session and load agent roster
   useEffect(() => {
     async function loadAgents() {
+      setLoading(true);
+      setError(null);
+
+      // Restore session/CSRF state if active
+      try {
+        await apiClient.getSession();
+      } catch {
+        // Not logged in or expired session
+      }
+
       try {
         const res = await apiClient.listAgents(principalId);
         setAgents(res.data.items);
@@ -44,6 +64,28 @@ export default function AgentsPage() {
     }
     loadAgents();
   }, [principalId]);
+
+  // Trap Escape key and manage focus for modal
+  useEffect(() => {
+    if (!showCreateModal) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowCreateModal(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    // Autofocus initial field
+    const timeout = setTimeout(() => {
+      nameInputRef.current?.focus();
+    }, 50);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      clearTimeout(timeout);
+    };
+  }, [showCreateModal]);
 
   const handleCreateAgent = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,8 +143,9 @@ export default function AgentsPage() {
         </div>
 
         <button
+          type="button"
           onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2 bg-[#202020] hover:bg-[#000000] text-white rounded-[11px] text-xs font-bold border border-[#000000] transition-all shadow-sm flex items-center gap-2 self-start sm:self-auto"
+          className="px-4 py-2 bg-[#202020] hover:bg-[#000000] text-white rounded-[11px] text-xs font-bold border border-[#000000] transition-all shadow-sm flex items-center gap-2 self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
         >
           <span className="font-bold text-sm">+</span>
           <span>Spawn New Agent</span>
@@ -123,8 +166,9 @@ export default function AgentsPage() {
             Spawn your first buyer or seller representative to begin autonomous counterparty discovery.
           </p>
           <button
+            type="button"
             onClick={() => setShowCreateModal(true)}
-            className="px-5 py-2.5 bg-[#202020] text-white text-xs font-bold rounded-[11px] border border-[#000000]"
+            className="px-5 py-2.5 bg-[#202020] text-white text-xs font-bold rounded-[11px] border border-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
           >
             Spawn Agent
           </button>
@@ -137,20 +181,29 @@ export default function AgentsPage() {
         </div>
       )}
 
-      {/* Spawn Agent Modal */}
+      {/* Spawn Agent Modal with accessible dialog semantics */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-[#000000]/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-spawn-title"
+          className="fixed inset-0 z-50 bg-[#000000]/60 backdrop-blur-sm flex items-center justify-center p-4"
+        >
           <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-[#c0c2a9] pb-4">
               <div>
                 <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
                   [ PROVISION PASSPORT ]
                 </span>
-                <h2 className="text-xl font-extrabold text-[#000000] mt-0.5">Spawn AI Representative</h2>
+                <h2 id="modal-spawn-title" className="text-xl font-extrabold text-[#000000] mt-0.5">
+                  Spawn AI Representative
+                </h2>
               </div>
               <button
+                type="button"
+                aria-label="Close dialog"
                 onClick={() => setShowCreateModal(false)}
-                className="text-[#7c7d76] hover:text-[#000000] font-mono font-bold text-sm px-2 py-1"
+                className="text-[#7c7d76] hover:text-[#000000] font-mono font-bold text-sm px-2 py-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
               >
                 ✕
               </button>
@@ -158,23 +211,37 @@ export default function AgentsPage() {
 
             <form onSubmit={handleCreateAgent} className="space-y-4">
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Agent Name</label>
+                <label
+                  htmlFor="agent-name-input"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
+                  Agent Name
+                </label>
                 <input
+                  ref={nameInputRef}
+                  id="agent-name-input"
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Marketplace Role</label>
-                <div className="flex gap-2">
+                <span
+                  id="agent-role-label"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
+                  Marketplace Role
+                </span>
+                <div role="radiogroup" aria-labelledby="agent-role-label" className="flex gap-2">
                   <button
                     type="button"
+                    role="radio"
+                    aria-checked={role === 'buyer'}
                     onClick={() => setRole('buyer')}
-                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
                       role === 'buyer'
                         ? 'bg-[#aafdc0] text-[#003d21] border-[#000000]'
                         : 'bg-[#f8f9eb] text-[#5a5a4f] border-[#c0c2a9]'
@@ -184,8 +251,10 @@ export default function AgentsPage() {
                   </button>
                   <button
                     type="button"
+                    role="radio"
+                    aria-checked={role === 'seller'}
                     onClick={() => setRole('seller')}
-                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] ${
                       role === 'seller'
                         ? 'bg-[#b0f4ff] text-[#041668] border-[#000000]'
                         : 'bg-[#f8f9eb] text-[#5a5a4f] border-[#c0c2a9]'
@@ -197,12 +266,18 @@ export default function AgentsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Description / Directive</label>
+                <label
+                  htmlFor="agent-description-input"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
+                  Description / Directive
+                </label>
                 <textarea
+                  id="agent-description-input"
                   rows={2}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                 />
               </div>
 
@@ -219,14 +294,14 @@ export default function AgentsPage() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] rounded-[9px] border border-[#c0c2a9] text-xs font-semibold"
+                  className="px-4 py-2 bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] rounded-[9px] border border-[#c0c2a9] text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="flex-1 py-2 px-4 bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white rounded-[11px] text-xs font-bold border border-[#000000] transition-all shadow-sm"
+                  className="flex-1 py-2 px-4 bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white rounded-[11px] text-xs font-bold border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
                   {creating ? 'Spawning Agent...' : 'Spawn & Sign Passport'}
                 </button>
@@ -236,5 +311,19 @@ export default function AgentsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AgentsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="vanik-container py-16 text-center text-[#7c7d76] text-sm font-mono animate-pulse">
+          Loading agent passports...
+        </div>
+      }
+    >
+      <AgentsContent />
+    </Suspense>
   );
 }

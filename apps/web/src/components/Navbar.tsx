@@ -39,7 +39,7 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`transition-colors py-1 ${
+                  className={`transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] rounded ${
                     isActive
                       ? 'text-[#000000] border-b-2 border-[#003d21]'
                       : 'text-[#5a5a4f] hover:text-[#000000]'
@@ -51,7 +51,7 @@ export const Navbar: React.FC = () => {
             })}
             <Link
               href="/miniapp"
-              className="px-2.5 py-1 rounded-full bg-[#b0f4ff] text-[#041668] border border-[#000000] text-xs font-mono font-bold tracking-tight hover:brightness-95 transition-all"
+              className="px-2.5 py-1 rounded-full bg-[#b0f4ff] text-[#041668] border border-[#000000] text-xs font-mono font-bold tracking-tight hover:brightness-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
             >
               Mini App
             </Link>
@@ -67,14 +67,14 @@ export const Navbar: React.FC = () => {
 
           <Link
             href="/login"
-            className="text-xs font-bold text-[#202020] hover:text-[#000000] px-3 sm:px-3.5 py-1.5 rounded-[9px] border border-[#c0c2a9] hover:border-[#000000] bg-transparent transition-all"
+            className="text-xs font-bold text-[#202020] hover:text-[#000000] px-3 sm:px-3.5 py-1.5 rounded-[9px] border border-[#c0c2a9] hover:border-[#000000] bg-transparent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
           >
             Sign In
           </Link>
 
           <Link
             href="/register"
-            className="text-xs font-bold text-white bg-[#202020] hover:bg-[#000000] px-3.5 sm:px-4 py-1.5 rounded-[11px] border border-[#000000] transition-all shadow-sm"
+            className="text-xs font-bold text-white bg-[#202020] hover:bg-[#000000] px-3.5 sm:px-4 py-1.5 rounded-[11px] border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
           >
             Register
           </Link>
@@ -82,8 +82,10 @@ export const Navbar: React.FC = () => {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1.5 rounded-lg border border-[#c0c2a9] text-[#202020] hover:bg-[#edeee1]"
-            aria-label="Toggle Menu"
+            className="md:hidden p-1.5 rounded-lg border border-[#c0c2a9] text-[#202020] hover:bg-[#edeee1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav-drawer"
           >
             <span className="block w-4 h-0.5 bg-[#000000] mb-1" />
             <span className="block w-4 h-0.5 bg-[#000000] mb-1" />
@@ -94,7 +96,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#c0c2a9] bg-[#f8f9eb] px-4 py-4 space-y-2 font-bold text-sm">
+        <div id="mobile-nav-drawer" className="md:hidden border-t border-[#c0c2a9] bg-[#f8f9eb] px-4 py-4 space-y-2 font-bold text-sm">
           {navLinks.map((link) => (
             <Link
               key={link.href}

@@ -51,7 +51,7 @@ async def test_status_handler() -> None:
     update.effective_message.reply_text.assert_called_once()
     call_args = update.effective_message.reply_text.call_args[0][0]
     assert "123456789" in call_args
-    assert "Diwali Kirana Restock Basket" in call_args
+    assert "Bot Status (Informational)" in call_args
 
 
 @pytest.mark.asyncio

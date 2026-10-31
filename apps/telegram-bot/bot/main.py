@@ -12,11 +12,37 @@ from bot.handlers.link import link_handler
 from bot.handlers.start import start_handler
 from bot.handlers.status import status_handler
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO,
-)
 logger = logging.getLogger("vanik.bot")
+
+
+class SecretTokenFilter(logging.Filter):
+    """Redacts secret bot tokens from all log messages."""
+
+    def __init__(self, token: str = ""):
+        super().__init__()
+        self.token = token
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        if self.token and isinstance(record.msg, str) and self.token in record.msg:
+            record.msg = record.msg.replace(self.token, "[REDACTED_BOT_TOKEN]")
+        return True
+
+
+def configure_logging(token: str = "") -> None:
+    """Configures application logging and silences transport logs containing URL secrets."""
+    logging.basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        level=logging.INFO,
+    )
+    # Silence HTTPX/HTTPCore transport loggers that log request URLs with tokens
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+    logging.getLogger("telegram").setLevel(logging.WARNING)
+    logging.getLogger("telegram.ext").setLevel(logging.INFO)
+
+    if token:
+        token_filter = SecretTokenFilter(token)
+        logging.getLogger().addFilter(token_filter)
 
 
 def build_application(
@@ -25,6 +51,8 @@ def build_application(
     """Configures and builds the Telegram Application with all handlers registered."""
     settings = settings or BotSettings()
     token = settings.telegram_bot_token.get_secret_value() or "DUMMY_TOKEN_FOR_TESTS:123456789"
+
+    configure_logging(token)
 
     app = Application.builder().token(token).build()
 

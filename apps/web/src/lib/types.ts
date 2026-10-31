@@ -21,12 +21,14 @@ export interface ErrorResponse {
 }
 
 export interface HealthResponse {
-  status: 'healthy' | 'degraded' | 'unhealthy' | string;
+  status: 'ok' | string;
+  service: string;
+  version: string;
 }
 
 export interface ReadinessResponse {
-  status: 'ready' | 'not_ready' | string;
-  database: 'connected' | 'unreachable' | string;
+  status: 'ready' | string;
+  database: 'ok' | string;
 }
 
 export interface RegisterRequest {

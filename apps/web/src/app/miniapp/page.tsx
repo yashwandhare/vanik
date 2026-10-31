@@ -82,8 +82,9 @@ export default function MiniAppPage() {
               </div>
             ) : (
               <button
+                type="button"
                 onClick={() => setApproved(true)}
-                className="w-full py-3 bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs rounded-[12px] border border-[#000000] transition-all shadow-sm flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs rounded-[12px] border border-[#000000] transition-all shadow-sm flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
               >
                 <span>Approve & Authorize Mock Settlement</span>
                 <span>→</span>

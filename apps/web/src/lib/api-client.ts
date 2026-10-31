@@ -20,14 +20,6 @@ import type {
 import {
   FIXTURE_AGENT_LIST,
   FIXTURE_AGENT_PASSPORT,
-  FIXTURE_DEMO_VERIFICATION,
-  FIXTURE_HEALTH,
-  FIXTURE_IDENTIFIER,
-  FIXTURE_PRINCIPAL,
-  FIXTURE_READINESS,
-  FIXTURE_SESSION,
-  FIXTURE_TELEGRAM_LINK_START,
-  FIXTURE_USER,
 } from './fixtures';
 
 export class ApiClientError extends Error {
@@ -58,7 +50,11 @@ export class ApiClient {
   private useMockFallback: boolean;
 
   constructor(config: ApiClientConfig = {}) {
-    this.baseUrl = config.baseUrl || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    this.baseUrl =
+      config.baseUrl ||
+      process.env.NEXT_PUBLIC_API_BASE_URL ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      'http://localhost:8000';
     this.csrfToken = config.csrfToken;
     this.useMockFallback = config.useMockFallback ?? false;
   }
@@ -84,7 +80,10 @@ export class ApiClient {
 
     // Server-side runtimes (Next SSR / Vitest) do not supply browser Origin automatically
     if (typeof window === 'undefined' && !headers['Origin']) {
-      headers['Origin'] = process.env.NEXT_PUBLIC_APP_ORIGIN || 'http://localhost:3000';
+      headers['Origin'] =
+        process.env.NEXT_PUBLIC_APP_ORIGIN ||
+        process.env.NEXT_PUBLIC_APP_URL ||
+        'http://localhost:3000';
     }
 
     if (this.csrfToken && options.method && !['GET', 'HEAD'].includes(options.method.toUpperCase())) {
@@ -129,14 +128,14 @@ export class ApiClient {
       return { data, isMock: false };
     } catch (err) {
       if (err instanceof ApiClientError) {
-        // If it's a 404 or backend route not implemented yet, and mock fallback is enabled:
+        // Only explicitly unimplemented demo routes with mockFallback enabled may use fixtures
         if (this.useMockFallback && mockFallback && [404, 501, 502, 503].includes(err.status)) {
           return { data: mockFallback(), isMock: true };
         }
         throw err;
       }
 
-      // Network failure / connection refused
+      // Network failure / connection refused: only fall back if an explicit mock generator is provided
       if (this.useMockFallback && mockFallback) {
         return { data: mockFallback(), isMock: true };
       }
@@ -145,40 +144,28 @@ export class ApiClient {
     }
   }
 
-  // Health & Readiness (Implemented in backend)
+  // Health & Readiness (Implemented in backend - real requests only)
   public async getHealth(): Promise<{ data: HealthResponse; isMock: boolean }> {
-    return this.request<HealthResponse>('/health', { method: 'GET' }, () => FIXTURE_HEALTH);
+    return this.request<HealthResponse>('/health', { method: 'GET' });
   }
 
   public async getReadiness(): Promise<{ data: ReadinessResponse; isMock: boolean }> {
-    return this.request<ReadinessResponse>('/health/ready', { method: 'GET' }, () => FIXTURE_READINESS);
+    return this.request<ReadinessResponse>('/health/ready', { method: 'GET' });
   }
 
-  // Phase 1 Identity Routes (Implemented in backend)
+  // Phase 1 Identity Routes (Implemented in backend - real requests only)
   public async register(payload: RegisterRequest): Promise<{ data: UserResponse; isMock: boolean }> {
-    return this.request<UserResponse>(
-      '/v1/auth/register',
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      () => ({
-        ...FIXTURE_USER,
-        email: payload.email,
-        display_name: payload.display_name,
-      })
-    );
+    return this.request<UserResponse>('/v1/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
   }
 
   public async login(payload: LoginRequest): Promise<{ data: SessionResponse; isMock: boolean }> {
-    const res = await this.request<SessionResponse>(
-      '/v1/auth/login',
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      () => FIXTURE_SESSION
-    );
+    const res = await this.request<SessionResponse>('/v1/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
     if (res.data?.csrf_token) {
       this.setCsrfToken(res.data.csrf_token);
     }
@@ -186,7 +173,7 @@ export class ApiClient {
   }
 
   public async getSession(): Promise<{ data: SessionResponse; isMock: boolean }> {
-    const res = await this.request<SessionResponse>('/v1/auth/session', { method: 'GET' }, () => FIXTURE_SESSION);
+    const res = await this.request<SessionResponse>('/v1/auth/session', { method: 'GET' });
     if (res.data?.csrf_token) {
       this.setCsrfToken(res.data.csrf_token);
     }
@@ -194,40 +181,26 @@ export class ApiClient {
   }
 
   public async logout(): Promise<{ data: void; isMock: boolean }> {
-    const res = await this.request<void>('/v1/auth/logout', { method: 'POST' }, () => undefined);
+    const res = await this.request<void>('/v1/auth/logout', { method: 'POST' });
     this.setCsrfToken(undefined);
     return res;
   }
 
-  // Principals (Implemented in backend)
+  // Principals (Implemented in backend - real requests only)
   public async createPrincipal(payload: PrincipalCreateRequest): Promise<{ data: PrincipalResponse; isMock: boolean }> {
-    return this.request<PrincipalResponse>(
-      '/v1/principals',
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      () => ({
-        ...FIXTURE_PRINCIPAL,
-        legal_name: payload.legal_name,
-        trade_name: payload.trade_name,
-        business_type: payload.business_type,
-        address: payload.address,
-        contact_email: payload.contact_email,
-        roles: payload.roles,
-      })
-    );
+    return this.request<PrincipalResponse>('/v1/principals', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
   }
 
   public async getPrincipal(principalId: string): Promise<{ data: PrincipalResponse; isMock: boolean }> {
-    return this.request<PrincipalResponse>(
-      `/v1/principals/${encodeURIComponent(principalId)}`,
-      { method: 'GET' },
-      () => FIXTURE_PRINCIPAL
-    );
+    return this.request<PrincipalResponse>(`/v1/principals/${encodeURIComponent(principalId)}`, {
+      method: 'GET',
+    });
   }
 
-  // Verification (Implemented in backend)
+  // Verification (Implemented in backend - real requests only)
   public async addBusinessIdentifier(
     principalId: string,
     payload: BusinessIdentifierCreateRequest
@@ -237,13 +210,7 @@ export class ApiClient {
       {
         method: 'POST',
         body: JSON.stringify(payload),
-      },
-      () => ({
-        ...FIXTURE_IDENTIFIER,
-        principal_id: principalId,
-        identifier_type: payload.identifier_type,
-        masked_value: `${payload.value.slice(0, 3)}****${payload.value.slice(-2)}`,
-      })
+      }
     );
   }
 
@@ -254,36 +221,24 @@ export class ApiClient {
       `/v1/principals/${encodeURIComponent(principalId)}/verification/demo`,
       {
         method: 'POST',
-      },
-      () => ({
-        ...FIXTURE_DEMO_VERIFICATION,
-        principal_id: principalId,
-      })
+      }
     );
   }
 
-  // Telegram Linking (Implemented in backend)
+  // Telegram Linking (Implemented in backend - real requests only)
   public async startTelegramLink(): Promise<{ data: TelegramLinkStartResponse; isMock: boolean }> {
-    return this.request<TelegramLinkStartResponse>(
-      '/v1/telegram/link/start',
-      {
-        method: 'POST',
-      },
-      () => FIXTURE_TELEGRAM_LINK_START
-    );
+    return this.request<TelegramLinkStartResponse>('/v1/telegram/link/start', {
+      method: 'POST',
+    });
   }
 
   public async unlinkTelegram(): Promise<{ data: void; isMock: boolean }> {
-    return this.request<void>(
-      '/v1/telegram/link',
-      {
-        method: 'DELETE',
-      },
-      () => undefined
-    );
+    return this.request<void>('/v1/telegram/link', {
+      method: 'DELETE',
+    });
   }
 
-  // Agents & Passports (Phase 2 - Mock fallback until backend persistence published)
+  // Agents & Passports (Unimplemented in backend until Phase 2 - labeled mock fallback)
   public async createAgent(
     principalId: string,
     payload: AgentCreateRequest
@@ -321,8 +276,8 @@ export class ApiClient {
   }
 }
 
-// Default singleton instance with mock fallback enabled for development & graceful demo degradation
+// Default singleton instance with mock fallback DISABLED for real endpoints
 export const apiClient = new ApiClient({
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
-  useMockFallback: true,
+  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+  useMockFallback: false,
 });

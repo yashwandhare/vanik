@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { apiClient, ApiClientError } from '../../lib/api-client';
 import { ErrorAlert } from '../../components/ErrorAlert';
@@ -13,6 +13,20 @@ export default function LoginPage() {
   const [session, setSession] = useState<SessionResponse | null>(null);
   const [isMock, setIsMock] = useState(false);
   const [error, setError] = useState<ErrorEnvelope | string | null>(null);
+
+  // Restore active session state on mount
+  useEffect(() => {
+    async function checkSession() {
+      try {
+        const res = await apiClient.getSession();
+        setSession(res.data);
+        setIsMock(res.isMock);
+      } catch {
+        // Not logged in or expired; stay on login form
+      }
+    }
+    checkSession();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +48,22 @@ export default function LoginPage() {
       } else {
         setError(err instanceof Error ? err.message : 'Unknown login error occurred');
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await apiClient.logout();
+      setSession(null);
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('vanik_principal_id');
+      }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Sign out failed');
     } finally {
       setLoading(false);
     }
@@ -74,43 +104,57 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/principals"
-                  className="w-full text-center py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
+                  className="flex-1 text-center py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
                   Go to Business Principal →
                 </Link>
                 <button
-                  onClick={() => setSession(null)}
-                  className="py-3 px-4 rounded-[9px] bg-[#ffffff] hover:bg-[#edeee1] text-[#202020] border border-[#c0c2a9] text-xs font-semibold"
+                  type="button"
+                  onClick={handleSignOut}
+                  disabled={loading}
+                  className="py-3 px-4 rounded-[12px] bg-[#ffffff] hover:bg-[#ffc0e6] text-[#3f0929] border border-[#000000] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
-                  Reset
+                  {loading ? 'Signing out...' : 'Sign Out'}
                 </button>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Email Address</label>
+                <label
+                  htmlFor="login-email"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
+                  Email Address
+                </label>
                 <input
+                  id="login-email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                   placeholder="owner@example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold">Password</label>
+                <label
+                  htmlFor="login-password"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                >
+                  Password
+                </label>
                 <input
+                  id="login-password"
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus:outline-none focus:border-[#000000]"
+                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
                   placeholder="••••••••"
                 />
               </div>
@@ -119,7 +163,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
+                  className="w-full py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
                 >
                   {loading ? 'Authenticating...' : 'Sign In'}
                 </button>
@@ -130,7 +174,7 @@ export default function LoginPage() {
 
         <div className="text-center text-xs text-[#5a5a4f]">
           Don&apos;t have a business principal yet?{' '}
-          <Link href="/register" className="text-[#000000] font-bold hover:underline">
+          <Link href="/register" className="text-[#000000] font-bold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] rounded">
             Register new enterprise
           </Link>
         </div>

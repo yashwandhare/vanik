@@ -27,7 +27,7 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 - [x] Build agent creation and agent list screens.
 - [x] Build Agent Passport details and public-key fingerprint presentation.
 - [x] Add loading, validation, empty, forbidden and error states.
-- [x] Add UI tests for the complete onboarding flow.
+- [/] Contract and unit tests for onboarding flow (pending live end-to-end run once PR merged).
 
 **Dependency:** Main must provide identity, principal, verification, Telegram-link and agent endpoints.
 

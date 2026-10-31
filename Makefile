@@ -36,16 +36,17 @@ install: install-api install-web install-bot
 install-api:
 	$(API) sync --locked
 install-web:
-	$(NPM) install
+	npm ci --prefix apps/web
 install-bot:
-	$(BOT) sync
+	$(BOT) sync --locked
+
 dev: dev-api
 dev-api:
 	$(API) run --locked uvicorn app.main:create_app --factory --reload --host 127.0.0.1 --port 8000
 dev-web:
 	$(NPM) run dev
 dev-bot:
-	$(BOT) run python -m bot.main
+	$(BOT) run --locked python -m bot.main
 
 test: test-api test-web test-bot
 test-api:
@@ -53,7 +54,7 @@ test-api:
 test-web:
 	$(NPM) run test
 test-bot:
-	$(BOT) run python -m pytest
+	$(BOT) run --locked python -m pytest
 
 lint: lint-api lint-web lint-bot
 lint-api:
@@ -62,14 +63,14 @@ lint-api:
 lint-web:
 	$(NPM) run lint
 lint-bot:
-	$(BOT) run ruff check bot tests
-	$(BOT) run ruff format --check bot tests
+	$(BOT) run --locked ruff check bot tests
+	$(BOT) run --locked ruff format --check bot tests
 
 format: format-api format-bot
 format-api:
 	$(API) run --locked ruff format app scripts tests alembic
 format-bot:
-	$(BOT) run ruff format bot tests
+	$(BOT) run --locked ruff format bot tests
 
 typecheck: typecheck-api typecheck-web typecheck-bot
 typecheck-api:
@@ -77,7 +78,7 @@ typecheck-api:
 typecheck-web:
 	$(NPM) run typecheck
 typecheck-bot:
-	$(BOT) run mypy bot tests
+	$(BOT) run --locked mypy bot tests
 
 build-web:
 	$(NPM) run build
