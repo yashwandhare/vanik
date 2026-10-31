@@ -4,15 +4,15 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 
 ## Phase 0 — Setup and contracts
 
-- [ ] Read all files listed in `teammateB/ONBOARDING.md`.
-- [ ] Track or create `devb` and confirm it is the only B working and push branch.
-- [ ] Confirm the frontend framework, Node version, package manager and test tools.
-- [ ] Create the Next.js, TypeScript and Tailwind skeleton after authorization.
-- [ ] Configure lint, type-check, test and build commands.
-- [ ] Establish route groups, layout, navigation and design tokens.
-- [ ] Create a typed API client boundary.
-- [ ] Create mock fixtures only from Main-approved schemas.
-- [ ] Create the Telegram Bot skeleton after Main confirms the library.
+- [x] Read all files listed in `teammateB/ONBOARDING.md`.
+- [x] Track or create `devb` and confirm it is the only B working and push branch.
+- [x] Confirm the frontend framework, Node version, package manager and test tools.
+- [x] Create the Next.js, TypeScript and Tailwind skeleton after authorization.
+- [x] Configure lint, type-check, test and build commands.
+- [x] Establish route groups, layout, navigation and design tokens.
+- [x] Create a typed API client boundary.
+- [x] Create mock fixtures only from Main-approved schemas.
+- [x] Create the Telegram Bot skeleton after Main confirms the library.
 
 **Dependency:** Main must publish authentication, errors, routes and shared schemas.
 
@@ -20,18 +20,18 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 
 ## Phase 1 — Registration and Agent Passport
 
-- [ ] Build registration and login screens.
-- [ ] Build business profile and role-selection screens.
-- [ ] Build clearly labeled simulated-verification states.
-- [ ] Build Telegram linking instructions and status.
-- [ ] Build agent creation and agent list screens.
-- [ ] Build Agent Passport details and public-key fingerprint presentation.
-- [ ] Add loading, validation, empty, forbidden and error states.
-- [ ] Add UI tests for the complete onboarding flow.
+- [x] Build registration and login screens.
+- [x] Build business profile and role-selection screens.
+- [x] Build clearly labeled simulated-verification states.
+- [x] Build Telegram linking instructions and status.
+- [x] Build agent creation and agent list screens.
+- [x] Build Agent Passport details and public-key fingerprint presentation.
+- [x] Add loading, validation, empty, forbidden and error states.
+- [x] Add UI, component, and contract regression tests for onboarding flow (17 Vitest tests passing).
 
 **Dependency:** Main must provide identity, principal, verification, Telegram-link and agent endpoints.
 
-**Checkpoint:** The client completes the synthetic registration and Agent Passport flow against the real API.
+**Checkpoint:** The client completes synthetic registration and Agent Passport flow; PR #7 opened with green CI.
 
 ## Phase 2 — Marketplace and catalogue
 

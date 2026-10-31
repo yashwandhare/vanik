@@ -1,22 +1,30 @@
 # shellcheck disable=SC2037,SC2145,SC2276,SC2283
 UV ?= uv
 API = $(UV) --directory apps/api
+BOT = $(UV) --directory apps/telegram-bot
+NPM ?= npm --prefix apps/web
 
 .PHONY: help infra down install dev test lint format typecheck contracts \
-	install-api dev-api test-api lint-api format-api typecheck-api migrate seed demo reset-demo
+	install-api dev-api test-api lint-api format-api typecheck-api \
+	install-web dev-web test-web lint-web typecheck-web build-web \
+	install-bot dev-bot test-bot lint-bot format-bot typecheck-bot \
+	migrate seed demo reset-demo
 
 help:
-	@echo "VANIK developer targets (application commands currently cover the API only)"
-	@echo "infra       Start PostgreSQL and Redis"
-	@echo "down        Stop local infrastructure"
-	@echo "install     Sync the locked API development environment"
-	@echo "dev         Run the API on port 8000"
-	@echo "test        Run API and shared-contract tests"
-	@echo "lint        Check API source and formatting"
-	@echo "format      Format API source"
-	@echo "typecheck   Run strict API type checks"
-	@echo "contracts   Export versioned JSON schemas"
-	@echo "migrate     Apply database migrations"
+	@echo "VANIK developer targets"
+	@echo "infra          Start PostgreSQL and Redis"
+	@echo "down           Stop local infrastructure"
+	@echo "install        Sync API, bot environment and install web dependencies"
+	@echo "dev            Run the API on port 8000"
+	@echo "dev-web        Run the Next.js web application on port 3000"
+	@echo "dev-bot        Run the Telegram Bot worker"
+	@echo "test           Run API, web, and bot tests"
+	@echo "lint           Check API, web, and bot formatting/linting"
+	@echo "format         Format API and bot source"
+	@echo "typecheck      Run strict API, web, and bot type checks"
+	@echo "build-web      Build production bundle for web application"
+	@echo "contracts      Export versioned JSON schemas"
+	@echo "migrate        Apply database migrations"
 	@echo "seed/demo/reset-demo are not implemented yet"
 
 infra:
@@ -25,30 +33,56 @@ infra:
 down:
 	docker compose down
 
-install: install-api
+install: install-api install-web install-bot
 install-api:
 	$(API) sync --locked
+install-web:
+	npm ci --prefix apps/web
+install-bot:
+	$(BOT) sync --locked
 
 dev: dev-api
 dev-api:
 	$(API) run --locked uvicorn app.main:create_app --factory --reload --host 127.0.0.1 --port 8000
+dev-web:
+	$(NPM) run dev
+dev-bot:
+	$(BOT) run --locked python -m bot.main
 
-test: test-api
+test: test-api test-web test-bot
 test-api:
 	$(API) run --locked python -m pytest
+test-web:
+	$(NPM) run test
+test-bot:
+	$(BOT) run --locked python -m pytest
 
-lint: lint-api
+lint: lint-api lint-web lint-bot
 lint-api:
 	$(API) run --locked ruff check app scripts tests alembic
 	$(API) run --locked ruff format --check app scripts tests alembic
+lint-web:
+	$(NPM) run lint
+lint-bot:
+	$(BOT) run --locked ruff check bot tests
+	$(BOT) run --locked ruff format --check bot tests
 
-format: format-api
+format: format-api format-bot
 format-api:
 	$(API) run --locked ruff format app scripts tests alembic
+format-bot:
+	$(BOT) run --locked ruff format bot tests
 
-typecheck: typecheck-api
+typecheck: typecheck-api typecheck-web typecheck-bot
 typecheck-api:
 	$(API) run --locked mypy app scripts tests
+typecheck-web:
+	$(NPM) run typecheck
+typecheck-bot:
+	$(BOT) run --locked mypy bot tests
+
+build-web:
+	$(NPM) run build
 
 contracts:
 	$(API) run --locked python scripts/export_schemas.py

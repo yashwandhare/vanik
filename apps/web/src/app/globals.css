@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+:root {
+  --color-cream-parchment: #f8f9eb;
+  --color-pure-white: #ffffff;
+  --color-obsidian: #000000;
+  --color-charcoal: #202020;
+  --color-sage-mist: #c0c2a9;
+  --color-olive-slate: #5a5a4f;
+  --color-pebble: #7c7d76;
+  --color-bone: #edeee1;
+  --color-forest-depths: #003d21;
+  --color-mint-sprout: #aafdc0;
+  --color-cobalt-ink: #041668;
+  --color-plum-depth: #2d0078;
+  --color-wine-shadow: #3f0929;
+  --color-lilac-wash: #d3beff;
+  --color-sky-wash: #b0f4ff;
+  --color-rose-wash: #ffc0e6;
+
+  --background: #f8f9eb;
+  --foreground: #000000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  letter-spacing: -0.015em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, kbd, samp, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+::selection {
+  background-color: #aafdc0;
+  color: #003d21;
+}
+
+/* Master container class for strict horizontal alignment across all views */
+.vanik-container {
+  max-width: 72rem; /* 1152px / 6xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .vanik-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .vanik-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
