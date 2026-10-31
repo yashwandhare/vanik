@@ -4,7 +4,7 @@ This directory contains the product, engineering and delivery sources of truth f
 
 ## Current repository status
 
-The repository is a documentation and infrastructure scaffold. PostgreSQL, Redis, environment variables and Make targets are defined. The API, web application, Telegram interfaces, schemas, migrations, fixtures and tests are not implemented.
+The repository contains a working API foundation with health checks, settings, database session setup, initial identity schemas and backend tests. PostgreSQL and Redis have Compose configuration. Business workflows, database revisions, the web application, Telegram clients and demo data are not implemented yet.
 
 Do not assume that a feature exists because a document specifies it.
 
@@ -14,13 +14,15 @@ Do not assume that a feature exists because a document specifies it.
 2. [Product requirements](product/PRD.md)
 3. [Architecture](engineering/ARCHITECTURE.md)
 4. [Data model](engineering/DATA_MODEL.md)
-5. [Protocol and API contracts](engineering/PROTOCOL_AND_API.md)
-6. [Trust and security](engineering/TRUST_AND_SECURITY.md)
-7. [Decision log](decisions/DECISIONS.md)
-8. [Implementation plan](delivery/IMPLEMENTATION_PLAN.md)
-9. [Team execution plan](delivery/TEAM_EXECUTION_PLAN.md)
-10. [Project TODO](delivery/PROJECT_TODO.md)
-11. [Demo runbook](delivery/DEMO_RUNBOOK.md)
+5. [Technology baseline](engineering/TECHNOLOGY_BASELINE.md)
+6. [API conventions](engineering/API_CONVENTIONS.md)
+7. [Protocol and API contracts](engineering/PROTOCOL_AND_API.md)
+8. [Trust and security](engineering/TRUST_AND_SECURITY.md)
+9. [Decision log](decisions/DECISIONS.md)
+10. [Implementation plan](delivery/IMPLEMENTATION_PLAN.md)
+11. [Team execution plan](delivery/TEAM_EXECUTION_PLAN.md)
+12. [Project TODO](delivery/PROJECT_TODO.md)
+13. [Demo runbook](delivery/DEMO_RUNBOOK.md)
 
 ## Documentation map
 
@@ -33,7 +35,9 @@ Do not assume that a feature exists because a document specifies it.
 
 - `engineering/ARCHITECTURE.md` defines component boundaries and runtime flow.
 - `engineering/DATA_MODEL.md` defines the logical entities and integrity requirements.
-- `engineering/PROTOCOL_AND_API.md` defines the proposed message and endpoint contracts.
+- `engineering/TECHNOLOGY_BASELINE.md` records selected versions and verification status.
+- `engineering/API_CONVENTIONS.md` defines wire conventions and the Phase 1 authentication design.
+- `engineering/PROTOCOL_AND_API.md` distinguishes published identity contracts from proposed commerce contracts.
 - `engineering/TRUST_AND_SECURITY.md` defines threat boundaries and security rules.
 
 ### Delivery

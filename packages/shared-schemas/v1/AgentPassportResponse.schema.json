@@ -1,0 +1,259 @@
+{
+  "$defs": {
+    "AgentStatus": {
+      "enum": [
+        "active",
+        "paused",
+        "revoked"
+      ],
+      "title": "AgentStatus",
+      "type": "string"
+    },
+    "BusinessRole": {
+      "enum": [
+        "buyer",
+        "seller"
+      ],
+      "title": "BusinessRole",
+      "type": "string"
+    },
+    "MarketRating": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_is_simulated": {
+          "title": "Evidence Is Simulated",
+          "type": "boolean"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "verified_outcome_count": {
+          "minimum": 0,
+          "title": "Verified Outcome Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "verified_outcome_count",
+        "evidence_is_simulated"
+      ],
+      "title": "MarketRating",
+      "type": "object"
+    },
+    "PublicSigningKey": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "Ed25519",
+          "default": "Ed25519",
+          "title": "Algorithm",
+          "type": "string"
+        },
+        "fingerprint": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "key_version": {
+          "minimum": 1,
+          "title": "Key Version",
+          "type": "integer"
+        },
+        "public_key": {
+          "title": "Public Key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "public_key",
+        "fingerprint",
+        "key_version"
+      ],
+      "title": "PublicSigningKey",
+      "type": "object"
+    },
+    "SecuritySummary": {
+      "additionalProperties": false,
+      "properties": {
+        "incident_count": {
+          "minimum": 0,
+          "title": "Incident Count",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "no_incidents_recorded",
+            "review_needed",
+            "restricted"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "incident_count"
+      ],
+      "title": "SecuritySummary",
+      "type": "object"
+    },
+    "TrustConfidence": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_count": {
+          "minimum": 0,
+          "title": "Evidence Count",
+          "type": "integer"
+        },
+        "evidence_is_simulated": {
+          "title": "Evidence Is Simulated",
+          "type": "boolean"
+        },
+        "level": {
+          "enum": [
+            "limited",
+            "medium",
+            "high"
+          ],
+          "title": "Level",
+          "type": "string"
+        },
+        "summary": {
+          "maxLength": 1000,
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "level",
+        "evidence_count",
+        "summary",
+        "evidence_is_simulated"
+      ],
+      "title": "TrustConfidence",
+      "type": "object"
+    },
+    "VerificationStatus": {
+      "enum": [
+        "not_submitted",
+        "pending",
+        "demo_verified",
+        "rejected"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/AgentPassportResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agent_id": {
+      "format": "uuid",
+      "title": "Agent Id",
+      "type": "string"
+    },
+    "agent_status": {
+      "$ref": "#/$defs/AgentStatus"
+    },
+    "allowed_tools": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 30,
+      "title": "Allowed Tools",
+      "type": "array"
+    },
+    "capabilities": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 30,
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "maxLength": 1000,
+      "title": "Description",
+      "type": "string"
+    },
+    "market_rating": {
+      "$ref": "#/$defs/MarketRating"
+    },
+    "name": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "passport_version": {
+      "minimum": 1,
+      "title": "Passport Version",
+      "type": "integer"
+    },
+    "principal_id": {
+      "format": "uuid",
+      "title": "Principal Id",
+      "type": "string"
+    },
+    "role": {
+      "$ref": "#/$defs/BusinessRole"
+    },
+    "security": {
+      "$ref": "#/$defs/SecuritySummary"
+    },
+    "signing_key": {
+      "$ref": "#/$defs/PublicSigningKey"
+    },
+    "strategy_profile": {
+      "default": "default",
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Strategy Profile",
+      "type": "string"
+    },
+    "trust_confidence": {
+      "$ref": "#/$defs/TrustConfidence"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "verification_status": {
+      "$ref": "#/$defs/VerificationStatus"
+    }
+  },
+  "required": [
+    "name",
+    "role",
+    "agent_id",
+    "principal_id",
+    "passport_version",
+    "agent_status",
+    "verification_status",
+    "signing_key",
+    "market_rating",
+    "trust_confidence",
+    "security",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "AgentPassportResponse",
+  "type": "object"
+}

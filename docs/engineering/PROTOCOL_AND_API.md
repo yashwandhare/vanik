@@ -1,19 +1,25 @@
 # VANIK — Protocol and API Contracts
 
+## Contract status
+
+Only the health endpoints are implemented. The initial identity schemas are published in [`packages/shared-schemas/v1`](../../packages/shared-schemas/v1), with route mappings in [API conventions](API_CONVENTIONS.md).
+
+The negotiation and commerce examples below remain proposals, not complete implemented wire contracts. All resource identifiers use UUID strings. Money uses decimal strings in JSON.
+
 ## 1. Message envelope
 
 All agent messages use a canonical envelope similar to:
 
 ```json
 {
-  "message_id": "msg_01...",
+  "message_id": "50000000-0000-4000-8000-000000000001",
   "protocol_version": "vanik.a2a.v1",
   "message_type": "REQUEST_FOR_QUOTE",
-  "sender_agent_id": "agt_...",
-  "recipient_agent_id": "agt_...",
-  "sender_principal_id": "prn_...",
-  "negotiation_id": "neg_...",
-  "task_id": "tsk_...",
+  "sender_agent_id": "30000000-0000-4000-8000-000000000001",
+  "recipient_agent_id": "30000000-0000-4000-8000-000000000002",
+  "sender_principal_id": "20000000-0000-4000-8000-000000000001",
+  "negotiation_id": "60000000-0000-4000-8000-000000000001",
+  "task_id": "70000000-0000-4000-8000-000000000001",
   "created_at": "2026-10-31T10:00:00Z",
   "nonce": "single-use-random-value",
   "payload": {},
@@ -40,16 +46,16 @@ The signature covers canonical serialisation of all security-relevant fields exc
 
 ```json
 {
-  "offer_id": "off_...",
+  "offer_id": "80000000-0000-4000-8000-000000000001",
   "currency": "INR",
   "lines": [
     {
       "sku": "RICE-25KG",
       "quantity": 10,
       "unit": "bag",
-      "unit_price": 1180,
-      "discount": 0,
-      "line_total": 11800
+      "unit_price": "1180.00",
+      "discount": "0.00",
+      "line_total": "11800.00"
     }
   ],
   "delivery": {

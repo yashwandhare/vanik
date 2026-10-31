@@ -5,7 +5,7 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 ## Phase 0 — Setup and contracts
 
 - [ ] Read all files listed in `teammateB/ONBOARDING.md`.
-- [ ] Confirm the assigned branch with Main.
+- [ ] Track or create `devb` and confirm it is the only B working and push branch.
 - [ ] Confirm the frontend framework, Node version, package manager and test tools.
 - [ ] Create the Next.js, TypeScript and Tailwind skeleton after authorization.
 - [ ] Configure lint, type-check, test and build commands.
@@ -111,7 +111,7 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 - [ ] Verify all loading, empty, error and permission states.
 - [ ] Rehearse the complete demo from a clean reset with Main.
 - [ ] Prepare screenshots and concise demo navigation notes.
-- [ ] Fix integration defects only on B-owned branches.
+- [ ] Fix integration defects only on `devb`.
 - [ ] Stop adding features after Main declares the freeze.
 
 **Dependency:** Main must provide stable integration, deterministic seed/reset and a release candidate.

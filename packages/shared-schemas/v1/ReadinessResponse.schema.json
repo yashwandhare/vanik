@@ -1,0 +1,21 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/ReadinessResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "database": {
+      "const": "ok",
+      "default": "ok",
+      "title": "Database",
+      "type": "string"
+    },
+    "status": {
+      "const": "ready",
+      "default": "ready",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "title": "ReadinessResponse",
+  "type": "object"
+}

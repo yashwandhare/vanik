@@ -25,6 +25,8 @@
 │   ├── engineering/
 │   │   ├── ARCHITECTURE.md
 │   │   ├── DATA_MODEL.md
+│   │   ├── TECHNOLOGY_BASELINE.md
+│   │   ├── API_CONVENTIONS.md
 │   │   ├── PROTOCOL_AND_API.md
 │   │   └── TRUST_AND_SECURITY.md
 │   ├── decisions/
@@ -39,10 +41,11 @@
     ├── ONBOARDING.md
     ├── GIT_PROTOCOL.md
     ├── TODO.md
+    ├── PHASE_0_HANDOFF.md
     └── WORKING_INSTRUCTIONS.md
 ```
 
-Application source and test directories will be added inside their owning applications during implementation.
+Application source and tests now exist inside `apps/api/`. The web and Bot remain placeholders until B scaffolds them.
 
 ## 2. Build order
 
@@ -70,13 +73,13 @@ Prompt-injection boundary, reference-price validation, collusion signals, reputa
 
 Matching acceptance, deal lock, exact approval challenge, mock UPI and receipt.
 
-### Phase 6 — Interfaces
+### Phase 6 — Events, Telegram, proactivity and memory
 
-Marketplace overview and seller workspace; Telegram Bot; focused Mini App for mandate, comparison and approval.
+Complete Bot and Mini App integration, event history, supplier memory, Decision Replay and the proactive alert. Client shells are built alongside the backend in earlier phases.
 
-### Phase 7 — Proactivity, memory and demo
+### Phase 7 — Integration and demo freeze
 
-Scheduled alert, supplier event memory, Decision Replay, seeded data, reset command and rehearsal.
+Seed/reset verification, security and interface tests, final integration, rehearsal and release freeze.
 
 ## 3. 24-hour execution guidance
 
@@ -117,4 +120,6 @@ Expected behaviour:
 - `reset-demo`: clear demo state and reseed.
 - `down`: stop local services.
 
-These targets are a specification until application code and Makefile recipes are implemented.
+Current application targets implement backend install, development, tests, lint, format, type checks and contract export. Infrastructure start/stop targets require Docker. Web and Bot commands will be added with those applications.
+
+`migrate` fails until a real revision exists. `seed`, `demo` and `reset-demo` fail explicitly until their workflows are implemented. Do not mistake an empty migration history for a working database schema.

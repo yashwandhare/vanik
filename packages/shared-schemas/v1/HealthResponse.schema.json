@@ -1,0 +1,28 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/HealthResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "service": {
+      "const": "VANIK API",
+      "default": "VANIK API",
+      "title": "Service",
+      "type": "string"
+    },
+    "status": {
+      "const": "ok",
+      "default": "ok",
+      "title": "Status",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "HealthResponse",
+  "type": "object"
+}

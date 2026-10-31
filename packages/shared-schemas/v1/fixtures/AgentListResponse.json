@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "name": "Diwali Buyer",
+      "role": "buyer",
+      "description": "Synthetic procurement agent",
+      "capabilities": [
+        "request_quote"
+      ],
+      "allowed_tools": [
+        "marketplace_search"
+      ],
+      "strategy_profile": "default",
+      "agent_id": "30000000-0000-4000-8000-000000000001",
+      "principal_id": "20000000-0000-4000-8000-000000000001",
+      "passport_version": 1,
+      "agent_status": "active",
+      "verification_status": "demo_verified",
+      "signing_key": {
+        "algorithm": "Ed25519",
+        "public_key": "11qYAYKxCrfVS/7TyWQHOg7hcvPapiMlrwIaaPcHURo=",
+        "fingerprint": "sha256:21fe31dfa154a261626bf854046fd2271b7bed4b6abe45aa58877ef47f9721b9",
+        "key_version": 1
+      },
+      "market_rating": {
+        "value": null,
+        "verified_outcome_count": 0,
+        "evidence_is_simulated": true
+      },
+      "trust_confidence": {
+        "level": "limited",
+        "evidence_count": 0,
+        "summary": "New demo agent with no recorded outcomes.",
+        "evidence_is_simulated": true
+      },
+      "security": {
+        "status": "no_incidents_recorded",
+        "incident_count": 0
+      },
+      "created_at": "2026-10-31T10:00:00Z",
+      "updated_at": "2026-10-31T10:00:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 20,
+    "offset": 0,
+    "total": 1
+  }
+}

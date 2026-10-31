@@ -14,9 +14,9 @@ The product has three interfaces:
 
 ## 2. Current repository state
 
-The repository is a starter scaffold. It contains product and engineering documentation, PostgreSQL and Redis configuration, environment-variable examples and placeholder application directories.
+The repository now includes a working API foundation: settings, health checks, database sessions, initial identity schemas and tests. It also contains PostgreSQL and Redis configuration and project documentation.
 
-The API, web application, Telegram clients, schemas, migrations, tests and demo data are not implemented yet. Do not assume a feature exists because it appears in the PRD.
+Business workflows, authentication endpoints, database revisions, the web application, Telegram clients and demo data are not implemented yet. Read [the Phase 0 handoff](PHASE_0_HANDOFF.md) for the client work that can start.
 
 ## 3. Required reading
 
@@ -31,6 +31,8 @@ Read these files before implementation:
 7. `teammateB/WORKING_INSTRUCTIONS.md`
 8. `teammateB/GIT_PROTOCOL.md`
 9. `teammateB/TODO.md`
+
+Read `docs/engineering/TECHNOLOGY_BASELINE.md`, `docs/engineering/API_CONVENTIONS.md` and `teammateB/PHASE_0_HANDOFF.md` before scaffolding.
 
 Read `docs/engineering/DATA_MODEL.md` when a view depends on entity relationships. Read `docs/delivery/DEMO_RUNBOOK.md` before demo integration.
 
