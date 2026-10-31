@@ -2,6 +2,9 @@ import type {
   AgentCreateRequest,
   AgentListResponse,
   AgentPassportResponse,
+  BusinessIdentifierCreateRequest,
+  BusinessIdentifierResponse,
+  DemoVerificationResponse,
   ErrorEnvelope,
   ErrorResponse,
   HealthResponse,
@@ -11,15 +14,19 @@ import type {
   ReadinessResponse,
   RegisterRequest,
   SessionResponse,
+  TelegramLinkStartResponse,
   UserResponse,
 } from './types';
 import {
   FIXTURE_AGENT_LIST,
   FIXTURE_AGENT_PASSPORT,
+  FIXTURE_DEMO_VERIFICATION,
   FIXTURE_HEALTH,
+  FIXTURE_IDENTIFIER,
   FIXTURE_PRINCIPAL,
   FIXTURE_READINESS,
   FIXTURE_SESSION,
+  FIXTURE_TELEGRAM_LINK_START,
   FIXTURE_USER,
 } from './fixtures';
 
@@ -217,6 +224,62 @@ export class ApiClient {
       `/v1/principals/${encodeURIComponent(principalId)}`,
       { method: 'GET' },
       () => FIXTURE_PRINCIPAL
+    );
+  }
+
+  // Verification (Implemented in backend)
+  public async addBusinessIdentifier(
+    principalId: string,
+    payload: BusinessIdentifierCreateRequest
+  ): Promise<{ data: BusinessIdentifierResponse; isMock: boolean }> {
+    return this.request<BusinessIdentifierResponse>(
+      `/v1/principals/${encodeURIComponent(principalId)}/identifiers`,
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      },
+      () => ({
+        ...FIXTURE_IDENTIFIER,
+        principal_id: principalId,
+        identifier_type: payload.identifier_type,
+        masked_value: `${payload.value.slice(0, 3)}****${payload.value.slice(-2)}`,
+      })
+    );
+  }
+
+  public async verifyPrincipalDemo(
+    principalId: string
+  ): Promise<{ data: DemoVerificationResponse; isMock: boolean }> {
+    return this.request<DemoVerificationResponse>(
+      `/v1/principals/${encodeURIComponent(principalId)}/verification/demo`,
+      {
+        method: 'POST',
+      },
+      () => ({
+        ...FIXTURE_DEMO_VERIFICATION,
+        principal_id: principalId,
+      })
+    );
+  }
+
+  // Telegram Linking (Implemented in backend)
+  public async startTelegramLink(): Promise<{ data: TelegramLinkStartResponse; isMock: boolean }> {
+    return this.request<TelegramLinkStartResponse>(
+      '/v1/telegram/link/start',
+      {
+        method: 'POST',
+      },
+      () => FIXTURE_TELEGRAM_LINK_START
+    );
+  }
+
+  public async unlinkTelegram(): Promise<{ data: void; isMock: boolean }> {
+    return this.request<void>(
+      '/v1/telegram/link',
+      {
+        method: 'DELETE',
+      },
+      () => undefined
     );
   }
 

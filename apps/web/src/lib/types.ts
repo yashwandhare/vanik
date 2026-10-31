@@ -79,6 +79,43 @@ export interface PrincipalResponse {
   created_at: string;
 }
 
+export type IdentifierType = 'pan' | 'gstin' | 'udyam' | 'cin' | 'llpin';
+
+export interface BusinessIdentifierCreateRequest {
+  identifier_type: IdentifierType;
+  value: string;
+  is_synthetic: true;
+}
+
+export interface BusinessIdentifierResponse {
+  id: string;
+  principal_id: string;
+  identifier_type: IdentifierType;
+  masked_value: string;
+  status: VerificationStatus;
+  is_synthetic: true;
+  created_at: string;
+}
+
+export interface DemoVerificationResponse {
+  principal_id: string;
+  verification_status: 'demo_verified';
+  verified_at: string;
+  label: 'SIMULATED / DEMO';
+}
+
+export interface TelegramLinkStartResponse {
+  link_code: string;
+  expires_at: string;
+}
+
+export interface TelegramLinkResponse {
+  id: string;
+  user_id: string;
+  telegram_user_id: string;
+  linked_at: string;
+}
+
 export type AgentStatus = 'active' | 'paused' | 'revoked';
 
 export interface PublicSigningKey {

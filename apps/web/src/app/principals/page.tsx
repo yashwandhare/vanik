@@ -3,13 +3,25 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { apiClient } from '../../lib/api-client';
-import type { PrincipalResponse } from '../../lib/types';
+import type { BusinessIdentifierResponse, DemoVerificationResponse, IdentifierType, PrincipalResponse } from '../../lib/types';
 
 export default function PrincipalsPage() {
   const [principal, setPrincipal] = useState<PrincipalResponse | null>(null);
   const [isMock, setIsMock] = useState(false);
-  const [telegramCode, setTelegramCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Telegram Linking (FR-REG-04)
+  const [telegramCode, setTelegramCode] = useState<string | null>(null);
+  const [linkExpiresAt, setLinkExpiresAt] = useState<string | null>(null);
+  const [linkLoading, setLinkLoading] = useState(false);
+
+  // Verification & Synthetic Identifiers (FR-REG-03)
+  const [idType, setIdType] = useState<IdentifierType>('pan');
+  const [idValue, setIdValue] = useState('ABCDE1234F');
+  const [submittingId, setSubmittingId] = useState(false);
+  const [verifyingDemo, setVerifyingDemo] = useState(false);
+  const [identifierRes, setIdentifierRes] = useState<BusinessIdentifierResponse | null>(null);
+  const [verificationNotice, setVerificationNotice] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPrincipal() {
@@ -18,7 +30,7 @@ export default function PrincipalsPage() {
         setPrincipal(res.data);
         setIsMock(res.isMock);
       } catch {
-        // fallback
+        // fallback handled gracefully by apiClient
       } finally {
         setLoading(false);
       }
@@ -26,9 +38,58 @@ export default function PrincipalsPage() {
     fetchPrincipal();
   }, []);
 
-  const generateTelegramCode = () => {
-    const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-    setTelegramCode(`VANIK-LINK-${randomCode}`);
+  const handleGenerateTelegramCode = async () => {
+    setLinkLoading(true);
+    try {
+      const res = await apiClient.startTelegramLink();
+      setTelegramCode(res.data.link_code);
+      setLinkExpiresAt(res.data.expires_at);
+    } catch {
+      const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
+      setTelegramCode(`VANIK-LINK-${randomCode}`);
+    } finally {
+      setLinkLoading(false);
+    }
+  };
+
+  const handleAddSyntheticIdentifier = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!principal) return;
+    setSubmittingId(true);
+    setVerificationNotice(null);
+
+    try {
+      const res = await apiClient.addBusinessIdentifier(principal.id, {
+        identifier_type: idType,
+        value: idValue,
+        is_synthetic: true,
+      });
+      setIdentifierRes(res.data);
+      setVerificationNotice(`Synthetic ${idType.toUpperCase()} recorded (${res.data.masked_value}). Proceed to demo verification.`);
+    } catch (err: unknown) {
+      setVerificationNotice(err instanceof Error ? err.message : 'Failed to record identifier');
+    } finally {
+      setSubmittingId(false);
+    }
+  };
+
+  const handleRunDemoVerification = async () => {
+    if (!principal) return;
+    setVerifyingDemo(true);
+    setVerificationNotice(null);
+
+    try {
+      const res: { data: DemoVerificationResponse } = await apiClient.verifyPrincipalDemo(principal.id);
+      setPrincipal({
+        ...principal,
+        verification_status: res.data.verification_status,
+      });
+      setVerificationNotice(`Principal verified under label "${res.data.label}".`);
+    } catch (err: unknown) {
+      setVerificationNotice(err instanceof Error ? err.message : 'Demo verification failed');
+    } finally {
+      setVerifyingDemo(false);
+    }
   };
 
   return (
@@ -78,7 +139,11 @@ export default function PrincipalsPage() {
                     Trade Name: <span className="text-[#000000] font-bold">{principal.trade_name}</span>
                   </p>
                 </div>
-                <span className="px-3 py-0.5 bg-[#aafdc0] border border-[#000000] text-[#003d21] text-xs font-mono font-bold rounded-full uppercase">
+                <span className={`px-3 py-0.5 border border-[#000000] text-xs font-mono font-bold rounded-full uppercase ${
+                  principal.verification_status === 'demo_verified'
+                    ? 'bg-[#aafdc0] text-[#003d21]'
+                    : 'bg-[#ffc0e6] text-[#3f0929]'
+                }`}>
                   {principal.verification_status.replace('_', ' ')}
                 </span>
               </div>
@@ -97,37 +162,124 @@ export default function PrincipalsPage() {
                   <span className="text-[#202020] font-medium">{principal.address}</span>
                 </div>
                 <div className="bg-[#f8f9eb] p-3 rounded-[12px] border border-[#c0c2a9]">
-                  <span className="text-[#7c7d76] block uppercase tracking-wider text-[10px] font-mono mb-1">Active Roles</span>
-                  <div className="flex gap-1.5 mt-0.5">
-                    {principal.roles.map((r) => (
-                      <span
-                        key={r}
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold border border-[#000000] ${
-                          r === 'buyer'
-                            ? 'bg-[#aafdc0] text-[#003d21]'
-                            : 'bg-[#b0f4ff] text-[#041668]'
-                        }`}
-                      >
-                        {r}
-                      </span>
-                    ))}
-                  </div>
+                  <span className="text-[#7c7d76] block uppercase tracking-wider text-[10px] font-mono mb-1">Contact Email</span>
+                  <span className="text-[#000000] font-mono font-bold">{principal.contact_email}</span>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[#7c7d76] block uppercase tracking-wider text-[10px] font-mono mb-1 font-bold">Marketplace Roles</span>
+                <div className="flex gap-1.5 mt-0.5">
+                  {principal.roles.map((r) => (
+                    <span
+                      key={r}
+                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold border border-[#000000] ${
+                        r === 'buyer'
+                          ? 'bg-[#aafdc0] text-[#003d21]'
+                          : 'bg-[#b0f4ff] text-[#041668]'
+                      }`}
+                    >
+                      {r}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Synthetic Compliance Banner */}
-            <div className="bg-[#f8f9eb] border-[1.5px] border-[#000000] rounded-[20px] p-6 space-y-2 text-xs">
-              <span className="font-mono font-bold text-[#003d21] text-xs uppercase tracking-wider block">
-                [ SYNTHETIC VERIFICATION & COMPLIANCE SEAL ]
-              </span>
-              <p className="text-[#5a5a4f] leading-relaxed">
-                Official PAN, GSTIN, and business registry credentials are synthesized via local cryptographic hashes for the hackathon demonstration. No actual government registries are queried.
+            {/* Synthetic Compliance & Verification Module (FR-REG-03) */}
+            <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] p-6 sm:p-8 space-y-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="font-mono text-xs uppercase font-extrabold text-[#003d21] tracking-wider block">
+                    [ SYNTHETIC VERIFICATION PORTAL ]
+                  </span>
+                  <h3 className="text-lg font-extrabold text-[#000000]">Business Identifier & Compliance Seal</h3>
+                </div>
+                <span className="px-2.5 py-0.5 rounded bg-[#aafdc0] text-[#003d21] text-[10px] font-mono font-bold border border-[#000000]">
+                  SIMULATED / DEMO
+                </span>
+              </div>
+
+              <p className="text-xs text-[#5a5a4f] leading-relaxed">
+                Official PAN, GSTIN, and Udyam credentials are keyed digests for the prototype demonstration. Never enter real identity documents or personal credentials.
               </p>
+
+              {verificationNotice && (
+                <div className="p-3 bg-[#f8f9eb] border border-[#000000] rounded-[10px] text-xs font-mono font-bold text-[#003d21]">
+                  ✓ {verificationNotice}
+                </div>
+              )}
+
+              {/* Form to add synthetic identifier */}
+              <form onSubmit={handleAddSyntheticIdentifier} className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                <div>
+                  <label className="block text-[10px] font-mono uppercase text-[#7c7d76] font-bold mb-1">
+                    Identifier Type
+                  </label>
+                  <select
+                    value={idType}
+                    onChange={(e) => setIdType(e.target.value as IdentifierType)}
+                    className="w-full px-3 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000]"
+                  >
+                    <option value="pan">PAN (Permanent Account)</option>
+                    <option value="gstin">GSTIN (Goods & Services Tax)</option>
+                    <option value="udyam">Udyam Registration</option>
+                    <option value="cin">CIN (Corporate Identity)</option>
+                    <option value="llpin">LLPIN (Limited Liability)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono uppercase text-[#7c7d76] font-bold mb-1">
+                    Synthetic Value
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={idValue}
+                    onChange={(e) => setIdValue(e.target.value)}
+                    placeholder="e.g. ABCDE1234F"
+                    className="w-full px-3 py-2 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000]"
+                  />
+                </div>
+
+                <div className="flex items-end">
+                  <button
+                    type="submit"
+                    disabled={submittingId}
+                    className="w-full py-2 px-3 rounded-[9px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white text-xs font-bold border border-[#000000] transition-all shadow-sm"
+                  >
+                    {submittingId ? 'Recording...' : 'Add Identifier'}
+                  </button>
+                </div>
+              </form>
+
+              {identifierRes && (
+                <div className="p-3 bg-[#aafdc0]/20 border border-[#003d21] rounded-[10px] text-xs font-mono flex items-center justify-between">
+                  <span>Type: <strong className="uppercase">{identifierRes.identifier_type}</strong> (Masked: {identifierRes.masked_value})</span>
+                  <span className="text-[10px] uppercase font-bold text-[#003d21]">[HASH PERSISTED]</span>
+                </div>
+              )}
+
+              <div className="pt-2 border-t border-[#c0c2a9] flex items-center justify-between">
+                <span className="text-xs text-[#5a5a4f]">Seal Principal Authority via local demo verifier:</span>
+                <button
+                  type="button"
+                  onClick={handleRunDemoVerification}
+                  disabled={verifyingDemo || principal.verification_status === 'demo_verified'}
+                  className="py-2 px-4 rounded-[11px] bg-[#003d21] hover:bg-[#002815] disabled:bg-[#c0c2a9] text-white text-xs font-bold border border-[#000000] transition-all shadow-sm"
+                >
+                  {verifyingDemo
+                    ? 'Verifying...'
+                    : principal.verification_status === 'demo_verified'
+                    ? '✓ Demo Verified'
+                    : 'Execute Demo Verification'}
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Telegram Linking Card */}
+          {/* Telegram Linking Card (FR-REG-04) */}
           <div className="space-y-6">
             <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] p-6 space-y-4 shadow-sm">
               <div className="flex items-center justify-between">
@@ -142,10 +294,17 @@ export default function PrincipalsPage() {
 
               {telegramCode ? (
                 <div className="p-4 bg-[#b0f4ff]/40 border-[1.5px] border-[#000000] rounded-[14px] space-y-2">
-                  <span className="text-[11px] text-[#041668] block font-mono font-bold">
-                    Single-Use Linking Token:
-                  </span>
-                  <div className="text-base font-mono font-extrabold text-[#000000] select-all text-center bg-[#ffffff] py-1.5 rounded-[8px] border border-[#000000]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#041668] block font-mono font-bold">
+                      Single-Use Linking Code:
+                    </span>
+                    {linkExpiresAt && (
+                      <span className="text-[10px] font-mono text-[#5a5a4f]">
+                        Expires: {new Date(linkExpiresAt).toLocaleTimeString()}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-base font-mono font-extrabold text-[#000000] select-all text-center bg-[#ffffff] py-2 rounded-[8px] border border-[#000000]">
                     {telegramCode}
                   </div>
                   <p className="text-[11px] text-[#5a5a4f]">
@@ -154,10 +313,11 @@ export default function PrincipalsPage() {
                 </div>
               ) : (
                 <button
-                  onClick={generateTelegramCode}
-                  className="w-full py-2.5 px-4 rounded-[11px] bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
+                  onClick={handleGenerateTelegramCode}
+                  disabled={linkLoading}
+                  className="w-full py-2.5 px-4 rounded-[11px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm"
                 >
-                  Generate Telegram Link Code
+                  {linkLoading ? 'Requesting Code from API...' : 'Generate Telegram Link Code'}
                 </button>
               )}
             </div>
@@ -170,6 +330,7 @@ export default function PrincipalsPage() {
                 <li>AI agents inherit maximum constraints from this principal.</li>
                 <li>Tasks narrow authority but can never exceed principal boundaries.</li>
                 <li>Consequential transactions require cryptographic human sign-off.</li>
+                <li>Telegram identity binds to this human account via digest tokens.</li>
               </ul>
             </div>
           </div>

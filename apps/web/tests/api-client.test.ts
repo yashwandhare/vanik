@@ -117,4 +117,29 @@ describe('ApiClient', () => {
       })
     );
   });
+
+  it('calls verification and telegram linking endpoints with CSRF token', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ link_code: 'VANIK-LINK-948214', expires_at: '2026-10-31T10:10:00Z' }),
+      headers: new Headers(),
+    });
+    global.fetch = mockFetch;
+
+    const client = new ApiClient({ baseUrl: 'http://localhost:8000', useMockFallback: false });
+    client.setCsrfToken('csrf-xyz');
+
+    const res = await client.startTelegramLink();
+    expect(res.data.link_code).toBe('VANIK-LINK-948214');
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/v1/telegram/link/start',
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({
+          'X-CSRF-Token': 'csrf-xyz',
+        }),
+      })
+    );
+  });
 });

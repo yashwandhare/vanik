@@ -1,11 +1,15 @@
 import type {
   AgentListResponse,
   AgentPassportResponse,
+  BusinessIdentifierResponse,
+  DemoVerificationResponse,
   ErrorResponse,
   HealthResponse,
   PrincipalResponse,
   ReadinessResponse,
   SessionResponse,
+  TelegramLinkResponse,
+  TelegramLinkStartResponse,
   UserResponse,
 } from './types';
 
@@ -42,6 +46,35 @@ export const FIXTURE_PRINCIPAL: PrincipalResponse = {
   verification_status: 'demo_verified',
   membership_role: 'owner',
   created_at: '2026-10-31T10:00:00Z',
+};
+
+export const FIXTURE_IDENTIFIER: BusinessIdentifierResponse = {
+  id: '50000000-0000-4000-8000-000000000001',
+  principal_id: '20000000-0000-4000-8000-000000000001',
+  identifier_type: 'pan',
+  masked_value: 'ABCDE****F',
+  status: 'demo_verified',
+  is_synthetic: true,
+  created_at: '2026-10-31T10:00:00Z',
+};
+
+export const FIXTURE_DEMO_VERIFICATION: DemoVerificationResponse = {
+  principal_id: '20000000-0000-4000-8000-000000000001',
+  verification_status: 'demo_verified',
+  verified_at: '2026-10-31T10:00:00Z',
+  label: 'SIMULATED / DEMO',
+};
+
+export const FIXTURE_TELEGRAM_LINK_START: TelegramLinkStartResponse = {
+  link_code: 'VANIK-LINK-948214',
+  expires_at: '2026-10-31T10:10:00Z',
+};
+
+export const FIXTURE_TELEGRAM_LINK: TelegramLinkResponse = {
+  id: '60000000-0000-4000-8000-000000000001',
+  user_id: '10000000-0000-4000-8000-000000000001',
+  telegram_user_id: '123456789',
+  linked_at: '2026-10-31T10:00:00Z',
 };
 
 export const FIXTURE_AGENT_PASSPORT: AgentPassportResponse = {

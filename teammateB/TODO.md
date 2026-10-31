@@ -12,7 +12,7 @@ This checklist contains only Teammate B work. Main publishes and owns the backen
 - [x] Establish route groups, layout, navigation and design tokens.
 - [x] Create a typed API client boundary.
 - [x] Create mock fixtures only from Main-approved schemas.
-- [ ] Create the Telegram Bot skeleton after Main confirms the library.
+- [x] Create the Telegram Bot skeleton after Main confirms the library.
 
 **Dependency:** Main must publish authentication, errors, routes and shared schemas.
 
