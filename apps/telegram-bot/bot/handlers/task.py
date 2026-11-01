@@ -51,9 +51,9 @@ async def task_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         f"2️⃣ *Mandi Smart Escrow* (Funds locked until delivery verified)\n"
         f"3️⃣ *RTGS / Wholesale Net Banking*\n\n"
         f"👉 *To Authorize in Chat:* Send `/auth_deal deal-diwali-2026-01 upi`\n"
-        f"👉 [📱 Open Deal in Mini App to Review & Approve]"
-        f"(http://localhost:3000/miniapp?view=approval&dealId=deal-diwali-2026-01)\n"
-        f"👉 [View Live Rounds in Web Dashboard](http://localhost:3000/negotiations?tab=timeline)"
+        f"👉 [📱 Open Deal in Mini App](http://localhost:3000/miniapp?view=approval&dealId=deal-diwali-2026-01)\n"
+        f"👉 [⚡ Watch Live Rounds Simulation in Web Dashboard](http://localhost:3000/negotiations?tab=timeline&autoSim=true&taskId={task_id})\n"
+        f"👉 [🤝 Inspect A2A Signed Protocols](http://localhost:3000/negotiations?tab=a2a)"
     )
 
     await msg.edit_text(final_text, parse_mode="Markdown", disable_web_page_preview=True)

@@ -32,7 +32,7 @@ async def ganesh_kirana_handler(update: Update, context: ContextTypes.DEFAULT_TY
         "• *Category:* Retail Kirana & Festive Provisions\n"
         "• *Verified GSTIN:* `27AABCS1429B1Z8` (Synthetic Mandi Verified)\n"
         "• *Annual Turnover:* `₹45,00,000.00` | *Mandi Credit Rating:* `Grade A`\n"
-        "• *Principal ID:* `20000000-0000-4000-8000-000000000001`\n\n"
+        "• *Principal ID:* `74b4c5f3-2e9b-5447-a3d3-c8c1c6a1853d`\n\n"
         "───────────────────────────────\n"
         "🤖 *Step 2 of 2: Deploy Your Autonomous Trading Agent*\n\n"
         "Now, let's configure your AI agent on the marketplace:\n"
@@ -51,8 +51,8 @@ async def ganesh_agent_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     if not update.effective_message:
         return
 
-    agent_id = "30000000-0000-4000-8000-000000000001"
-    key_fingerprint = "sha256:21fe31dfa154a261626bf854046fd2271b7bed4b6abe45aa58877ef47f9721b9"
+    agent_id = "7a1bd7b3-308a-5f49-ba8a-0dd1ec451c88"
+    key_fingerprint = "sha256:319c7a91e1428bec8969b29ec041c7ba23a111877fb412c2a14e1c2bc08f3ed7"
 
     msg = await update.effective_message.reply_text(
         "⚙️ *Compiling Autonomous Buyer Agent Mandate Specification...*\n\n"

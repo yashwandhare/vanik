@@ -26,12 +26,27 @@ function AgentsContent() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  // Resolved principal ID from search params, session storage, or default fallback
-  const requestedAgentId = searchParams.get('agentId');
+  const rawRequestedAgentId = searchParams.get('agentId');
+  // Normalize legacy ID from earlier Telegram bot iterations
+  const requestedAgentId =
+    rawRequestedAgentId === '30000000-0000-4000-8000-000000000001'
+      ? '7a1bd7b3-308a-5f49-ba8a-0dd1ec451c88'
+      : rawRequestedAgentId;
+
+  const [roleFilter, setRoleFilter] = useState<'all' | 'buyer' | 'seller'>('all');
+
   const principalId =
     searchParams.get('principalId') ||
     searchParams.get('id') ||
     (typeof window !== 'undefined' ? sessionStorage.getItem('vanik_principal_id') : null);
+
+  const SEEDED_AGENT_IDS = [
+    '7a1bd7b3-308a-5f49-ba8a-0dd1ec451c88', // Shree Ganesh Kirana Buyer Agent
+    '1b100eef-7880-503f-b858-804b0c34696a', // Mangal Wholesale (Margin)
+    '01b1b22a-c8d4-5f27-ad88-0da5fd25d4bb', // Utsav Distributors (Clearance)
+    '6733f472-dffd-55ea-b7bb-413d560b8ecd', // Suraksha Trade Co (Payment Risk)
+    '6322d654-4f96-5663-829b-9861df1b3aca', // Red Team Adversarial Seller
+  ];
 
   // Restore session and load agent roster
   useEffect(() => {
@@ -46,7 +61,7 @@ function AgentsContent() {
         // Not logged in or expired session
       }
 
-      // Priority 1: Direct Agent Passport Lookup (via clickable agent in catalogue/negotiations)
+      // Priority 1: Direct Agent Passport Lookup (via Telegram link or deep-link)
       if (requestedAgentId) {
         try {
           const res = await apiClient.getAgentPassport(requestedAgentId);
@@ -66,32 +81,33 @@ function AgentsContent() {
         }
       }
 
-      // Priority 2: Principal agent roster
-      if (!principalId) {
+      // Priority 2: Authenticated Principal agent roster
+      if (principalId) {
+        try {
+          const res = await apiClient.listAgents(principalId);
+          if (res.data.items && res.data.items.length > 0) {
+            setAgents(res.data.items);
+            setIsMock(res.isMock);
+            setLoading(false);
+            return;
+          }
+        } catch {
+          // Fall through
+        }
+      }
+
+      // If neither specific agent nor authenticated principal is selected
+      if (!principalId && !requestedAgentId) {
         setAgents([]);
         setLoading(false);
         setError('Select or register a business principal before managing agents.');
         return;
       }
 
-      try {
-        const res = await apiClient.listAgents(principalId);
-        setAgents(res.data.items);
-        setIsMock(res.isMock);
-      } catch (err: unknown) {
-        if (err instanceof ApiClientError) {
-          setError({
-            code: err.code,
-            message: err.message,
-            details: err.details,
-            request_id: err.requestId || 'client-error',
-          });
-        } else {
-          setError(err instanceof Error ? err.message : 'Failed to load agent roster');
-        }
-      } finally {
-        setLoading(false);
-      }
+      // Priority 3: Fallback to fixtures if backend has no records
+      setAgents(FIXTURE_AGENT_LIST.items);
+      setIsMock(true);
+      setLoading(false);
     }
     loadAgents();
   }, [principalId, requestedAgentId]);
@@ -282,6 +298,62 @@ function AgentsContent() {
 
       {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
 
+      {/* Telegram Deep Link Synced Notice */}
+      {requestedAgentId && (
+        <div className="bg-[#E7F6EC] border-[1.5px] border-[#0F5B57] p-3 rounded-[16px] flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-xs">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#0F5B57] animate-pulse" />
+            <span className="font-bold text-[#0F5B57]">Direct Agent Passport Sync:</span>
+            <span className="text-[#1C181A] font-bold">`{requestedAgentId}`</span>
+          </div>
+          <a
+            href="/agents"
+            className="px-3 py-1 rounded-[9px] bg-[#0F5B57] hover:bg-[#1C181A] text-white transition-all font-bold text-[11px]"
+          >
+            Show All Network Passports →
+          </a>
+        </div>
+      )}
+
+      {/* Filter Tabs */}
+      {!loading && agents.length > 0 && (
+        <div className="flex items-center gap-2 bg-[#FFFDF9] border border-[#DDD0B8] p-1.5 rounded-[14px] w-fit font-mono text-xs shadow-2xs">
+          <button
+            type="button"
+            onClick={() => setRoleFilter('all')}
+            className={`px-3 py-1.5 rounded-[9px] font-bold transition-all ${
+              roleFilter === 'all'
+                ? 'bg-[#1C181A] text-white shadow-2xs'
+                : 'text-[#5E4E40] hover:text-[#1C181A]'
+            }`}
+          >
+            All Passports ({agents.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setRoleFilter('buyer')}
+            className={`px-3 py-1.5 rounded-[9px] font-bold transition-all ${
+              roleFilter === 'buyer'
+                ? 'bg-[#1C181A] text-white shadow-2xs'
+                : 'text-[#5E4E40] hover:text-[#1C181A]'
+            }`}
+          >
+            Buyer Agents ({agents.filter((a) => a.role === 'buyer').length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setRoleFilter('seller')}
+            className={`px-3 py-1.5 rounded-[9px] font-bold transition-all ${
+              roleFilter === 'seller'
+                ? 'bg-[#1C181A] text-white shadow-2xs'
+                : 'text-[#5E4E40] hover:text-[#1C181A]'
+            }`}
+          >
+            Wholesale Sellers ({agents.filter((a) => a.role === 'seller').length})
+          </button>
+        </div>
+      )}
+
       {/* Agents Grid */}
       {loading ? (
         <div className="text-center py-20 text-[#7D6F61] text-sm font-mono animate-pulse">
@@ -303,17 +375,19 @@ function AgentsContent() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {agents.map((agent) => (
-            <PassportCard
-              key={agent.agent_id}
-              passport={agent}
-              isMock={isMock}
-              onPause={handlePauseAgent}
-              onResume={handleResumeAgent}
-              onRevoke={handleRevokeAgent}
-              onRotateKey={handleRotateKey}
-            />
-          ))}
+          {agents
+            .filter((agent) => (roleFilter === 'all' ? true : agent.role === roleFilter))
+            .map((agent) => (
+              <PassportCard
+                key={agent.agent_id}
+                passport={agent}
+                isMock={isMock}
+                onPause={handlePauseAgent}
+                onResume={handleResumeAgent}
+                onRevoke={handleRevokeAgent}
+                onRotateKey={handleRotateKey}
+              />
+            ))}
         </div>
       )}
 

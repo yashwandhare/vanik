@@ -284,8 +284,60 @@ async def test_ganesh_agent_handler() -> None:
     edit_args = mock_msg.edit_text.call_args[0][0]
     assert "Diwali Kirana Buyer Agent" in edit_args
     assert "Ed25519" in edit_args
-    assert "30000000-0000-4000-8000-000000000001" in edit_args
+    assert "7a1bd7b3-308a-5f49-ba8a-0dd1ec451c88" in edit_args
     assert "/task" in edit_args
+
+
+@pytest.mark.asyncio
+async def test_disconnect_handler() -> None:
+    from bot.handlers.disconnect import disconnect_handler
+
+    update = MagicMock()
+    update.effective_message = MagicMock()
+    update.effective_message.reply_text = AsyncMock()
+    update.effective_user = MagicMock()
+    update.effective_user.id = 998877
+    context = MagicMock()
+    context.user_data = {"some_state": 123}
+
+    await disconnect_handler(update, context)
+    assert len(context.user_data) == 0
+    update.effective_message.reply_text.assert_called_once()
+    reply_text = update.effective_message.reply_text.call_args[0][0]
+    assert "Reset Complete" in reply_text
+    assert "/ganesh_kirana" in reply_text
+
+
+@pytest.mark.asyncio
+async def test_miniapp_handler() -> None:
+    from bot.handlers.miniapp import miniapp_handler
+
+    update = MagicMock()
+    update.effective_message = MagicMock()
+    update.effective_message.reply_text = AsyncMock()
+    context = MagicMock()
+
+    await miniapp_handler(update, context)
+    update.effective_message.reply_text.assert_called_once()
+    reply_text = update.effective_message.reply_text.call_args[0][0]
+    reply_markup = update.effective_message.reply_text.call_args[1]["reply_markup"]
+    assert "Mini App" in reply_text
+    assert reply_markup is not None
+
+
+@pytest.mark.asyncio
+async def test_natural_chat_handler_hindi() -> None:
+    update = MagicMock()
+    update.effective_message = MagicMock()
+    update.effective_message.text = "नमस्ते, VANIK क्या है?"
+    update.effective_message.reply_text = AsyncMock()
+    context = MagicMock()
+
+    await natural_chat_handler(update, context)
+    update.effective_message.reply_text.assert_called_once()
+    call_args = update.effective_message.reply_text.call_args[0][0]
+    assert "VANIK" in call_args
+    assert "/ganesh_kirana" in call_args
 
 
 @pytest.mark.asyncio
