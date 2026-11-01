@@ -244,3 +244,64 @@ export interface InventoryUpdateRequest {
   product_id: string;
   stock_qty: number | string;
 }
+
+export interface SellerProfileRequest {
+  coverage: string[];
+  delivery_days: number;
+  credit_days: number[];
+  delivery_terms?: string;
+  payment_note?: string;
+}
+
+export interface SellerProfileResponse {
+  seller: SellerSummary;
+  legal_name: string;
+  business_type: string;
+  address: string;
+  public_policies: Record<string, unknown>;
+}
+
+export interface TaskLineItemRequest {
+  sku: string;
+  quantity: number | string;
+  unit: string;
+}
+
+export interface TaskCreateRequest {
+  principal_id: string;
+  agent_id: string;
+  objective: string;
+  category: 'procurement';
+  lines: TaskLineItemRequest[];
+  budget: number | string;
+  currency: 'INR';
+  delivery_deadline: string;
+  expires_at: string;
+  priorities: Record<string, number | string>;
+  allowed_tools: string[];
+  permitted_actions: string[];
+  max_rounds: number;
+  requires_human_approval: true;
+}
+
+export interface TaskResponse {
+  id: string;
+  version: number;
+  principal_id: string;
+  agent_id: string;
+  mandate: Record<string, unknown>;
+  status:
+    | 'created'
+    | 'cancelled'
+    | 'expired'
+    | 'running'
+    | 'awaiting_approval'
+    | 'completed'
+    | 'failed';
+  created_at: string;
+}
+
+export interface TaskListResponse {
+  items: TaskResponse[];
+  pagination: PaginationMeta;
+}

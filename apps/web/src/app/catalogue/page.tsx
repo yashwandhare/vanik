@@ -8,6 +8,7 @@ import type {
   InventoryLineResponse,
   ProductResponse,
   SellerAgentSummary,
+  SellerProfileResponse,
   SellerSummary,
 } from '../../lib/types';
 
@@ -57,10 +58,26 @@ export default function CataloguePage() {
   const [stockError, setStockError] = useState<ErrorEnvelope | string | null>(null);
   const [stockSuccess, setStockSuccess] = useState<string | null>(null);
 
+  // Seller Profile Modal State
+  const [profileSeller, setProfileSeller] = useState<SellerSummary | null>(null);
+  const [profileData, setProfileData] = useState<SellerProfileResponse | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  const [profileError, setProfileError] = useState<ErrorEnvelope | string | null>(null);
+  const [profileSuccess, setProfileSuccess] = useState<string | null>(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [profileDeliveryDays, setProfileDeliveryDays] = useState<number>(3);
+  const [profileCoverageText, setProfileCoverageText] = useState<string>('');
+  const [profileCreditDaysText, setProfileCreditDaysText] = useState<string>('');
+  const [profileDeliveryTerms, setProfileDeliveryTerms] = useState<string>('');
+  const [profilePaymentNote, setProfilePaymentNote] = useState<string>('');
+  const [savingProfile, setSavingProfile] = useState(false);
+
   // Modal references for focus trapping and restoration
   const inventoryDialogRef = useRef<HTMLDivElement>(null);
   const stockDialogRef = useRef<HTMLDivElement>(null);
+  const profileDialogRef = useRef<HTMLDivElement>(null);
   const triggerButtonRef = useRef<HTMLButtonElement | null>(null);
+  const profileTriggerRef = useRef<HTMLButtonElement | null>(null);
   const stockInputRef = useRef<HTMLInputElement>(null);
 
   // Attempt session restoration on mount
@@ -289,6 +306,130 @@ export default function CataloguePage() {
       }
     } finally {
       setUpdatingStock(false);
+    }
+  };
+
+  // Open Seller Profile Modal
+  const openProfileModal = async (
+    seller: SellerSummary,
+    triggerElement: HTMLButtonElement | null
+  ) => {
+    profileTriggerRef.current = triggerElement;
+    setProfileSeller(seller);
+    setProfileData(null);
+    setProfileError(null);
+    setProfileSuccess(null);
+    setIsEditingProfile(false);
+    setLoadingProfile(true);
+
+    try {
+      const res = await apiClient.getSellerProfile(seller.principal_id);
+      setProfileData(res.data);
+      setProfileDeliveryDays(res.data.seller.delivery_days);
+      setProfileCoverageText(res.data.seller.coverage.join(', '));
+      setProfileCreditDaysText(res.data.seller.credit_days.join(', '));
+      const pol = res.data.public_policies || {};
+      setProfileDeliveryTerms(typeof pol.delivery_terms === 'string' ? pol.delivery_terms : '');
+      setProfilePaymentNote(typeof pol.payment_note === 'string' ? pol.payment_note : '');
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setProfileError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'profile-error',
+        });
+      } else {
+        setProfileError(err instanceof Error ? err.message : 'Failed to fetch seller profile');
+      }
+    } finally {
+      setLoadingProfile(false);
+    }
+  };
+
+  const closeProfileModal = () => {
+    setProfileSeller(null);
+    setProfileData(null);
+    setIsEditingProfile(false);
+    if (profileTriggerRef.current && profileTriggerRef.current.isConnected) {
+      profileTriggerRef.current.focus();
+    }
+  };
+
+  // Keyboard navigation & Focus Trapping for Profile Modal
+  useEffect(() => {
+    if (!profileSeller) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeProfileModal();
+      }
+      if (e.key === 'Tab') {
+        const controls = profileDialogRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]'
+        );
+        const first = controls?.[0];
+        const last = controls?.[controls.length - 1];
+        if (e.shiftKey && first && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && last && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [profileSeller]);
+
+  // Submit Profile & Policy Update
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profileSeller) return;
+
+    setSavingProfile(true);
+    setProfileError(null);
+    setProfileSuccess(null);
+
+    const coverageArr = profileCoverageText
+      .split(',')
+      .map((c) => c.trim())
+      .filter(Boolean);
+    const creditDaysArr = profileCreditDaysText
+      .split(',')
+      .map((c) => parseInt(c.trim(), 10))
+      .filter((n) => !isNaN(n) && n >= 0);
+
+    try {
+      const res = await apiClient.updateSellerProfile(profileSeller.principal_id, {
+        coverage: coverageArr.length > 0 ? coverageArr : profileSeller.coverage,
+        delivery_days: Number(profileDeliveryDays) || 1,
+        credit_days: creditDaysArr,
+        delivery_terms: profileDeliveryTerms.trim() || undefined,
+        payment_note: profilePaymentNote.trim() || undefined,
+      });
+
+      setProfileData(res.data);
+      setSellers((prev) =>
+        prev.map((s) => (s.principal_id === profileSeller.principal_id ? res.data.seller : s))
+      );
+      setProfileSuccess('Seller profile and commercial policies successfully updated.');
+      setIsEditingProfile(false);
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        setProfileError({
+          code: err.code,
+          message: err.message,
+          details: err.details,
+          request_id: err.requestId || 'profile-save-error',
+        });
+      } else {
+        setProfileError(err instanceof Error ? err.message : 'Failed to save seller profile');
+      }
+    } finally {
+      setSavingProfile(false);
     }
   };
 
@@ -707,6 +848,20 @@ export default function CataloguePage() {
                         </div>
                       ))}
                     </div>
+
+                    {/* Seller Profile Action */}
+                    <div className="pt-3 border-t border-[#d8cbbe] flex items-center justify-between">
+                      <span className="text-[11px] font-mono text-[#877d73]">
+                        Verified Mandi Entity
+                      </span>
+                      <button
+                        type="button"
+                        onClick={(e) => openProfileModal(seller, e.currentTarget)}
+                        className="px-3 py-1.5 rounded-[9px] bg-[#fbf7ee] hover:bg-[#f3ebe0] border border-[#1c1917] text-[#1c1917] hover:text-[#85290c] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                      >
+                        View Business Profile & Policies ↗
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -940,6 +1095,331 @@ export default function CataloguePage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 3: SELLER PROFILE & COMMERCIAL POLICIES DIALOG */}
+      {profileSeller && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="profile-dialog-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        >
+          <div
+            ref={profileDialogRef}
+            className="w-full max-w-2xl max-h-[90vh] bg-[#ffffff] border-[2px] border-[#1c1917] rounded-[24px] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          >
+            {/* Modal Header */}
+            <div className="p-6 border-b-[1.5px] border-[#1c1917] bg-[#fbf7ee] flex items-start justify-between gap-4">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#b45309] font-bold block mb-1">
+                  [ VERIFIED BUSINESS PROFILE & POLICIES ]
+                </span>
+                <h2 id="profile-dialog-title" className="text-2xl font-extrabold text-[#1c1917]">
+                  {profileSeller.trade_name}
+                </h2>
+                <p className="text-xs text-[#665e55] mt-1 font-mono">
+                  Principal ID: <strong className="text-[#85290c]">{profileSeller.principal_id}</strong>
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeProfileModal}
+                className="w-8 h-8 rounded-full border border-[#1c1917] bg-[#ffffff] hover:bg-[#f3ebe0] flex items-center justify-center font-mono font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                aria-label="Close profile dialog"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto space-y-5 flex-1">
+              {profileError && (
+                <ErrorAlert error={profileError} onDismiss={() => setProfileError(null)} />
+              )}
+
+              {profileSuccess && (
+                <div className="bg-[#dcfce7] border border-[#166534] rounded-[14px] p-3.5 text-[#14532d] text-xs font-bold flex items-center justify-between">
+                  <span>✓ {profileSuccess}</span>
+                  <button
+                    type="button"
+                    onClick={() => setProfileSuccess(null)}
+                    className="text-[#14532d] hover:text-[#1c1917] font-mono text-xs px-2"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+
+              {loadingProfile ? (
+                <div className="py-16 text-center font-mono text-xs text-[#665e55]">
+                  <span className="inline-block w-4 h-4 border-2 border-[#85290c] border-t-transparent rounded-full animate-spin mr-2" />
+                  Querying verified counterparty profile (/v1/marketplace/sellers/{profileSeller.principal_id})...
+                </div>
+              ) : profileData ? (
+                <div className="space-y-5">
+                  {/* Business Entity Info */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="p-3.5 bg-[#fbf7ee] rounded-[14px] border border-[#d8cbbe] space-y-1">
+                      <span className="text-[10px] font-mono uppercase text-[#877d73] font-bold block">
+                        Legal Entity Name
+                      </span>
+                      <span className="text-xs font-bold text-[#1c1917] block">
+                        {profileData.legal_name}
+                      </span>
+                    </div>
+
+                    <div className="p-3.5 bg-[#fbf7ee] rounded-[14px] border border-[#d8cbbe] space-y-1">
+                      <span className="text-[10px] font-mono uppercase text-[#877d73] font-bold block">
+                        Business Structure & Verification
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-[#1c1917] capitalize">
+                          {profileData.business_type.replace('_', ' ')}
+                        </span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#dcfce7] text-[#14532d] border border-[#166534] font-bold">
+                          {profileData.seller.verification_status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Registered Address */}
+                  <div className="p-3.5 bg-[#fbf7ee] rounded-[14px] border border-[#d8cbbe] space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-[#877d73] font-bold block">
+                      Registered Mandi / Warehouse Address
+                    </span>
+                    <span className="text-xs text-[#1c1917] block font-medium">
+                      {profileData.address || 'Address registered on state Mandi ledger'}
+                    </span>
+                  </div>
+
+                  {/* Commercial Terms View or Edit Form */}
+                  {!isEditingProfile ? (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[16px] space-y-3">
+                        <div className="flex items-center justify-between border-b border-[#d8cbbe] pb-2">
+                          <span className="font-mono text-xs font-bold text-[#1c1917] uppercase">
+                            Published Commercial Policies
+                          </span>
+                          <span className="text-[10px] font-mono text-[#85290c] font-bold">
+                            Live on Marketplace
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-2.5 text-center font-mono">
+                          <div className="bg-[#fbf7ee] p-2.5 rounded-[12px] border border-[#d8cbbe]">
+                            <span className="text-[10px] uppercase text-[#877d73] block font-bold">
+                              Fulfillment Lead
+                            </span>
+                            <span className="text-xs font-extrabold text-[#1c1917]">
+                              {profileData.seller.delivery_days} {profileData.seller.delivery_days === 1 ? 'day' : 'days'}
+                            </span>
+                          </div>
+
+                          <div className="bg-[#fbf7ee] p-2.5 rounded-[12px] border border-[#d8cbbe]">
+                            <span className="text-[10px] uppercase text-[#877d73] block font-bold">
+                              Credit Windows
+                            </span>
+                            <span className="text-xs font-extrabold text-[#1c1917]">
+                              {profileData.seller.credit_days.length > 0
+                                ? profileData.seller.credit_days.map((d) => `Net ${d}`).join(', ')
+                                : 'Prepaid (Net 0)'}
+                            </span>
+                          </div>
+
+                          <div className="bg-[#fbf7ee] p-2.5 rounded-[12px] border border-[#d8cbbe]">
+                            <span className="text-[10px] uppercase text-[#877d73] block font-bold">
+                              Live SKUs
+                            </span>
+                            <span className="text-xs font-extrabold text-[#85290c]">
+                              {profileData.seller.available_sku_count} items
+                            </span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <span className="text-[10px] font-mono uppercase text-[#877d73] font-bold block mb-1">
+                            Supply Coverage Regions:
+                          </span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {profileData.seller.coverage.map((c) => (
+                              <span
+                                key={c}
+                                className="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#f3ebe0] text-[#292524] border border-[#d8cbbe] font-medium uppercase"
+                              >
+                                {c}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {profileData.public_policies && (
+                          <div className="space-y-2 pt-2 border-t border-[#d8cbbe]">
+                            {typeof profileData.public_policies.delivery_terms === 'string' && (
+                              <div className="text-xs">
+                                <span className="font-mono text-[10px] uppercase text-[#877d73] font-bold block">
+                                  Delivery Terms:
+                                </span>
+                                <span className="text-[#1c1917]">{profileData.public_policies.delivery_terms}</span>
+                              </div>
+                            )}
+                            {typeof profileData.public_policies.payment_note === 'string' && (
+                              <div className="text-xs">
+                                <span className="font-mono text-[10px] uppercase text-[#877d73] font-bold block">
+                                  Payment Note:
+                                </span>
+                                <span className="text-[#1c1917]">{profileData.public_policies.payment_note}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2">
+                        <span className="text-[11px] font-mono text-[#877d73]">
+                          POST /v1/principals/{'{id}'}/seller-profile requires authenticated principal member
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setIsEditingProfile(true)}
+                          className="px-4 py-2 bg-[#1c1917] text-white hover:bg-[#85290c] text-xs font-mono font-bold rounded-[10px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                        >
+                          ✎ Edit Seller Policies
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleUpdateProfile} className="space-y-4 p-4 bg-[#fbf7ee] border-[1.5px] border-[#1c1917] rounded-[16px]">
+                      <div className="flex items-center justify-between border-b border-[#d8cbbe] pb-2">
+                        <span className="font-mono text-xs font-bold text-[#1c1917] uppercase">
+                          Edit Commercial Mandate & Policies
+                        </span>
+                        <span className="text-[10px] font-mono text-[#85290c] font-bold">
+                          POST /v1/principals/{profileSeller.principal_id}/seller-profile
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label htmlFor="edit-delivery-days" className="block text-[11px] font-mono font-bold text-[#877d73] uppercase mb-1">
+                            Fulfillment Lead (Days)
+                          </label>
+                          <input
+                            id="edit-delivery-days"
+                            type="number"
+                            min="1"
+                            max="30"
+                            required
+                            value={profileDeliveryDays}
+                            onChange={(e) => setProfileDeliveryDays(Number(e.target.value))}
+                            className="w-full px-3 py-2 bg-[#ffffff] border border-[#d8cbbe] rounded-[8px] text-xs font-mono font-bold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="edit-credit-days" className="block text-[11px] font-mono font-bold text-[#877d73] uppercase mb-1">
+                            Credit Windows (Comma-separated days, e.g. 0, 7, 15)
+                          </label>
+                          <input
+                            id="edit-credit-days"
+                            type="text"
+                            value={profileCreditDaysText}
+                            onChange={(e) => setProfileCreditDaysText(e.target.value)}
+                            placeholder="0, 7, 15"
+                            className="w-full px-3 py-2 bg-[#ffffff] border border-[#d8cbbe] rounded-[8px] text-xs font-mono font-bold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label htmlFor="edit-coverage" className="block text-[11px] font-mono font-bold text-[#877d73] uppercase mb-1">
+                          Coverage Regions (Comma-separated cities/states)
+                        </label>
+                        <input
+                          id="edit-coverage"
+                          type="text"
+                          required
+                          value={profileCoverageText}
+                          onChange={(e) => setProfileCoverageText(e.target.value)}
+                          placeholder="Pune, Mumbai, Maharashtra"
+                          className="w-full px-3 py-2 bg-[#ffffff] border border-[#d8cbbe] rounded-[8px] text-xs font-mono text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="edit-delivery-terms" className="block text-[11px] font-mono font-bold text-[#877d73] uppercase mb-1">
+                          Delivery Terms Note
+                        </label>
+                        <input
+                          id="edit-delivery-terms"
+                          type="text"
+                          value={profileDeliveryTerms}
+                          onChange={(e) => setProfileDeliveryTerms(e.target.value)}
+                          placeholder="Wholesale truckload delivery to retail doorstep"
+                          className="w-full px-3 py-2 bg-[#ffffff] border border-[#d8cbbe] rounded-[8px] text-xs text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="edit-payment-note" className="block text-[11px] font-mono font-bold text-[#877d73] uppercase mb-1">
+                          Payment Policy Note
+                        </label>
+                        <input
+                          id="edit-payment-note"
+                          type="text"
+                          value={profilePaymentNote}
+                          onChange={(e) => setProfilePaymentNote(e.target.value)}
+                          placeholder="Standard mandi credit terms with post-dated cheque or UPI"
+                          className="w-full px-3 py-2 bg-[#ffffff] border border-[#d8cbbe] rounded-[8px] text-xs text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-end gap-3 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsEditingProfile(false)}
+                          className="px-4 py-2 border border-[#1c1917] rounded-[9px] text-xs font-mono font-bold text-[#1c1917] hover:bg-[#f3ebe0]"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={savingProfile}
+                          className="px-5 py-2 bg-[#85290c] hover:bg-[#9a3412] text-white border border-[#1c1917] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
+                        >
+                          {savingProfile ? (
+                            <>
+                              <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              Saving Policy...
+                            </>
+                          ) : (
+                            'Save Commercial Policies'
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              ) : null}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-[#d8cbbe] bg-[#fbf7ee] flex items-center justify-between">
+              <span className="text-[11px] font-mono text-[#877d73]">
+                Mandi Counterparty Trust Protocol
+              </span>
+              <button
+                type="button"
+                onClick={closeProfileModal}
+                className="px-4 py-2 bg-[#1c1917] text-white hover:bg-[#85290c] text-xs font-mono font-bold rounded-[10px]"
+              >
+                Close Profile
+              </button>
+            </div>
           </div>
         </div>
       )}
