@@ -7,10 +7,14 @@ from typing import Any
 from telegram.ext import Application, CommandHandler
 
 from bot.config import BotSettings
+from bot.handlers.adversarial_test import adversarial_test_handler
+from bot.handlers.create_agent import create_agent_handler
 from bot.handlers.help import help_handler
 from bot.handlers.link import link_handler
+from bot.handlers.sale import sale_handler
 from bot.handlers.start import start_handler
 from bot.handlers.status import status_handler
+from bot.handlers.task import task_handler
 
 logger = logging.getLogger("vanik.bot")
 
@@ -71,6 +75,10 @@ def build_application(
     app.add_handler(CommandHandler("link", link_handler))
     app.add_handler(CommandHandler("status", status_handler))
     app.add_handler(CommandHandler("help", help_handler))
+    app.add_handler(CommandHandler("create_agent", create_agent_handler))
+    app.add_handler(CommandHandler("task", task_handler))
+    app.add_handler(CommandHandler("test", adversarial_test_handler))
+    app.add_handler(CommandHandler("sale", sale_handler))
 
     return app
 

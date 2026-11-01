@@ -11,8 +11,12 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
     text = (
         "📖 *VANIK Telegram Bot Commands*\n\n"
-        "• `/start` — Welcome message and onboarding guide\n"
+        "• `/start` — Welcome message and deep-link processor\n"
         "• `/link <CODE>` — Link your Telegram user ID using a single-use code\n"
+        "• `/create_agent` — Conversational creation of your buyer/seller AI agent\n"
+        "• `/task <MANDATE>` — Launch parallel procurement negotiation across sellers\n"
+        "• `/test` — Simulate a malicious adversarial seller attack & buyer defense\n"
+        "• `/sale <SKU> <PRICE> <QTY>` — Put an item on sale live from Telegram\n"
         "• `/status` — View your account connection and agent status\n"
         "• `/help` — Display this command reference\n\n"
         "📱 *Mini App:* Access structured offer comparisons, cryptographic Passport verification, "
