@@ -19,7 +19,7 @@ async def link_handler(
     if not update.effective_message or not update.effective_user:
         return
 
-    if not update.effective_chat or update.effective_chat.type != "private":
+    if getattr(update.effective_chat, "type", None) in ("group", "supergroup", "channel"):
         await update.effective_message.reply_text("Use /link in a private chat with this bot.")
         return
 

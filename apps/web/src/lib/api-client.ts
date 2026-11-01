@@ -421,10 +421,17 @@ export class ApiClient {
     });
   }
 
-  public async listTasks(params?: { limit?: number; offset?: number }): Promise<{ data: TaskListResponse; isMock: boolean }> {
+  public async listTasks(
+    params?: { limit?: number; offset?: number; principal_id?: string } | string
+  ): Promise<{ data: TaskListResponse; isMock: boolean }> {
     const query = new URLSearchParams();
-    if (params?.limit !== undefined) query.set('limit', String(params.limit));
-    if (params?.offset !== undefined) query.set('offset', String(params.offset));
+    if (typeof params === 'string') {
+      query.set('principal_id', params);
+    } else if (params) {
+      if (params.limit !== undefined) query.set('limit', String(params.limit));
+      if (params.offset !== undefined) query.set('offset', String(params.offset));
+      if (params.principal_id !== undefined) query.set('principal_id', params.principal_id);
+    }
     return this.request<TaskListResponse>(`/v1/tasks${query.size ? `?${query}` : ''}`, { method: 'GET' });
   }
 

@@ -32,7 +32,7 @@ export function TaskMandateForm({ principalId, initialAgentId, onCreated }: {
   const [rounds, setRounds] = useState(3);
   const [creditDays, setCreditDays] = useState(0);
   const [upfront, setUpfront] = useState('100');
-  const [weights, setWeights] = useState<Record<TaskPriority, string>>({ price: '0.45', reliability: '0.25', delivery: '0.20', credit: '0.10' });
+  const [weights, setWeights] = useState<Record<TaskPriority, string>>({ price: '0.45', reliability: '0.25', delivery: '0.20', credit: '0.10', availability: '0.00' });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);

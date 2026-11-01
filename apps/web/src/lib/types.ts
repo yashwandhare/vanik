@@ -267,7 +267,7 @@ export interface TaskLineItemRequest {
   unit: string;
 }
 
-export type TaskPriority = 'price' | 'reliability' | 'delivery' | 'credit';
+export type TaskPriority = 'price' | 'reliability' | 'delivery' | 'credit' | 'availability';
 export type TaskTool = 'marketplace_search' | 'benchmark_compare';
 export type TaskAction = 'request_quote' | 'evaluate_offers';
 
