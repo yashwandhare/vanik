@@ -1,0 +1,14 @@
+{
+  "coverage": [
+    "Pune",
+    "Maharashtra"
+  ],
+  "delivery_days": 3,
+  "credit_days": [
+    0,
+    7,
+    15
+  ],
+  "delivery_terms": "Synthetic delivery coverage",
+  "payment_note": "Synthetic commercial terms"
+}
