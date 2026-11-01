@@ -73,31 +73,31 @@ export default function LoginPage() {
     <div className="vanik-container py-16 sm:py-20">
       <div className="max-w-md mx-auto space-y-8">
         <div className="text-center space-y-2">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#7c7d76] font-bold">
+          <span className="font-mono text-xs uppercase tracking-widest text-[#877d73] font-bold">
             [ HUMAN ACCESS PORTAL ]
           </span>
-          <h1 className="text-3xl font-extrabold text-[#000000] tracking-tight">Sign In to VANIK</h1>
-          <p className="text-xs sm:text-sm text-[#5a5a4f]">
+          <h1 className="text-3xl font-extrabold text-[#1c1917] tracking-tight">Sign In to VANIK</h1>
+          <p className="text-xs sm:text-sm text-[#665e55]">
             Access your verified business principal authority and AI agent roster.
           </p>
         </div>
 
-        <div className="bg-[#ffffff] border-[1.5px] border-[#000000] rounded-[24px] p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[24px] p-6 sm:p-8 shadow-sm space-y-6">
           {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
 
           {session ? (
             <div className="space-y-4">
-              <div className="p-5 bg-[#aafdc0]/30 border-[1.5px] border-[#000000] rounded-[18px] space-y-2">
+              <div className="p-5 bg-[#dcfce7]/30 border-[1.5px] border-[#1c1917] rounded-[18px] space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs uppercase font-extrabold text-[#003d21]">Session Active</span>
+                  <span className="font-mono text-xs uppercase font-extrabold text-[#85290c]">Session Active</span>
                   {isMock && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ffffff] text-[#000000] border border-[#000000] font-bold">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ffffff] text-[#1c1917] border border-[#1c1917] font-bold">
                       FIXTURE
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-[#003d21] font-semibold">Authentication token verified.</p>
-                <div className="text-[11px] font-mono text-[#202020] pt-2 border-t border-[#c0c2a9] space-y-1">
+                <p className="text-xs text-[#85290c] font-semibold">Authentication token verified.</p>
+                <div className="text-[11px] font-mono text-[#292524] pt-2 border-t border-[#d8cbbe] space-y-1">
                   <div>User ID: <span className="font-bold select-all">{session.user.id}</span></div>
                   <div>User: <span className="font-bold">{session.user.display_name} ({session.user.email})</span></div>
                   <div>Expires: <span className="font-bold">{new Date(session.expires_at).toLocaleString()}</span></div>
@@ -107,7 +107,7 @@ export default function LoginPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/principals"
-                  className="flex-1 text-center py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+                  className="flex-1 text-center py-3 px-4 rounded-[12px] bg-[#292524] hover:bg-[#1c1917] text-white font-bold text-xs border border-[#1c1917] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
                 >
                   Go to Business Principal →
                 </Link>
@@ -115,7 +115,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={handleSignOut}
                   disabled={loading}
-                  className="py-3 px-4 rounded-[12px] bg-[#ffffff] hover:bg-[#ffc0e6] text-[#3f0929] border border-[#000000] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+                  className="py-3 px-4 rounded-[12px] bg-[#ffffff] hover:bg-[#fee2e2] text-[#991b1b] border border-[#1c1917] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
                 >
                   {loading ? 'Signing out...' : 'Sign Out'}
                 </button>
@@ -126,7 +126,7 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="login-email"
-                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#877d73] mb-1 font-bold"
                 >
                   Email Address
                 </label>
@@ -136,7 +136,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
+                  className="w-full px-3.5 py-2.5 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[9px] text-xs font-semibold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] focus-visible:border-transparent"
                   placeholder="owner@example.com"
                 />
               </div>
@@ -144,7 +144,7 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="login-password"
-                  className="block text-xs font-mono uppercase tracking-wider text-[#7c7d76] mb-1 font-bold"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#877d73] mb-1 font-bold"
                 >
                   Password
                 </label>
@@ -154,7 +154,7 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#f8f9eb] border border-[#c0c2a9] rounded-[9px] text-xs font-semibold text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] focus-visible:border-transparent"
+                  className="w-full px-3.5 py-2.5 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[9px] text-xs font-semibold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] focus-visible:border-transparent"
                   placeholder="••••••••"
                 />
               </div>
@@ -163,7 +163,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 px-4 rounded-[12px] bg-[#202020] hover:bg-[#000000] disabled:bg-[#7c7d76] text-white font-bold text-xs border border-[#000000] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000]"
+                  className="w-full py-3 px-4 rounded-[12px] bg-[#292524] hover:bg-[#1c1917] disabled:bg-[#877d73] text-white font-bold text-xs border border-[#1c1917] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
                 >
                   {loading ? 'Authenticating...' : 'Sign In'}
                 </button>
@@ -172,9 +172,9 @@ export default function LoginPage() {
           )}
         </div>
 
-        <div className="text-center text-xs text-[#5a5a4f]">
+        <div className="text-center text-xs text-[#665e55]">
           Don&apos;t have a business principal yet?{' '}
-          <Link href="/register" className="text-[#000000] font-bold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#000000] rounded">
+          <Link href="/register" className="text-[#1c1917] font-bold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] rounded">
             Register new enterprise
           </Link>
         </div>
