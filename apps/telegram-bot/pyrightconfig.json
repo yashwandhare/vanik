@@ -1,0 +1,8 @@
+{
+  "include": ["bot", "tests"],
+  "venvPath": ".",
+  "venv": ".venv",
+  "extraPaths": ["."],
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "basic"
+}

@@ -1,56 +1,94 @@
 # VANIK — Demo Runbook
 
-## Demo story
+## Safety and prerequisites
 
-A kirana business needs to restock 40 distinct SKUs before Diwali. Its buyer agent discovers distributor agents, negotiates price, credit and delivery in parallel, catches a malicious seller, recommends an offer and asks the owner to approve the exact deal before mock UPI settlement.
+Use a dedicated demo database. All businesses, delivery evidence and payments are synthetic.
+**Do not downgrade or delete a shared database. `make reset-demo` refuses to change data.**
 
-## Seed participants
+Configure `DATABASE_URL`, `AGENT_KEY_ENCRYPTION_SECRET` and `DEMO_ACCOUNT_PASSWORD` in your local environment or ignored `.env`.
+Keep the encryption secret unchanged after seeding. The demo password needs at least 12 characters; the encryption secret needs at least 32.
+Do not publish either value.
 
-- Buyer principal: Shree Ganesh Kirana (synthetic).
-- Seller A: margin optimiser.
-- Seller B: inventory clearance.
-- Seller C: payment-risk optimiser.
-- Seller D: adversarial seller (additional red-team participant).
+```sh
+make install
+make migrate
+make seed
+make demo
+```
 
-Each seller must be a distinct principal for the primary three-seller requirement. Seller D is a separate synthetic principal.
+`make demo` validates the pure domain and runs isolated API workflow tests. It does not create an approved deal in your running database.
 
-## Demo sequence
+Start the API and Web in separate terminals:
 
-1. Register buyer business in the portal; show `DEMO VERIFIED`.
-2. Link Telegram using one-time code.
-3. Create buyer agent; show Passport ID and public-key fingerprint.
-4. Open marketplace and inspect seller profiles, catalogues, rankings and activity.
-5. Load Diwali template with exactly 40 unique SKUs.
-6. Review mandate: quantities, budget, deadline, permitted tools and approval boundary.
-7. Launch parallel RFQs.
-8. Watch independent seller strategies respond.
-9. Show at least one counteroffer round using anonymised competitive benchmark.
-10. Show Seller D's inflated reference price/fake discount and prompt-injection note.
-11. Show reference-price check and untrusted-text guard blocking the attack.
-12. Show signature verification and security status.
-13. Show a proactive Telegram deadline/stock alert.
-14. Show supplier memory from a seeded prior delivery event affecting reliability ranking.
-15. Present line-item comparison and explain recommendation.
-16. Human approves exact deal version.
-17. Run mock UPI settlement and display simulated receipt.
-18. Open Decision Replay.
+```sh
+make dev-api
+make dev-web
+```
 
-## Required demo data checks
+## Fast seeded buyer flow
 
-- Exactly 40 distinct SKU codes.
-- Basket totals and seller offers are arithmetically consistent.
-- At least three legitimate seller principals.
-- Seller strategies produce visibly different commercial trade-offs.
-- Credit terms differ and are actually evaluated.
-- Buyer budget is never exposed to seller context.
-- All agent messages have valid signatures.
-- Malicious content is detected without blocking legitimate seller data.
-- Approval is invalidated if deal terms change.
-- No real payment is attempted.
+1. Open `/login`. Sign in as `buyer-kirana@example.com` with your configured `DEMO_ACCOUNT_PASSWORD`.
+2. Obtain the deterministic buyer reference:
 
-## Reliability
+   ```sh
+   uv --directory apps/api run --locked python -c 'from app.seed import demo_id; print(demo_id("principal", "buyer-kirana"))'
+   ```
 
-- Seed data and demo reset must be deterministic.
-- Use fixed policy parameters and low LLM temperature where supported.
-- Provide deterministic fallback messages for the main demo path.
-- Rehearse the full demo and keep a screen recording as backup.
+3. Open `/negotiations?principalId=<buyer-reference>`.
+4. In **Mandate Form**, select the active buyer agent.
+5. Select **Load Full Catalogue Basket (40 SKUs)**. Each selected quantity starts at one unit.
+6. Review the budget, future dates and ranking weights. Keep sufficient delivery time for all three legitimate sellers.
+7. Select **Create Task Mandate**. Creation does not launch negotiation.
+8. Select **Launch Negotiations**. Wait for the backend request to finish.
+9. Open **Parallel Rounds**. Inspect real message hashes, Ed25519 signatures and offer versions.
+10. Open **Adversarial Audit**. Explain the injection and fake-discount evidence. Review signals are not fraud findings.
+11. Open **Offer Comparison**. Inspect the backend recommendation, commercial terms and individual line items.
+12. Select **Lock Offer** for a valid current offer.
+13. Review the complete locked snapshot, version, amount, expiry and SHA256 hash.
+14. Select **Request Approval Challenge**, then **Approve Exact Deal Terms**.
+15. Select **Settle Mock Payment**. Show **MOCK UPI / NO FUNDS MOVED** and the receipt reference.
+16. Open **Decision Replay**. Open **Supplier Memory** to show the seeded delivery source and confidence.
+
+Task and deal selections are recorded in the URL. Reloading retrieves backend state; it does not recreate approval.
+Use `/miniapp?taskId=<task-reference>` or `/miniapp?dealId=<deal-reference>&view=approval` to show the same workflow.
+
+## Seller view
+
+Sign in as one of these synthetic accounts using the configured demo password:
+
+- `seller-margin@example.com` — Mangal Wholesale.
+- `seller-clearance@example.com` — Utsav Distributors.
+- `seller-risk@example.com` — Suraksha Trade Co.
+- `seller-adversarial@example.com` — Synthetic Red Team Seller.
+
+Open `/seller`. Select the matching principal, then **Incoming Buyer RFQs**.
+The API checks seller membership. Buyer budgets and buyer ranking evaluations are not returned.
+Quotes are generated by backend strategies during buyer launch. There is no manual quotation button that fabricates a signature.
+
+## Telegram — manual deployment checkpoint
+
+Configure matching `TELEGRAM_WEBHOOK_SECRET` values for API and Bot, plus:
+
+- `TELEGRAM_BOT_ENABLED=true`
+- `TELEGRAM_BOT_TOKEN` from your Bot account.
+- `API_BASE_URL` reachable by the Bot worker.
+- `PUBLIC_APP_URL` as the deployed HTTPS Web origin.
+- Optional `TELEGRAM_WORKER_INTERVAL_SECONDS` (default 30).
+
+Configure deployed cookies and allowed origins for the actual API/Web domains. Then run `make dev-bot`.
+
+1. Generate a link code from the authenticated business profile.
+2. In a private Bot chat, send `/link <code>`.
+3. Send `/task Restock full Diwali basket within INR 100000`.
+4. Follow the generated Mini App link. Authenticate with the linked VANIK account if needed.
+5. Review the created mandate; launch and approve only through the authenticated interface.
+6. Verify a proactive notification arrives. The worker processes the seeded due trigger without a new user prompt.
+
+The text parser supports the full demo basket with an explicit budget, not arbitrary purchase requests.
+A Telegram deep link never proves task status and never authorizes settlement. Delivery is at-least-once; interrupted sends can be repeated.
+
+## Verified versus pending
+
+See [Project TODO](PROJECT_TODO.md) for the authoritative checklist.
+API/PostgreSQL workflow, Web tests/build and Bot worker tests passed locally. Live Telegram, deployed cookies/CORS, browser rehearsal and screenshots remain manual.
+Destructive reset, exhaustive concurrency coverage, full browser-to-live-API automation and complete DevC domain consolidation remain explicit engineering limitations.

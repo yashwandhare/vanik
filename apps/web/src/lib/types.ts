@@ -267,6 +267,10 @@ export interface TaskLineItemRequest {
   unit: string;
 }
 
+export type TaskPriority = 'price' | 'reliability' | 'delivery' | 'credit';
+export type TaskTool = 'marketplace_search' | 'benchmark_compare';
+export type TaskAction = 'request_quote' | 'evaluate_offers';
+
 export interface TaskCreateRequest {
   principal_id: string;
   agent_id: string;
@@ -277,10 +281,12 @@ export interface TaskCreateRequest {
   currency: 'INR';
   delivery_deadline: string;
   expires_at: string;
-  priorities: Record<string, number | string>;
-  allowed_tools: string[];
-  permitted_actions: string[];
+  priorities: Record<TaskPriority, number | string>;
+  allowed_tools: TaskTool[];
+  permitted_actions: TaskAction[];
   max_rounds: number;
+  min_credit_days?: number;
+  max_upfront_pct?: number | string;
   requires_human_approval: true;
 }
 
@@ -289,7 +295,7 @@ export interface TaskResponse {
   version: number;
   principal_id: string;
   agent_id: string;
-  mandate: Record<string, unknown>;
+  mandate: TaskMandateResponse;
   status:
     | 'created'
     | 'cancelled'
@@ -305,3 +311,165 @@ export interface TaskListResponse {
   items: TaskResponse[];
   pagination: PaginationMeta;
 }
+
+export interface TaskMandateResponse extends Omit<TaskCreateRequest, 'principal_id' | 'agent_id'> {
+  lines: Array<TaskLineItemRequest & { product_id: string }>;
+}
+
+export interface PaymentTerms {
+  type: 'advance_upi' | 'partial_advance' | 'credit_net_7' | 'credit_net_15' | 'credit_net_30';
+  credit_days: number;
+  upfront_pct: string;
+  balance_due_days: number;
+}
+
+export interface OfferLine {
+  product_id: string;
+  sku: string;
+  quantity: string;
+  unit: string;
+  unit_price: string;
+  claimed_original_price: string;
+  claimed_discount_pct: string;
+  line_total: string;
+}
+
+export interface OfferTerms {
+  currency: 'INR';
+  lines: OfferLine[];
+  total: string;
+  delivery_at: string;
+  payment_terms: PaymentTerms;
+  expires_at: string;
+  seller_note: string;
+  tax_representation: 'not_modeled';
+}
+
+export interface AgentEnvelope {
+  message_id: string;
+  protocol_version: 'vanik.a2a.v1';
+  message_type: 'REQUEST_FOR_QUOTE' | 'OFFER' | 'COUNTER_OFFER' | 'ACCEPT' | 'REJECT' | 'WITHDRAW' | 'FINAL_OFFER' | 'EXPIRE' | 'SECURITY_REPORT';
+  sender_agent_id: string;
+  recipient_agent_id: string;
+  sender_principal_id: string;
+  negotiation_id: string;
+  task_id: string;
+  created_at: string;
+  nonce: string;
+  key_version: number;
+  payload: Record<string, unknown>;
+  payload_hash: string;
+  signature: string;
+}
+
+export interface OfferResponse {
+  id: string;
+  negotiation_id: string;
+  seller_principal_id: string;
+  seller_agent_id: string;
+  version: number;
+  terms: OfferTerms;
+  terms_hash: string;
+  valid: boolean;
+  validation: Record<string, unknown>;
+  ranking: Record<string, unknown>;
+}
+
+export interface NegotiationResponse {
+  id: string;
+  task_id: string;
+  seller_principal_id: string;
+  seller_agent_id: string;
+  state: string;
+  round_no: number;
+  offers: OfferResponse[];
+  messages: AgentEnvelope[];
+}
+
+export interface NegotiationListResponse {
+  task_id: string;
+  items: NegotiationResponse[];
+  recommendation_offer_id: string | null;
+}
+
+export interface AcceptOfferRequest { offer_id: string }
+export interface SellerRFQListResponse { items: NegotiationResponse[] }
+
+export interface DealResponse {
+  id: string;
+  task_id: string;
+  version: number;
+  status: string;
+  buyer_principal_id: string;
+  seller_principal_id: string;
+  amount: string;
+  currency: 'INR';
+  snapshot: Record<string, unknown>;
+  terms_hash: string;
+  expires_at: string;
+  label: 'SIMULATED / NO REAL PAYMENT';
+}
+export interface DealListResponse { items: DealResponse[] }
+export interface ApprovalChallengeResponse {
+  challenge_id: string;
+  deal_id: string;
+  deal_version: number;
+  terms_hash: string;
+  nonce: string;
+  expires_at: string;
+}
+export interface ApproveRequest {
+  challenge_id: string;
+  deal_version: number;
+  terms_hash: string;
+  nonce: string;
+}
+export interface ReceiptResponse {
+  id: string;
+  deal_id: string;
+  amount: string;
+  contracted_total: string;
+  balance_due: string;
+  currency: 'INR';
+  status: 'succeeded';
+  reference: string;
+  created_at: string;
+  label: 'MOCK UPI / NO FUNDS MOVED';
+}
+export interface EventResponse {
+  id: string;
+  event_type: string;
+  actor_type: string;
+  entity_type: string;
+  entity_id: string;
+  payload: Record<string, unknown>;
+  created_at: string;
+}
+export interface ReplayResponse { task_id: string; events: EventResponse[] }
+export interface SecurityIncidentResponse {
+  id: string;
+  incident_type: string;
+  agent_id: string;
+  principal_id: string;
+  evidence: Record<string, unknown>;
+  action: string;
+  status: string;
+  created_at: string;
+}
+export interface SecurityIncidentListResponse { items: SecurityIncidentResponse[] }
+export interface SupplierMemoryResponse {
+  id: string;
+  seller_principal_id: string;
+  event_id: string;
+  memory_type: string;
+  score: string;
+  confidence: string;
+  evidence: Record<string, unknown>;
+  status: string;
+  created_at: string;
+}
+export interface SupplierMemoryListResponse { items: SupplierMemoryResponse[] }
+export interface NotificationResponse { id: string; text: string; status: string; created_at: string }
+export interface NotificationListResponse { items: NotificationResponse[] }
+export interface MemoryDisputeRequest { reason: string }
+export interface MemoryCorrectionRequest { score: string | number; confidence: string | number; reason: string }

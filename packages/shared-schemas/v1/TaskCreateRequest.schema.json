@@ -1,0 +1,204 @@
+{
+  "$defs": {
+    "LineItemRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "quantity": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Quantity"
+        },
+        "sku": {
+          "maxLength": 40,
+          "minLength": 1,
+          "pattern": ".*\\S.*",
+          "title": "Sku",
+          "type": "string"
+        },
+        "unit": {
+          "maxLength": 32,
+          "minLength": 1,
+          "pattern": ".*\\S.*",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sku",
+        "quantity",
+        "unit"
+      ],
+      "title": "LineItemRequest",
+      "type": "object"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/TaskCreateRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agent_id": {
+      "format": "uuid",
+      "title": "Agent Id",
+      "type": "string"
+    },
+    "allowed_tools": {
+      "items": {
+        "enum": [
+          "marketplace_search",
+          "benchmark_compare"
+        ],
+        "type": "string"
+      },
+      "maxItems": 2,
+      "title": "Allowed Tools",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "budget": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Budget"
+    },
+    "category": {
+      "const": "procurement",
+      "default": "procurement",
+      "title": "Category",
+      "type": "string"
+    },
+    "currency": {
+      "const": "INR",
+      "default": "INR",
+      "title": "Currency",
+      "type": "string"
+    },
+    "delivery_deadline": {
+      "format": "date-time",
+      "title": "Delivery Deadline",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "lines": {
+      "items": {
+        "$ref": "#/$defs/LineItemRequest"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Lines",
+      "type": "array"
+    },
+    "max_rounds": {
+      "default": 3,
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Max Rounds",
+      "type": "integer"
+    },
+    "max_upfront_pct": {
+      "anyOf": [
+        {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "default": "100",
+      "title": "Max Upfront Pct"
+    },
+    "min_credit_days": {
+      "default": 0,
+      "maximum": 90,
+      "minimum": 0,
+      "title": "Min Credit Days",
+      "type": "integer"
+    },
+    "objective": {
+      "maxLength": 500,
+      "minLength": 1,
+      "pattern": ".*\\S.*",
+      "title": "Objective",
+      "type": "string"
+    },
+    "permitted_actions": {
+      "items": {
+        "enum": [
+          "request_quote",
+          "evaluate_offers"
+        ],
+        "type": "string"
+      },
+      "maxItems": 2,
+      "title": "Permitted Actions",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "principal_id": {
+      "format": "uuid",
+      "title": "Principal Id",
+      "type": "string"
+    },
+    "priorities": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "maxProperties": 5,
+      "minProperties": 1,
+      "propertyNames": {
+        "enum": [
+          "price",
+          "reliability",
+          "delivery",
+          "credit",
+          "availability"
+        ]
+      },
+      "title": "Priorities",
+      "type": "object"
+    },
+    "requires_human_approval": {
+      "const": true,
+      "default": true,
+      "title": "Requires Human Approval",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "principal_id",
+    "agent_id",
+    "objective",
+    "lines",
+    "budget",
+    "delivery_deadline",
+    "expires_at",
+    "priorities"
+  ],
+  "title": "TaskCreateRequest",
+  "type": "object"
+}

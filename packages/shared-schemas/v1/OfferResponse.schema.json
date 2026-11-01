@@ -1,0 +1,216 @@
+{
+  "$defs": {
+    "OfferLine": {
+      "additionalProperties": false,
+      "properties": {
+        "claimed_discount_pct": {
+          "title": "Claimed Discount Pct",
+          "type": "string"
+        },
+        "claimed_original_price": {
+          "title": "Claimed Original Price",
+          "type": "string"
+        },
+        "line_total": {
+          "title": "Line Total",
+          "type": "string"
+        },
+        "product_id": {
+          "format": "uuid",
+          "title": "Product Id",
+          "type": "string"
+        },
+        "quantity": {
+          "title": "Quantity",
+          "type": "string"
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        },
+        "unit_price": {
+          "title": "Unit Price",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product_id",
+        "sku",
+        "quantity",
+        "unit",
+        "unit_price",
+        "claimed_original_price",
+        "claimed_discount_pct",
+        "line_total"
+      ],
+      "title": "OfferLine",
+      "type": "object"
+    },
+    "OfferTerms": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "delivery_at": {
+          "format": "date-time",
+          "title": "Delivery At",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "lines": {
+          "items": {
+            "$ref": "#/$defs/OfferLine"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Lines",
+          "type": "array"
+        },
+        "payment_terms": {
+          "$ref": "#/$defs/PaymentTerms"
+        },
+        "seller_note": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Seller Note",
+          "type": "string"
+        },
+        "tax_representation": {
+          "const": "not_modeled",
+          "default": "not_modeled",
+          "title": "Tax Representation",
+          "type": "string"
+        },
+        "total": {
+          "title": "Total",
+          "type": "string"
+        }
+      },
+      "required": [
+        "lines",
+        "total",
+        "delivery_at",
+        "payment_terms",
+        "expires_at"
+      ],
+      "title": "OfferTerms",
+      "type": "object"
+    },
+    "PaymentTerms": {
+      "additionalProperties": false,
+      "properties": {
+        "balance_due_days": {
+          "maximum": 30,
+          "minimum": 0,
+          "title": "Balance Due Days",
+          "type": "integer"
+        },
+        "credit_days": {
+          "maximum": 30,
+          "minimum": 0,
+          "title": "Credit Days",
+          "type": "integer"
+        },
+        "type": {
+          "enum": [
+            "advance_upi",
+            "partial_advance",
+            "credit_net_7",
+            "credit_net_15",
+            "credit_net_30"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "upfront_pct": {
+          "title": "Upfront Pct",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "credit_days",
+        "upfront_pct",
+        "balance_due_days"
+      ],
+      "title": "PaymentTerms",
+      "type": "object"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/OfferResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "negotiation_id": {
+      "format": "uuid",
+      "title": "Negotiation Id",
+      "type": "string"
+    },
+    "ranking": {
+      "additionalProperties": true,
+      "title": "Ranking",
+      "type": "object"
+    },
+    "seller_agent_id": {
+      "format": "uuid",
+      "title": "Seller Agent Id",
+      "type": "string"
+    },
+    "seller_principal_id": {
+      "format": "uuid",
+      "title": "Seller Principal Id",
+      "type": "string"
+    },
+    "terms": {
+      "$ref": "#/$defs/OfferTerms"
+    },
+    "terms_hash": {
+      "title": "Terms Hash",
+      "type": "string"
+    },
+    "valid": {
+      "title": "Valid",
+      "type": "boolean"
+    },
+    "validation": {
+      "additionalProperties": true,
+      "title": "Validation",
+      "type": "object"
+    },
+    "version": {
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "negotiation_id",
+    "seller_principal_id",
+    "seller_agent_id",
+    "version",
+    "terms",
+    "terms_hash",
+    "valid",
+    "validation",
+    "ranking"
+  ],
+  "title": "OfferResponse",
+  "type": "object"
+}

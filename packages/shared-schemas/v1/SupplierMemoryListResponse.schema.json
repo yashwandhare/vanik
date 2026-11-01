@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "SupplierMemoryResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "title": "Confidence",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "evidence": {
+          "additionalProperties": true,
+          "title": "Evidence",
+          "type": "object"
+        },
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "memory_type": {
+          "title": "Memory Type",
+          "type": "string"
+        },
+        "score": {
+          "title": "Score",
+          "type": "string"
+        },
+        "seller_principal_id": {
+          "format": "uuid",
+          "title": "Seller Principal Id",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "seller_principal_id",
+        "event_id",
+        "memory_type",
+        "score",
+        "confidence",
+        "evidence",
+        "status",
+        "created_at"
+      ],
+      "title": "SupplierMemoryResponse",
+      "type": "object"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/SupplierMemoryListResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/SupplierMemoryResponse"
+      },
+      "title": "Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "items"
+  ],
+  "title": "SupplierMemoryListResponse",
+  "type": "object"
+}

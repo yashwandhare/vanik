@@ -1,0 +1,18 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/MemoryDisputeRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "reason"
+  ],
+  "title": "MemoryDisputeRequest",
+  "type": "object"
+}

@@ -1,236 +1,127 @@
 # Project TODO
 
-This checklist tracks delivery of the P0 hackathon scope. It does not indicate that documented features are already implemented.
+Updated: 2026-11-01. This is the authoritative P0 delivery checklist.
 
-## Status rules
+## Current state
 
-- `[ ]` Not started or not verified.
-- `[x]` Completed and verified.
-- Main owns backend, contracts, security, integration and release work.
-- Teammate B owns the marketplace interfaces and Telegram clients.
-- A phase closes only after its checkpoint passes.
+**The core synthetic procurement flow works end to end. This is a demo release candidate, not a production-ready marketplace.**
 
-## Current snapshot
+- PR #16 merged DevB and DevC into `main` at `a92c7c6`.
+- PR #15 was closed because its DevC commits were included in PR #16.
+- The follow-up DevA integration is on `feat/main-workflow-engine`. Its release merge must pass required CI.
+- PR #16's passing unit tests did not prove live workflow integration. Its buyer approval, seller quotation and Mini App results still used local simulation.
+- The follow-up replaces those simulated outcomes with real backend requests. Web and Mini App share `LiveWorkflow.tsx`.
+- Local verification passed: **310 API tests** (two PostgreSQL tests run separately), **46 Web tests**, **77 Bot tests**, lint, strict type checks and production Web build.
+- Real PostgreSQL verification passed: identity integration, 40-SKU workflow through settlement, migration upgrade/drift/downgrade/re-upgrade.
+- **Remaining work is listed below. Do not describe every P0 requirement as finished.**
 
-- **Phase 0:** Repository/contracts/backend and B web/Bot foundation are merged and CI-verified through PR #7.
-- **Phase 1:** Identity, verification, Telegram linking, Agent Passports and corresponding client screens are implemented. The complete live Web/Telegram demo checkpoint still requires rehearsal.
-- **Phase 2:** Catalogue/inventory/discovery and deterministic 40-SKU seeding are implemented; task-specific ranking and B marketplace wiring remain pending.
-- **Phases 3–7:** Not complete. The task draft is not exposed as an API; signed envelopes, negotiation, trust, deals, complete replay/memory, deterministic reset and rehearsal remain pending.
+## Status and ownership
 
-## Phase 0 — Repository, scope and contracts
+- `[x]` Implemented and checked locally, or previously merged with passing CI.
+- `[ ]` Incomplete or not verified. A passing build does not replace a live browser rehearsal.
+- DevA owns backend, contracts, integration and release. DevB owns Web/Mini App/Bot. DevC owns pure domain modules.
+- Only synthetic identities, verification, delivery history and payments are used. No real funds move.
 
-### Main
+## Phase 0 — Repository, contracts and delivery
 
-- [x] Organize product, engineering and delivery documentation.
-- [x] Publish Main and Teammate B ownership boundaries.
-- [x] Create phased project and Teammate B checklists.
-- [x] Add repository ignore rules for secrets and generated files.
-- [x] Initialize Git and connect the project GitHub repository.
-- [x] Configure `main` as the protected integration branch.
-- [x] Select and record the initial backend, frontend, bot and cryptography versions.
-- [x] Define the Phase 1 authentication and session design.
-- [x] Define API route, pagination and error conventions.
-- [x] Publish initial identity schemas and representative JSON fixtures.
-- [x] Create the backend skeleton, configuration and database connection code.
-- [x] Verify the real PostgreSQL integration tests in CI.
-- [x] Publish identity, verification, Telegram-linking and Agent Passport contract packs before dependent client integration.
-- [ ] Publish marketplace, task, negotiation, trust, deal and event contract packs before dependent client integration.
+- [x] Repository, protected main branch, team ownership, setup and CI.
+- [x] Versioned identity, verification, Telegram, Passport and marketplace schemas/fixtures.
+- [x] Task, procurement policy, signed envelope, negotiation, offer, deal, approval, receipt, replay, security, memory and notification contract packs.
+- [x] API, Web and Bot install/test/lint/type-check targets.
+- [x] Review and merge PR #7 and marketplace PRs #11–13. Earlier PR #7 blockers are resolved.
+- [x] Merge combined DevB/DevC PR #16; close superseded PR #15.
+- [ ] Merge the follow-up integration after required CI passes; then freeze main.
 
-### Teammate B
+## Phase 1 — Identity and Agent Passport
 
-- [x] Complete the reading sequence in `teammateB/ONBOARDING.md`.
-- [x] Confirm ownership and contract boundaries with Main.
-- [x] Create the Next.js, TypeScript and Tailwind application skeleton after authorization.
-- [x] Establish routes, layout, navigation, design tokens and API client boundaries.
-- [x] Create contract-aligned mock fixtures only after Main publishes schemas.
-- [x] Create the Telegram Bot skeleton after Main confirms the library and contract.
-- [x] Merge the verified web/Bot foundation through PR #7 after clean install and required CI pass.
+- [x] Users, opaque sessions, expiry/logout, CSRF and allowed origins.
+- [x] Principals, memberships, roles and synthetic verification.
+- [x] Single-use Telegram linking and unlinking.
+- [x] Agent creation, pause/resume/revoke, key rotation and authority ceilings.
+- [x] Encrypted Ed25519 signing identities and append-only lifecycle events.
+- [x] Registration, login, business, verification and Passport interfaces.
+- [x] Identity/authority tests and real PostgreSQL integration.
+- [ ] Rehearse real Telegram linking and deployed browser session behavior.
 
-### Checkpoint
+## Phase 2 — Catalogue and seller workspace
 
-- [x] Both developers confirm the same routes, fields, state names and error format.
-- [x] Backend, web and bot skeletons pass their initial lint and test commands.
+- [x] Exactly 40 synthetic Diwali SKUs, one buyer and four distinct seller principals.
+- [x] Product/inventory persistence, discovery filters and public seller profiles.
+- [x] Real catalogue, seller discovery, inventory update and commercial policy interfaces.
+- [x] Full-catalogue basket selection from live products; no invented product identities.
+- [x] Explainable backend offer ranking and evidence display.
+- [x] Seller-scoped RFQ reads; buyer budget and ranking inputs remain private.
+- [ ] Full responsive, keyboard and accessibility browser audit.
 
-## Phase 1 — Identity, registration and Agent Passport
+## Phase 3 — Mandates, protocol and negotiation
 
-### Main
+- [x] Create/read/list/cancel tasks with principal membership and agent authority checks.
+- [x] Owner/admin procurement policies; tasks can narrow but cannot exceed those policies.
+- [x] Canonical signed envelopes with participant, state, time, hash, signature and nonce/replay checks.
+- [x] Concurrent deterministic seller jobs, failure isolation, multiple rounds and anonymous benchmark counters.
+- [x] Structured quantity/unit/product, arithmetic, stock, floor, budget, payment, deadline and expiry validation.
+- [x] Latest eligible offers only; backend recommendation and weighted explanations.
+- [x] Live task launch, seller messages/signatures, offer comparison and persisted state reload in Web/Mini App.
+- [x] Failure paths no longer invent successful launches, signatures, approvals or receipts.
+- [x] 40-SKU workflow tested against SQLite and real PostgreSQL.
+- [ ] Complete exhaustive concurrent launch/accept/settlement load and race tests.
 
-- [x] Implement users, principals, memberships and business roles.
-- [x] Implement authentication, session expiry and logout.
-- [x] Implement explicitly simulated verification states.
-- [x] Implement short-lived, single-use Telegram linking tokens.
-- [x] Implement agent creation, lifecycle and ownership checks.
-- [x] Generate and protect Ed25519 signing identities.
-- [x] Implement Agent Passport responses and principal authority ceilings.
-- [x] Add unit tests for authentication, CSRF and principal authority boundaries.
-- [x] Verify the identity, verification, Telegram and Agent Passport migrations/integration flows against PostgreSQL in CI.
+## Phase 4 — Trust and security
 
-### Teammate B
-
-- [x] Build registration and login screens.
-- [x] Build business profile, role selection and simulated verification views.
-- [x] Build Telegram linking instructions and status views.
-- [x] Build agent creation and agent list screens.
-- [x] Build Agent Passport views.
-- [x] Add loading, validation, empty, permission and error states.
-- [x] Add UI tests for the identity flow.
-
-### Checkpoint
-
-- [ ] A demo user can register a synthetic business, see `demo_verified`, link Telegram and create an Agent Passport.
-
-## Phase 2 — Marketplace and catalogue
-
-### Main
-
-- [x] Implement product, catalogue and inventory persistence.
-- [x] Implement seller profiles and marketplace discovery APIs.
-- [x] Implement search and filters for category, coverage, stock, delivery and credit.
-- [ ] Implement explainable task-specific ranking inputs and responses.
-- [x] Seed exactly 40 distinct Diwali SKUs with internally consistent prices and quantities.
-- [x] Seed at least three legitimate seller principals and one adversarial principal.
-- [x] Test principal grouping, catalogue arithmetic and discovery behavior.
-
-### Teammate B
-
-- [ ] Build marketplace overview and seller discovery pages.
-- [ ] Build seller cards and seller profile pages.
-- [ ] Build catalogue and inventory tables.
-- [ ] Build search, filter and sort controls.
-- [ ] Build ranking-factor and evidence views.
-- [ ] Build the seller inventory and business-profile workspace.
-- [ ] Add responsive and accessibility checks for marketplace views.
-
-### Checkpoint
-
-- [ ] The UI displays real API data for distinct seller principals and all 40 requested SKUs.
-
-## Phase 3 — Protocol and negotiation
-
-### Main
-
-- [ ] Finalize canonical signed message schemas.
-- [ ] Implement mandate-authorized signed message envelopes, replay protection and message expiry using the existing Ed25519 identity primitive.
-- [ ] Implement the negotiation state machine and valid transitions.
-- [ ] Implement concurrent per-seller RFQ dispatch with timeout isolation.
-- [ ] Implement margin, clearance and payment-risk seller strategies.
-- [ ] Implement deterministic stock, quantity, price, budget, delivery and credit validation.
-- [ ] Implement multi-round counters with anonymized benchmark data.
-- [ ] Test signatures, invalid transitions, timeouts and seller isolation.
-
-### Teammate B
-
-- [ ] Build the negotiation workspace and live activity feed.
-- [ ] Build RFQ and structured offer detail views.
-- [ ] Build side-by-side line-item comparison.
-- [ ] Build negotiation timeline and status indicators.
-- [ ] Build pending, rejected, withdrawn, expired and invalid states.
-- [ ] Build seller-side incoming RFQ and offer views required by the demo.
-- [ ] Add UI tests against Main's published negotiation states.
-
-### Checkpoint
-
-- [ ] One buyer negotiates with at least three seller principals in parallel without cross-seller state leakage.
-
-## Phase 4 — Trust, security and explainability
-
-### Main
-
-- [ ] Treat seller notes and catalogue text as untrusted input.
-- [ ] Implement a tool-less prompt-injection classification boundary.
-- [ ] Implement benchmark-backed fake-discount checks.
-- [ ] Implement basic collusion signals across distinct principals.
-- [ ] Keep market rating, trust confidence and security status separate.
-- [ ] Record evidence, rules, outcomes and security events.
-- [ ] Test malicious content, false claims, principal grouping and incident isolation.
-
-### Teammate B
-
-- [ ] Build security warning and suspicious-offer indicators.
-- [ ] Build trust, rating and evidence explanation panels.
-- [ ] Build security event detail views.
-- [ ] Label review signals separately from confirmed violations.
-- [ ] Display backend-provided evidence without calculating fraud or trust scores in the UI.
-
-### Checkpoint
-
-- [ ] The seeded adversarial seller is detected and explained without blocking valid structured seller data.
+- [x] Merge DevC pure deterministic domain and its 107 tests.
+- [x] Integrate DevC's tool-less seller-note classifier into the persisted workflow.
+- [x] Benchmark-backed discount checks and distinct-principal collusion review signals.
+- [x] Persist incident rules, evidence, actions and audit events.
+- [x] Keep trust/history confidence separate from market rating; no invented rating for new sellers.
+- [x] Display backend-provided security evidence without browser-computed fraud scores.
+- [ ] Consolidate remaining service strategy/validation/ranking implementations onto DevC's full domain API. The current persisted service implementations work but still duplicate that logic.
+- [ ] Reconcile policy for otherwise-valid offers with malicious notes. Current workflow invalidates the offer; the domain classifier supports note quarantine.
 
 ## Phase 5 — Deal, approval and mock payment
 
-### Main
+- [x] Bind deal lock to the latest signed final offer and its exact payload hash.
+- [x] Reserve inventory and persist immutable deal snapshot/version/hash.
+- [x] Single-use, user-bound approval challenge; reject stale versions, altered snapshots and expired terms.
+- [x] Require explicit owner/admin approval before idempotent mock settlement.
+- [x] Reject settlement after participant revocation, expiry or snapshot change.
+- [x] Release reservations on rejection/expiry; consume them on settlement.
+- [x] Clearly labeled mock receipt with upfront amount, contracted total and balance due.
+- [x] Web/Mini App fetch current terms before approval and use a stable settlement idempotency key.
+- [x] Tests cover stale approval UI, failed launch, replay tampering, settlement refusal and duplicate payment requests.
+- [x] Telegram links navigate to authenticated approval; a link or Bot command never authorizes payment.
 
-- [ ] Require matching accepted structured terms before deal lock.
-- [ ] Store immutable deal versions and exact line items.
-- [ ] Bind approval to the complete canonical deal hash and one-time nonce.
-- [ ] Invalidate approval after any material deal change.
-- [ ] Implement an idempotent, explicitly simulated UPI transition.
-- [ ] Generate a clearly labeled mock receipt and audit events.
-- [ ] Test stale approvals, duplicate requests, authorization and settlement failures.
+## Phase 6 — Replay, memory and Telegram
 
-### Teammate B
+- [x] Material workflow events and Decision Replay.
+- [x] Supplier memory with source event, scope, timestamp, confidence and synthetic provenance.
+- [x] Authorized memory dispute/correction; revoked memberships cannot read private evidence.
+- [x] Seeded due proactive trigger and trusted worker processing endpoint.
+- [x] Notification claim/ack with five-minute lease recovery, failed delivery retries and idempotent delivered acknowledgement.
+- [x] Bot lifecycle worker, `/task`, `/link`, informational `/status`, help and validated deep links.
+- [x] Configurable HTTPS public application URL; no hardcoded localhost links presented as deployed links.
+- [x] Live Mini App mandate, Passport, rounds, comparison, approval, replay and evidence views.
+- [ ] Verify live notification delivery with real Telegram credentials and deployed session/CORS configuration.
+- [ ] Telegram delivery is at-least-once, not exactly-once. A crash after sending can cause redelivery.
 
-- [ ] Build exact deal summary and warning views.
-- [ ] Build approve and reject interactions.
-- [ ] Build deal status and simulated receipt views.
-- [ ] Build Telegram approval messages and callbacks against Main's API.
-- [ ] Prevent stale UI state from appearing to authorize changed or expired deals.
-- [ ] Add UI and bot tests for approval outcomes.
+## Phase 7 — Verification and release
 
-### Checkpoint
+- [x] API lint/format/strict mypy and automated regression suite.
+- [x] Web ESLint/TypeScript, 46 tests and production Next.js build.
+- [x] Bot Ruff/strict mypy and 77 tests, including worker retry/lifecycle behavior.
+- [x] Real PostgreSQL identity tests and full 40-SKU negotiation/approval/payment/replay scenario.
+- [x] Migration head `20261101_0007`: clean upgrade, no drift, downgrade to base, re-upgrade, no drift.
+- [x] Safe idempotent `make seed` inserts missing synthetic data without resetting existing permissions or reservations.
+- [x] `make demo` runs domain validation and isolated API workflow regression tests without changing the configured demo database.
+- [ ] Destructive `make reset-demo` remains intentionally blocked. Use a fresh dedicated demo database; do not reset shared data.
+- [ ] Complete automated browser-to-live-API end-to-end coverage. Current UI tests mock the HTTP boundary; real PostgreSQL API flow is checked separately.
+- [ ] Complete live browser/Telegram rehearsal and capture screenshots or a backup recording.
+- [x] Record known limitations instead of marking incomplete work complete.
 
-- [ ] A deal completes only after valid human approval, and duplicate settlement requests do not create duplicate payments.
+## Demo boundaries
 
-## Phase 6 — Events, Telegram, proactivity and memory
-
-### Main
-
-- [x] Implement append-only Agent Passport lifecycle and key-rotation events.
-- [ ] Extend append-only material event history across tasks, negotiations, security decisions and deals.
-- [ ] Implement Decision Replay from recorded events.
-- [ ] Implement supplier memory with source, time, scope and evidence.
-- [ ] Implement one scheduled or seeded proactive trigger.
-- [ ] Implement authorized notification APIs and delivery tracking.
-- [ ] Test memory provenance, corrections and proactive trigger behavior.
-
-### Teammate B
-
-- [ ] Complete Telegram Bot task, status and notification commands.
-- [ ] Complete Mini App mandate, Passport, comparison, approval and timeline views.
-- [ ] Add authorized deep links between Telegram and web views.
-- [ ] Add bot and Mini App failure states.
-- [ ] Connect proactive notifications to Main's notification contract.
-
-### Checkpoint
-
-- [ ] A proactive alert occurs without a new prompt, and a verified prior event affects a later ranking with visible evidence.
-
-## Phase 7 — Integration, testing and demo freeze
-
-### Main
-
-- [x] Implement functional API install, development, tests, lint, format, type-check and migration targets.
-- [ ] Integrate verified web/Bot targets and implement deterministic seed, demo and reset targets.
-- [x] Run identity/authority backend unit, PostgreSQL integration and security tests.
-- [ ] Run negotiation state-machine, trust, deal and full end-to-end tests.
-- [x] Verify implemented API authorization and principal isolation.
-- [x] Verify migration upgrade, drift, downgrade and re-upgrade behavior from clean PostgreSQL in CI.
-- [ ] Verify deterministic seed and reset behavior from a clean environment.
-- [ ] Integrate and review Teammate B PR #7; currently blocked by failed required CI and unresolved review findings.
-- [ ] Freeze `main` before final rehearsal.
-
-### Teammate B
-
-- [ ] Run frontend, bot and Mini App tests.
-- [ ] Verify responsive layout and accessibility basics.
-- [ ] Verify loading, empty, error and permission states.
-- [ ] Verify consistent task and deal state across all interfaces.
-- [ ] Prepare screenshots and demo navigation notes.
-- [ ] Stop feature additions after Main declares the freeze.
-
-### Checkpoint
-
-- [ ] Complete the full demo runbook from a clean deterministic reset.
-- [ ] Confirm the main negotiation sequence completes predictably within the target duration.
-- [ ] Confirm no real identity verification, financial data or payment is used.
-- [ ] Record all remaining limitations before release.
+- Use the seeded buyer for the fastest rehearsal. New buyer businesses need an owner/admin procurement policy through `/v1/tasks/policies/{principal_id}`; no policy editor is provided yet.
+- Text task creation is deliberately limited: request the full Diwali basket and an explicit INR budget. It is not a general natural-language order parser.
+- Negotiation completes within one launch request. The timeline shows persisted rounds after completion; it is not a streaming feed.
+- Seller quotations are generated by backend strategies. There is no manual seller quote submission API.
+- Tax, real KYC, real UPI, fulfillment verification and financial reconciliation are outside this synthetic demo.
+- Bot editor imports use the dedicated virtual environment; two root-editor import annotations document the split. Fresh canonical-path LSP and session diagnostics report no blocking errors.

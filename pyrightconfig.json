@@ -3,6 +3,13 @@
   "venvPath": "apps/api",
   "venv": ".venv",
   "extraPaths": ["apps/api"],
+  "executionEnvironments": [
+    {"root": "apps/api", "extraPaths": ["apps/api"]},
+    {
+      "root": "apps/telegram-bot",
+      "extraPaths": ["apps/telegram-bot", "apps/telegram-bot/.venv/lib/python3.12/site-packages"]
+    }
+  ],
   "pythonVersion": "3.12",
   "typeCheckingMode": "basic"
 }

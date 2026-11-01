@@ -1,0 +1,30 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/NaturalTaskRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agent_id": {
+      "format": "uuid",
+      "title": "Agent Id",
+      "type": "string"
+    },
+    "principal_id": {
+      "format": "uuid",
+      "title": "Principal Id",
+      "type": "string"
+    },
+    "text": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "principal_id",
+    "agent_id",
+    "text"
+  ],
+  "title": "NaturalTaskRequest",
+  "type": "object"
+}

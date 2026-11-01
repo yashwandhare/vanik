@@ -237,7 +237,12 @@ def test_public_seller_profile_and_owner_update(
     )
     assert updated.status_code == 200
     assert updated.json()["seller"]["coverage"] == ["Mumbai"]
-    assert updated.json()["seller"]["reliability_score"] is None
+    # The seeded delivery event is synthetic evidence, not a self-reported seller rating.
+    assert (
+        updated.json()["seller"]["reliability_score"]
+        == public.json()["seller"]["reliability_score"]
+    )
+    assert updated.json()["seller"]["reliability_evidence_count"] == 1
     member = db.get(PrincipalMember, (principal_id, demo_id("user", "seller-margin")))
     assert member is not None
     member.role = "operator"

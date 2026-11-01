@@ -1,0 +1,67 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/ReceiptResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "amount": {
+      "title": "Amount",
+      "type": "string"
+    },
+    "balance_due": {
+      "title": "Balance Due",
+      "type": "string"
+    },
+    "contracted_total": {
+      "title": "Contracted Total",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "currency": {
+      "const": "INR",
+      "default": "INR",
+      "title": "Currency",
+      "type": "string"
+    },
+    "deal_id": {
+      "format": "uuid",
+      "title": "Deal Id",
+      "type": "string"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "label": {
+      "const": "MOCK UPI / NO FUNDS MOVED",
+      "default": "MOCK UPI / NO FUNDS MOVED",
+      "title": "Label",
+      "type": "string"
+    },
+    "reference": {
+      "title": "Reference",
+      "type": "string"
+    },
+    "status": {
+      "const": "succeeded",
+      "default": "succeeded",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "deal_id",
+    "amount",
+    "contracted_total",
+    "balance_due",
+    "reference",
+    "created_at"
+  ],
+  "title": "ReceiptResponse",
+  "type": "object"
+}

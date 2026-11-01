@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from uuid import NAMESPACE_URL, UUID, uuid5
 
@@ -21,7 +21,10 @@ from app.db.models import (
     User,
 )
 from app.db.session import create_database_engine
+from app.db.task_models import PrincipalProcurementPolicy
+from app.db.workflow_models import ProactiveTrigger, SupplierMemory
 from app.fixtures.diwali import DIWALI_PRODUCTS
+from app.services.events import record_delivery_memory
 
 SELLERS = (
     ("seller-margin", "Mangal Wholesale", "margin", 3, [7, 15]),
@@ -165,7 +168,19 @@ def seed_demo(db: Session, settings: Settings) -> dict[str, int]:
             db.add(product)
         products.append(product)
     db.flush()
-    _participant(db, settings, "buyer-kirana", "Shree Ganesh Kirana", "buyer", "default")
+    buyer_principal, _buyer_agent = _participant(
+        db, settings, "buyer-kirana", "Shree Ganesh Kirana", "buyer", "default"
+    )
+    if db.get(PrincipalProcurementPolicy, buyer_principal.id) is None:
+        db.add(
+            PrincipalProcurementPolicy(
+                principal_id=buyer_principal.id,
+                max_budget_inr=Decimal("1000000.00"),
+                max_credit_days=30,
+                max_rounds=5,
+                credit_score=65,
+            )
+        )
     for seller_index, (slug, name, strategy, delivery, credit) in enumerate(SELLERS):
         principal, agent = _participant(db, settings, slug, name, "seller", strategy)
         if db.get(SellerProfile, principal.id) is None:
@@ -192,6 +207,33 @@ def seed_demo(db: Session, settings: Settings) -> dict[str, int]:
                         reserved_qty=Decimal(0),
                     )
                 )
+    first_seller = demo_id("principal", "seller-margin")
+    memory = db.scalar(
+        select(SupplierMemory.id).where(
+            SupplierMemory.buyer_principal_id == buyer_principal.id,
+            SupplierMemory.seller_principal_id == first_seller,
+            SupplierMemory.memory_type == "delivery",
+        )
+    )
+    if memory is None:
+        record_delivery_memory(
+            db,
+            buyer_principal.id,
+            first_seller,
+            buyer_principal.id,
+            late_days=2,
+            synthetic=True,
+        )
+    trigger_id = demo_id("trigger", "diwali-deadline-alert")
+    if db.get(ProactiveTrigger, trigger_id) is None:
+        db.add(
+            ProactiveTrigger(
+                id=trigger_id,
+                principal_id=buyer_principal.id,
+                due_at=datetime.now(UTC) - timedelta(minutes=1),
+                reason="Diwali restock deadline is approaching; review current offers.",
+            )
+        )
     db.commit()
     return {
         "products": 40,

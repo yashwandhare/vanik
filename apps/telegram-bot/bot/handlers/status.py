@@ -5,17 +5,15 @@ from telegram.ext import ContextTypes
 
 
 async def status_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Displays informational status; live authorized query is pending Phase 6 contracts."""
+    """Report only information observed from the current update."""
     if not update.effective_message or not update.effective_user:
         return
-
-    user_id = str(update.effective_user.id)
     text = (
-        "ℹ️ *VANIK Bot Status (Informational)*\n\n"
-        f"• *Telegram User ID:* `{user_id}`\n"
-        "• *Bot Worker:* Online\n"
-        "• *Account Link:* Submit `/link <CODE>` with a 10-minute token from the web portal\n"
-        "• *Backend Status:* Live membership query pending Phase 6 notification API\n\n"
-        "Use `/help` for command instructions."
+        "VANIK Bot Status (Informational)\n\n"
+        f"Telegram user ID: {update.effective_user.id}\n"
+        "This command confirms only that the bot can respond to this message. "
+        "It does not verify account linking, task activity or notification delivery.\n\n"
+        "Sign in to the web portal to check your linked account and current tasks. "
+        "Use /link <CODE> to link an account, or /help for instructions."
     )
-    await update.effective_message.reply_text(text, parse_mode="Markdown")
+    await update.effective_message.reply_text(text)

@@ -1,9 +1,13 @@
 """Handler for the /link command."""
 
+import logging
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
 from bot.client import BackendApiError, BackendClient
+
+logger = logging.getLogger("vanik.bot.link")
 
 
 async def link_handler(
@@ -13,6 +17,10 @@ async def link_handler(
 ) -> None:
     """Processes account linking with single-use digest tokens."""
     if not update.effective_message or not update.effective_user:
+        return
+
+    if not update.effective_chat or update.effective_chat.type != "private":
+        await update.effective_message.reply_text("Use /link in a private chat with this bot.")
         return
 
     args = context.args or []
@@ -29,7 +37,7 @@ async def link_handler(
     link_code = args[0].strip()
     telegram_user_id = str(update.effective_user.id)
 
-    backend = client or BackendClient()
+    backend = client or context.bot_data["backend"]
 
     try:
         res = await backend.complete_link(
@@ -41,16 +49,18 @@ async def link_handler(
             f"✅ *Account Linked Successfully!*\n\n"
             f"• *Telegram User ID:* `{telegram_user_id}`\n"
             f"• *Linked At:* `{linked_at}`\n\n"
-            f"Your Telegram handle is now authenticated with your business principal. "
-            f"You will receive deal challenges and agent updates here.\n\n"
-            f"Use `/status` to check active representation.",
+            f"Your Telegram account is linked to your business principal. "
+            f"Backend notifications will be sent here when available.\n\n"
+            f"Use `/task <request>` to submit a buyer task. "
+            f"Deal approval requires human review in the authenticated web app.",
             parse_mode="Markdown",
         )
     except BackendApiError as exc:
+        logger.warning("Account linking failed (backend HTTP %s)", exc.status_code)
         if exc.status_code == 400:
             await update.effective_message.reply_text(
                 "❌ *Invalid or Expired Link Code*\n\n"
-                "Single-use link codes expire after 10 minutes. "
+                "Single-use link codes expire. "
                 "Please generate a fresh code in the VANIK web portal.",
                 parse_mode="Markdown",
             )
@@ -70,6 +80,7 @@ async def link_handler(
             )
         else:
             await update.effective_message.reply_text(
-                f"❌ *Linking Failed*\n\n{exc}",
+                "❌ Linking Failed\n\nThe request could not be confirmed. "
+                "Check your linked account in the web portal before trying again.",
                 parse_mode="Markdown",
             )

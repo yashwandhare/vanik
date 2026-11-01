@@ -1,0 +1,17 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/AcceptOfferRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "offer_id": {
+      "format": "uuid",
+      "title": "Offer Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "offer_id"
+  ],
+  "title": "AcceptOfferRequest",
+  "type": "object"
+}

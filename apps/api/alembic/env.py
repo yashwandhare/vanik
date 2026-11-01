@@ -1,6 +1,6 @@
 from alembic import context
 from app.core.config import Settings
-from app.db import models  # noqa: F401
+from app.db import models, task_models, workflow_models  # noqa: F401
 from app.db.session import Base, create_database_engine
 
 config = context.config

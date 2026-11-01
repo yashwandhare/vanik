@@ -1,0 +1,8 @@
+{
+  "challenge_id": "00000029-0000-4000-8000-000000000001",
+  "deal_id": "00000028-0000-4000-8000-000000000001",
+  "deal_version": 1,
+  "expires_at": "2027-11-01T10:10:00Z",
+  "nonce": "synthetic-approval-nonce-value",
+  "terms_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}
