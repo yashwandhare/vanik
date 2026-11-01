@@ -8,7 +8,7 @@ Updated: 2026-11-01. This is the authoritative P0 delivery checklist.
 
 - PR #16 merged DevB and DevC into `main` at `a92c7c6`.
 - PR #15 was closed because its DevC commits were included in PR #16.
-- The follow-up DevA integration is on `feat/main-workflow-engine`. Its release merge must pass required CI.
+- PR #17 merged the verified DevA integration into `main` at `fa092d6`. Both required API/Web workflow runs passed. Feature work is frozen for rehearsal.
 - PR #16's passing unit tests did not prove live workflow integration. Its buyer approval, seller quotation and Mini App results still used local simulation.
 - The follow-up replaces those simulated outcomes with real backend requests. Web and Mini App share `LiveWorkflow.tsx`.
 - Local verification passed: **310 API tests** (two PostgreSQL tests run separately), **46 Web tests**, **77 Bot tests**, lint, strict type checks and production Web build.
@@ -30,7 +30,7 @@ Updated: 2026-11-01. This is the authoritative P0 delivery checklist.
 - [x] API, Web and Bot install/test/lint/type-check targets.
 - [x] Review and merge PR #7 and marketplace PRs #11–13. Earlier PR #7 blockers are resolved.
 - [x] Merge combined DevB/DevC PR #16; close superseded PR #15.
-- [ ] Merge the follow-up integration after required CI passes; then freeze main.
+- [x] Merge the follow-up integration after required CI passes; freeze main features (PR #17).
 
 ## Phase 1 — Identity and Agent Passport
 
