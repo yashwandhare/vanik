@@ -8,12 +8,13 @@ NPM ?= npm --prefix apps/web
 	install-api dev-api test-api lint-api format-api typecheck-api \
 	install-web dev-web test-web lint-web typecheck-web build-web \
 	install-bot dev-bot test-bot lint-bot format-bot typecheck-bot \
-	migrate seed demo reset-demo run health
+	migrate seed demo reset-demo reset-db run health
 
 help:
 	@echo "VANIK developer targets"
 	@echo "run            Start full stack (infra, migrate, seed, API, web, bot)"
 	@echo "health         Check health status of all stack services"
+	@echo "reset-db       Drop, recreate, migrate and seed fresh database & flush cache"
 	@echo "infra          Start PostgreSQL and Redis"
 	@echo "down           Stop local infrastructure"
 	@echo "install        Sync API, bot environment and install web dependencies"
@@ -103,9 +104,10 @@ demo:
 	$(API) run --locked python scripts/validate_demo.py
 	$(API) run --locked python -m pytest tests/test_workflow.py -q
 
-reset-demo:
-	@echo "Destructive reset is not implemented. No data changed. Use a fresh demo database." >&2
-	@exit 1
+reset-db:
+	@./scripts/reset-db.sh
+
+reset-demo: reset-db
 
 run:
 	@./scripts/run.sh
