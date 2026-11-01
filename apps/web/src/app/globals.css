@@ -1,34 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* Indic Mandi & Festive Kirana Palette */
-  --color-cream-parchment: #fbf7ee; /* Warm Sandalwood / Desi Khadi Parchment */
-  --color-pure-white: #ffffff;
-  --color-obsidian: #1c1917; /* Warm Deep Obsidian Espresso */
-  --color-charcoal: #292524; /* Warm Earthen Charcoal */
-  --color-sage-mist: #d8cbbe; /* Warm Sandstone & Brass Border */
-  --color-olive-slate: #665e55; /* Warm Spiced Earth Text */
-  --color-pebble: #877d73; /* Warm Sand Subdued Label */
-  --color-bone: #f3ebe0; /* Warm Champa / Multani Mitti */
-  --color-forest-depths: #85290c; /* Deep Royal Terracotta / Gerua */
-  --color-mint-sprout: #fde68a; /* Festive Marigold / Genda Phool Gold */
-  --color-cobalt-ink: #7c2d12; /* Deep Terracotta Ink */
-  --color-plum-depth: #78350f; /* Deep Kesar Amber */
-  --color-wine-shadow: #881337; /* Deep Sindoor / Kumkum */
-  --color-lilac-wash: #fed7aa; /* Warm Mitti / Terracotta Clay Wash */
-  --color-sky-wash: #fef3c7; /* Warm Kesar / Haldi Silk Wash */
-  --color-rose-wash: #ffe4e6; /* Festive Gulal Rose Wash */
+  /* Coda Indic Palette */
+  --color-cream-parchment: #F6EDD9; /* Chuna (lime-wash) */
+  --color-pure-white: #FFFAF0; /* Ivory */
+  --color-obsidian: #1E1A1C; /* Kajal (kohl) */
+  --color-charcoal: #2A2224; /* Dark kajal (buttons) */
+  --color-sage-mist: #CDBB98; /* Retā (sandstone) */
+  --color-olive-slate: #6B5A4B; /* Mitti (clay) */
+  --color-pebble: #8C7E70; /* Khaki dust */
+  --color-bone: #EDE0C4; /* Khadi */
+  --color-forest-depths: #0E4A47; /* Mor Pankh (deep peacock) */
+  --color-mint-sprout: #BCDFB0; /* Neem wash */
+  --color-cobalt-ink: #1F2A66; /* Nila (indigo) */
+  --color-plum-depth: #4A1D5E; /* Jamun */
+  --color-wine-shadow: #5A1530; /* Manjistha (madder red) */
+  --color-lilac-wash: #D4C2E6; /* Jamuni wash */
+  --color-sky-wash: #A8DDD8; /* Peacock wash */
+  --color-rose-wash: #F2B6C4; /* Gulabi (lotus) wash */
 
-  /* Semantic Indic Tokens */
-  --color-terracotta: #85290c;
-  --color-marigold: #f59e0b;
-  --color-haldi-gold: #fef3c7;
-  --color-neem-green: #14532d;
-  --color-tulsi-wash: #dcfce7;
-  --color-kumkum-crimson: #991b1b;
+  /* New Indic Accents */
+  --color-genda-wash: #F2C85B; /* Genda (marigold) wash */
+  --color-sindoor: #C8472F; /* Sindoor (tiny accents only) */
+  --color-haldi: #E2A93B; /* Haldi (borders, icons) */
 
-  --background: #fbf7ee;
-  --foreground: #1c1917;
+  --background: #F6EDD9;
+  --foreground: #1E1A1C;
 }
 
 * {
@@ -50,8 +47,8 @@ code, kbd, samp, pre, .font-mono {
 }
 
 ::selection {
-  background-color: #fde68a;
-  color: #78350f;
+  background-color: #F2C85B;
+  color: #1E1A1C;
 }
 
 /* Master container class for strict horizontal alignment across all views */

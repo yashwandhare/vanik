@@ -226,22 +226,22 @@ function AgentsContent() {
   return (
     <div className="vanik-container py-10 sm:py-14 space-y-8">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#d8cbbe] pb-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#CDBB98] pb-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#877d73] font-bold">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#8C7E70] font-bold">
               [ AGENT REGISTRY & IDENTITY ]
             </span>
             {isMock && (
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f3ebe0] text-[#292524] border border-[#d8cbbe] font-bold">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#EDE0C4] text-[#2A2224] border border-[#CDBB98] font-bold">
                 FIXTURE
               </span>
             )}
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1c1917] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E1A1C] tracking-tight">
             Agent Passports Roster
           </h1>
-          <p className="text-xs sm:text-sm text-[#665e55]">
+          <p className="text-xs sm:text-sm text-[#6B5A4B]">
             Persistent autonomous representatives with verifiable Ed25519 signing keys, tool permissions, and trust profiles.
           </p>
         </div>
@@ -249,7 +249,7 @@ function AgentsContent() {
         <button
           type="button"
           onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2 bg-[#292524] hover:bg-[#1c1917] text-white rounded-[11px] text-xs font-bold border border-[#1c1917] transition-all shadow-sm flex items-center gap-2 self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+          className="px-4 py-2 bg-[#2A2224] hover:bg-[#1E1A1C] text-white rounded-[11px] text-xs font-bold border border-[#1E1A1C] transition-all shadow-sm flex items-center gap-2 self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
         >
           <span className="font-bold text-sm">+</span>
           <span>Spawn New Agent</span>
@@ -260,19 +260,19 @@ function AgentsContent() {
 
       {/* Agents Grid */}
       {loading ? (
-        <div className="text-center py-20 text-[#877d73] text-sm font-mono animate-pulse">
+        <div className="text-center py-20 text-[#8C7E70] text-sm font-mono animate-pulse">
           Loading cryptographic Agent Passports...
         </div>
       ) : agents.length === 0 ? (
-        <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[24px] p-12 text-center space-y-4">
-          <p className="text-[#1c1917] font-bold text-base">No agent representatives spawned yet.</p>
-          <p className="text-xs text-[#665e55] max-w-md mx-auto">
+        <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[24px] p-12 text-center space-y-4">
+          <p className="text-[#1E1A1C] font-bold text-base">No agent representatives spawned yet.</p>
+          <p className="text-xs text-[#6B5A4B] max-w-md mx-auto">
             Spawn your first buyer or seller representative to begin autonomous counterparty discovery.
           </p>
           <button
             type="button"
             onClick={() => setShowCreateModal(true)}
-            className="px-5 py-2.5 bg-[#292524] text-white text-xs font-bold rounded-[11px] border border-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+            className="px-5 py-2.5 bg-[#2A2224] text-white text-xs font-bold rounded-[11px] border border-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
           >
             Spawn Agent
           </button>
@@ -300,15 +300,15 @@ function AgentsContent() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-spawn-title"
-          className="fixed inset-0 z-50 bg-[#1c1917]/60 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-[#1E1A1C]/60 backdrop-blur-sm flex items-center justify-center p-4"
         >
-          <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[24px] max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#d8cbbe] pb-4">
+          <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[24px] max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#CDBB98] pb-4">
               <div>
-                <span className="font-mono text-xs uppercase tracking-widest text-[#877d73] font-bold">
+                <span className="font-mono text-xs uppercase tracking-widest text-[#8C7E70] font-bold">
                   [ PROVISION PASSPORT ]
                 </span>
-                <h2 id="modal-spawn-title" className="text-xl font-extrabold text-[#1c1917] mt-0.5">
+                <h2 id="modal-spawn-title" className="text-xl font-extrabold text-[#1E1A1C] mt-0.5">
                   Spawn AI Representative
                 </h2>
               </div>
@@ -316,7 +316,7 @@ function AgentsContent() {
                 type="button"
                 aria-label="Close dialog"
                 onClick={() => setShowCreateModal(false)}
-                className="text-[#877d73] hover:text-[#1c1917] font-mono font-bold text-sm px-2 py-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                className="text-[#8C7E70] hover:text-[#1E1A1C] font-mono font-bold text-sm px-2 py-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
               >
                 ✕
               </button>
@@ -326,7 +326,7 @@ function AgentsContent() {
               <div>
                 <label
                   htmlFor="agent-name-input"
-                  className="block text-xs font-mono uppercase tracking-wider text-[#877d73] mb-1 font-bold"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#8C7E70] mb-1 font-bold"
                 >
                   Agent Name
                 </label>
@@ -337,14 +337,14 @@ function AgentsContent() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[9px] text-xs font-semibold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] focus-visible:border-transparent"
+                  className="w-full px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[9px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] focus-visible:border-transparent"
                 />
               </div>
 
               <div>
                 <span
                   id="agent-role-label"
-                  className="block text-xs font-mono uppercase tracking-wider text-[#877d73] mb-1 font-bold"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#8C7E70] mb-1 font-bold"
                 >
                   Marketplace Role
                 </span>
@@ -357,10 +357,10 @@ function AgentsContent() {
                       setRole('buyer');
                       setStrategyProfile('default');
                     }}
-                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] ${
                       role === 'buyer'
-                        ? 'bg-[#dcfce7] text-[#14532d] border-[#1c1917]'
-                        : 'bg-[#fbf7ee] text-[#665e55] border-[#d8cbbe]'
+                        ? 'bg-[#BCDFB0] text-[#0E4A47] border-[#1E1A1C]'
+                        : 'bg-[#F6EDD9] text-[#6B5A4B] border-[#CDBB98]'
                     }`}
                   >
                     Buyer Agent
@@ -370,10 +370,10 @@ function AgentsContent() {
                     role="radio"
                     aria-checked={role === 'seller'}
                     onClick={() => setRole('seller')}
-                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] ${
+                    className={`flex-1 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] ${
                       role === 'seller'
-                        ? 'bg-[#ffedd5] text-[#9a3412] border-[#1c1917]'
-                        : 'bg-[#fbf7ee] text-[#665e55] border-[#d8cbbe]'
+                        ? 'bg-[#D4C2E6] text-[#C8472F] border-[#1E1A1C]'
+                        : 'bg-[#F6EDD9] text-[#6B5A4B] border-[#CDBB98]'
                     }`}
                   >
                     Seller Agent
@@ -385,7 +385,7 @@ function AgentsContent() {
                 <div>
                   <label
                     htmlFor="agent-strategy-select"
-                    className="block text-xs font-mono uppercase tracking-wider text-[#877d73] mb-1 font-bold"
+                    className="block text-xs font-mono uppercase tracking-wider text-[#8C7E70] mb-1 font-bold"
                   >
                     Strategy Profile
                   </label>
@@ -393,7 +393,7 @@ function AgentsContent() {
                     id="agent-strategy-select"
                     value={strategyProfile}
                     onChange={(e) => setStrategyProfile(e.target.value)}
-                    className="w-full px-3.5 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[9px] text-xs font-semibold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] focus-visible:border-transparent"
+                    className="w-full px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[9px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] focus-visible:border-transparent"
                   >
                     <option value="default">Default Balanced Seller</option>
                     <option value="margin">Margin Optimizer (Seller A)</option>
@@ -407,7 +407,7 @@ function AgentsContent() {
               <div>
                 <label
                   htmlFor="agent-description-input"
-                  className="block text-xs font-mono uppercase tracking-wider text-[#877d73] mb-1 font-bold"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#8C7E70] mb-1 font-bold"
                 >
                   Description / Directive
                 </label>
@@ -416,12 +416,12 @@ function AgentsContent() {
                   rows={2}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[9px] text-xs font-semibold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] focus-visible:border-transparent"
+                  className="w-full px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[9px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] focus-visible:border-transparent"
                 />
               </div>
 
-              <div className="p-3.5 bg-[#fbf7ee] rounded-[13px] border border-[#d8cbbe] text-xs text-[#665e55] space-y-1">
-                <span className="font-mono font-bold text-[#85290c] text-[11px] uppercase tracking-wider block">
+              <div className="p-3.5 bg-[#F6EDD9] rounded-[13px] border border-[#CDBB98] text-xs text-[#6B5A4B] space-y-1">
+                <span className="font-mono font-bold text-[#0E4A47] text-[11px] uppercase tracking-wider block">
                   Cryptographic Protocol:
                 </span>
                 <p className="text-[11px] leading-relaxed">
@@ -433,14 +433,14 @@ function AgentsContent() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-[#ffffff] hover:bg-[#f3ebe0] text-[#292524] rounded-[9px] border border-[#d8cbbe] text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                  className="px-4 py-2 bg-[#FFFAF0] hover:bg-[#EDE0C4] text-[#2A2224] rounded-[9px] border border-[#CDBB98] text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="flex-1 py-2 px-4 bg-[#292524] hover:bg-[#1c1917] disabled:bg-[#877d73] text-white rounded-[11px] text-xs font-bold border border-[#1c1917] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                  className="flex-1 py-2 px-4 bg-[#2A2224] hover:bg-[#1E1A1C] disabled:bg-[#8C7E70] text-white rounded-[11px] text-xs font-bold border border-[#1E1A1C] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                 >
                   {creating ? 'Spawning Agent...' : 'Spawn & Sign Passport'}
                 </button>
@@ -457,7 +457,7 @@ export default function AgentsPage() {
   return (
     <Suspense
       fallback={
-        <div className="vanik-container py-16 text-center text-[#877d73] text-sm font-mono animate-pulse">
+        <div className="vanik-container py-16 text-center text-[#8C7E70] text-sm font-mono animate-pulse">
           Loading agent passports...
         </div>
       }

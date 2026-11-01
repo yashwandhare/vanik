@@ -389,20 +389,20 @@ function SellerWorkspaceContent() {
   return (
     <div className="vanik-container py-10 sm:py-14 space-y-8">
       {/* Top Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#d8cbbe] pb-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#CDBB98] pb-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#85290c] font-bold">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#0E4A47] font-bold">
               [ WHOLESALE SUPPLIER WORKSPACE ]
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#b45309] font-bold shadow-2xs">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F2C85B] text-[#1E1A1C] border border-[#E2A93B] font-bold shadow-2xs">
               AUTHORIZED SELLER CONSOLE
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1c1917] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E1A1C] tracking-tight">
             Wholesale Supplier Workspace & RFQ Engine
           </h1>
-          <p className="text-xs sm:text-sm text-[#665e55] max-w-3xl">
+          <p className="text-xs sm:text-sm text-[#6B5A4B] max-w-3xl">
             Manage on-hand inventory allocations, configure commercial mandi policies, review incoming buyer RFQs, and coordinate autonomous sales agent strategies.
           </p>
         </div>
@@ -411,16 +411,16 @@ function SellerWorkspaceContent() {
         <div
           role="tablist"
           aria-label="Seller workspace views"
-          className="flex items-center bg-[#ffffff] border-[1.5px] border-[#1c1917] p-1 rounded-[14px] shadow-sm self-start sm:self-auto"
+          className="flex items-center bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] p-1 rounded-[14px] shadow-sm self-start sm:self-auto"
         >
           <button
             role="tab"
             aria-selected={activeTab === 'inventory'}
             onClick={() => setActiveTab('inventory')}
-            className={`px-3.5 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] ${
+            className={`px-3.5 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] ${
               activeTab === 'inventory'
-                ? 'bg-[#1c1917] text-white shadow-sm'
-                : 'text-[#665e55] hover:text-[#1c1917]'
+                ? 'bg-[#1E1A1C] text-white shadow-sm'
+                : 'text-[#6B5A4B] hover:text-[#1E1A1C]'
             }`}
           >
             Live Inventory ({inventoryItems.length})
@@ -429,10 +429,10 @@ function SellerWorkspaceContent() {
             role="tab"
             aria-selected={activeTab === 'rfqs'}
             onClick={() => setActiveTab('rfqs')}
-            className={`px-3.5 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] ${
+            className={`px-3.5 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] ${
               activeTab === 'rfqs'
-                ? 'bg-[#1c1917] text-white shadow-sm'
-                : 'text-[#665e55] hover:text-[#1c1917]'
+                ? 'bg-[#1E1A1C] text-white shadow-sm'
+                : 'text-[#6B5A4B] hover:text-[#1E1A1C]'
             }`}
           >
             Incoming Buyer RFQs ({rfqs.length})
@@ -441,10 +441,10 @@ function SellerWorkspaceContent() {
             role="tab"
             aria-selected={activeTab === 'policies'}
             onClick={() => setActiveTab('policies')}
-            className={`px-3.5 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] ${
+            className={`px-3.5 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] ${
               activeTab === 'policies'
-                ? 'bg-[#1c1917] text-white shadow-sm'
-                : 'text-[#665e55] hover:text-[#1c1917]'
+                ? 'bg-[#1E1A1C] text-white shadow-sm'
+                : 'text-[#6B5A4B] hover:text-[#1E1A1C]'
             }`}
           >
             Commercial Policies
@@ -453,22 +453,22 @@ function SellerWorkspaceContent() {
       </div>
 
       {/* Seller Selector & Active Principal Card */}
-      <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] p-5 rounded-[20px] shadow-xs space-y-4">
+      <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] p-5 rounded-[20px] shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="w-3 h-3 rounded-full bg-[#166534] inline-block" />
+            <span className="w-3 h-3 rounded-full bg-[#0E4A47] inline-block" />
             <div>
-              <span className="text-[10px] font-mono uppercase text-[#877d73] font-bold block">
+              <span className="text-[10px] font-mono uppercase text-[#8C7E70] font-bold block">
                 Active Seller Entity
               </span>
-              <h2 className="text-lg font-extrabold text-[#1c1917]">
+              <h2 className="text-lg font-extrabold text-[#1E1A1C]">
                 {selectedSeller ? selectedSeller.trade_name : 'Loading Seller Principal...'}
               </h2>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <label htmlFor="seller-select" className="text-xs font-mono font-bold text-[#877d73]">
+            <label htmlFor="seller-select" className="text-xs font-mono font-bold text-[#8C7E70]">
               Switch Entity:
             </label>
             <select
@@ -484,7 +484,7 @@ function SellerWorkspaceContent() {
                 }
               }}
               disabled={loadingSellers || sellers.length === 0}
-              className="px-3 py-1.5 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[8px] text-xs font-semibold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+              className="px-3 py-1.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
             >
               {sellers.map((s) => (
                 <option key={s.principal_id} value={s.principal_id}>
@@ -496,28 +496,28 @@ function SellerWorkspaceContent() {
         </div>
 
         {selectedSeller && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#d8cbbe] text-xs font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#CDBB98] text-xs font-mono">
             <div>
-              <span className="text-[10px] uppercase text-[#877d73] block font-bold">Principal ID</span>
-              <span className="text-[11px] text-[#1c1917] truncate block" title={selectedSeller.principal_id}>
+              <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">Principal ID</span>
+              <span className="text-[11px] text-[#1E1A1C] truncate block" title={selectedSeller.principal_id}>
                 {selectedSeller.principal_id}
               </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-[#877d73] block font-bold">Assigned Agent</span>
-              <span className="text-xs font-bold text-[#85290c]">
+              <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">Assigned Agent</span>
+              <span className="text-xs font-bold text-[#0E4A47]">
                 {selectedAgent?.name || 'Default Seller Agent'}
               </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-[#877d73] block font-bold">Strategy Profile</span>
-              <span className="text-xs font-semibold text-[#1c1917] capitalize">
+              <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">Strategy Profile</span>
+              <span className="text-xs font-semibold text-[#1E1A1C] capitalize">
                 {selectedAgent?.strategy_profile || 'Margin'}
               </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-[#877d73] block font-bold">Fulfillment Lead</span>
-              <span className="text-xs font-bold text-[#14532d]">
+              <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">Fulfillment Lead</span>
+              <span className="text-xs font-bold text-[#0E4A47]">
                 {selectedSeller.delivery_days} days
               </span>
             </div>
@@ -527,12 +527,12 @@ function SellerWorkspaceContent() {
 
       {sellersError && <ErrorAlert error={sellersError} onDismiss={() => setSellersError(null)} />}
       {stockSuccess && (
-        <div className="bg-[#dcfce7] border border-[#166534] rounded-[14px] p-3.5 text-[#14532d] text-xs font-bold flex items-center justify-between">
+        <div className="bg-[#BCDFB0] border border-[#0E4A47] rounded-[14px] p-3.5 text-[#0E4A47] text-xs font-bold flex items-center justify-between">
           <span>✓ {stockSuccess}</span>
           <button
             type="button"
             onClick={() => setStockSuccess(null)}
-            className="text-[#14532d] hover:text-[#1c1917] font-mono text-xs px-2"
+            className="text-[#0E4A47] hover:text-[#1E1A1C] font-mono text-xs px-2"
           >
             ✕
           </button>
@@ -544,10 +544,10 @@ function SellerWorkspaceContent() {
         <section className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h3 className="text-xl font-extrabold text-[#1c1917]">
+              <h3 className="text-xl font-extrabold text-[#1E1A1C]">
                 On-Hand Free-to-Sell Inventory Ledger
               </h3>
-              <p className="text-xs text-[#665e55]">
+              <p className="text-xs text-[#6B5A4B]">
                 Real-time stock quantities. Decrements automatically upon buyer contract reservation. Cannot reduce stock below active reservations (HTTP 409).
               </p>
             </div>
@@ -555,7 +555,7 @@ function SellerWorkspaceContent() {
               type="button"
               onClick={fetchInventory}
               disabled={loadingInventory}
-              className="px-3.5 py-1.5 bg-[#fbf7ee] hover:bg-[#f3ebe0] border border-[#1c1917] rounded-[9px] text-xs font-mono font-bold text-[#1c1917]"
+              className="px-3.5 py-1.5 bg-[#F6EDD9] hover:bg-[#EDE0C4] border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold text-[#1E1A1C]"
             >
               ↻ Refresh Stock
             </button>
@@ -565,10 +565,10 @@ function SellerWorkspaceContent() {
             <ErrorAlert error={inventoryError} onDismiss={() => setInventoryError(null)} />
           )}
 
-          <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[20px] overflow-hidden shadow-sm">
+          <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[20px] overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[700px] text-left text-xs">
-                <thead className="bg-[#fbf7ee] text-[#1c1917] uppercase font-mono tracking-wider border-b-[1.5px] border-[#1c1917]">
+                <thead className="bg-[#F6EDD9] text-[#1E1A1C] uppercase font-mono tracking-wider border-b-[1.5px] border-[#1E1A1C]">
                   <tr>
                     <th className="px-5 py-3.5">SKU Code</th>
                     <th className="px-5 py-3.5">Product Name</th>
@@ -578,38 +578,38 @@ function SellerWorkspaceContent() {
                     <th className="px-5 py-3.5 text-center">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#d8cbbe]">
+                <tbody className="divide-y divide-[#CDBB98]">
                   {loadingInventory ? (
                     <tr>
-                      <td colSpan={6} className="px-5 py-12 text-center text-[#665e55] font-mono">
-                        <span className="inline-block w-4 h-4 border-2 border-[#85290c] border-t-transparent rounded-full animate-spin mr-2" />
+                      <td colSpan={6} className="px-5 py-12 text-center text-[#6B5A4B] font-mono">
+                        <span className="inline-block w-4 h-4 border-2 border-[#0E4A47] border-t-transparent rounded-full animate-spin mr-2" />
                         Fetching live inventory ledger...
                       </td>
                     </tr>
                   ) : inventoryItems.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-5 py-12 text-center text-[#665e55]">
+                      <td colSpan={6} className="px-5 py-12 text-center text-[#6B5A4B]">
                         No inventory records discovered for this agent.
                       </td>
                     </tr>
                   ) : (
                     inventoryItems.map((line) => (
-                      <tr key={line.product.id} className="hover:bg-[#fbf7ee]/60 transition-colors">
-                        <td className="px-5 py-3.5 font-mono font-bold text-[#1c1917]">
+                      <tr key={line.product.id} className="hover:bg-[#F6EDD9]/60 transition-colors">
+                        <td className="px-5 py-3.5 font-mono font-bold text-[#1E1A1C]">
                           {line.product.sku}
                         </td>
-                        <td className="px-5 py-3.5 font-semibold text-[#1c1917]">
+                        <td className="px-5 py-3.5 font-semibold text-[#1E1A1C]">
                           {line.product.name}
                         </td>
                         <td className="px-5 py-3.5">
-                          <span className="px-2 py-0.5 bg-[#fbf7ee] border border-[#d8cbbe] rounded-full text-[11px] font-mono capitalize text-[#292524]">
+                          <span className="px-2 py-0.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-full text-[11px] font-mono capitalize text-[#2A2224]">
                             {line.product.category.replace('_', ' ')}
                           </span>
                         </td>
-                        <td className="px-5 py-3.5 font-mono text-right text-[#665e55]">
+                        <td className="px-5 py-3.5 font-mono text-right text-[#6B5A4B]">
                           ₹{line.product.benchmark_price}
                         </td>
-                        <td className="px-5 py-3.5 font-mono text-right font-extrabold text-[#85290c] text-sm">
+                        <td className="px-5 py-3.5 font-mono text-right font-extrabold text-[#0E4A47] text-sm">
                           {line.available_qty} {line.product.unit}s
                         </td>
                         <td className="px-5 py-3.5 text-center">
@@ -620,7 +620,7 @@ function SellerWorkspaceContent() {
                               setStockInput(line.available_qty);
                               setStockError(null);
                             }}
-                            className="px-3 py-1 bg-[#1c1917] hover:bg-[#85290c] text-white rounded-[7px] text-[11px] font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                            className="px-3 py-1 bg-[#1E1A1C] hover:bg-[#0E4A47] text-white rounded-[7px] text-[11px] font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                           >
                             Update Stock
                           </button>
@@ -632,11 +632,11 @@ function SellerWorkspaceContent() {
               </table>
             </div>
 
-            <div className="p-4 bg-[#fbf7ee] border-t border-[#d8cbbe] text-xs text-[#665e55] flex flex-wrap items-center justify-between gap-2">
+            <div className="p-4 bg-[#F6EDD9] border-t border-[#CDBB98] text-xs text-[#6B5A4B] flex flex-wrap items-center justify-between gap-2">
               <span className="font-mono">
                 Showing {inventoryItems.length} allocated commodity lines
               </span>
-              <span className="font-mono text-[#877d73] text-[11px]">
+              <span className="font-mono text-[#8C7E70] text-[11px]">
                 GET /v1/principals/{'{id}'}/agents/{'{agent_id}'}/inventory
               </span>
             </div>
@@ -648,9 +648,9 @@ function SellerWorkspaceContent() {
       {activeTab === 'rfqs' && (
         <section className="space-y-6">
           {/* CRITICAL SECURITY BANNER: BUYER BUDGET PRIVACY */}
-          <div className="bg-[#fef3c7] border-[1.5px] border-[#b45309] rounded-[18px] p-4 text-[#92400e] text-xs space-y-1 shadow-2xs">
+          <div className="bg-[#F2C85B] border-[1.5px] border-[#E2A93B] rounded-[18px] p-4 text-[#1E1A1C] text-xs space-y-1 shadow-2xs">
             <div className="flex items-center gap-2">
-              <span className="font-mono font-bold uppercase text-[11px] text-[#85290c]">
+              <span className="font-mono font-bold uppercase text-[11px] text-[#0E4A47]">
                 🔒 MANDI FAIR BIDDING ENFORCEMENT • BUYER BUDGET PRIVACY
               </span>
             </div>
@@ -660,12 +660,12 @@ function SellerWorkspaceContent() {
           </div>
 
           {rfqSuccess && (
-            <div className="bg-[#dcfce7] border border-[#166534] rounded-[14px] p-3.5 text-[#14532d] text-xs font-bold flex items-center justify-between">
+            <div className="bg-[#BCDFB0] border border-[#0E4A47] rounded-[14px] p-3.5 text-[#0E4A47] text-xs font-bold flex items-center justify-between">
               <span>✓ {rfqSuccess}</span>
               <button
                 type="button"
                 onClick={() => setRfqSuccess(null)}
-                className="text-[#14532d] hover:text-[#1c1917] font-mono text-xs px-2"
+                className="text-[#0E4A47] hover:text-[#1E1A1C] font-mono text-xs px-2"
               >
                 ✕
               </button>
@@ -676,23 +676,23 @@ function SellerWorkspaceContent() {
             {rfqs.map((rfq) => (
               <div
                 key={rfq.rfqId}
-                className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[22px] p-6 shadow-sm space-y-5"
+                className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[22px] p-6 shadow-sm space-y-5"
               >
                 {/* RFQ Header */}
-                <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#d8cbbe] pb-4">
+                <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#CDBB98] pb-4">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-[#85290c]">
+                      <span className="font-mono text-xs font-bold text-[#0E4A47]">
                         {rfq.rfqId.toUpperCase()}
                       </span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#fbf7ee] text-[#292524] border border-[#d8cbbe]">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F6EDD9] text-[#2A2224] border border-[#CDBB98]">
                         {rfq.category}
                       </span>
                     </div>
-                    <h3 className="text-xl font-extrabold text-[#1c1917] mt-1">
+                    <h3 className="text-xl font-extrabold text-[#1E1A1C] mt-1">
                       {rfq.buyerTradeName}
                     </h3>
-                    <p className="text-xs text-[#665e55] font-mono">
+                    <p className="text-xs text-[#6B5A4B] font-mono">
                       Agent: {rfq.buyerAgentName} | Principal: {rfq.buyerPrincipalId}
                     </p>
                   </div>
@@ -700,8 +700,8 @@ function SellerWorkspaceContent() {
                   <span
                     className={`text-[10px] font-mono px-3 py-1 rounded-full uppercase font-bold border ${
                       rfq.status === 'quote_submitted'
-                        ? 'bg-[#dcfce7] text-[#14532d] border-[#166534]'
-                        : 'bg-[#fef3c7] text-[#92400e] border-[#b45309]'
+                        ? 'bg-[#BCDFB0] text-[#0E4A47] border-[#0E4A47]'
+                        : 'bg-[#F2C85B] text-[#1E1A1C] border-[#E2A93B]'
                     }`}
                   >
                     {rfq.status.replace('_', ' ')}
@@ -710,34 +710,34 @@ function SellerWorkspaceContent() {
 
                 {/* Terms Summary */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs">
-                  <div className="p-3 bg-[#fbf7ee] rounded-[12px] border border-[#d8cbbe]">
-                    <span className="text-[10px] uppercase text-[#877d73] block font-bold">
+                  <div className="p-3 bg-[#F6EDD9] rounded-[12px] border border-[#CDBB98]">
+                    <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">
                       Requested Delivery
                     </span>
-                    <span className="font-bold text-[#1c1917]">{rfq.deliveryDeadline}</span>
+                    <span className="font-bold text-[#1E1A1C]">{rfq.deliveryDeadline}</span>
                   </div>
-                  <div className="p-3 bg-[#fbf7ee] rounded-[12px] border border-[#d8cbbe]">
-                    <span className="text-[10px] uppercase text-[#877d73] block font-bold">
+                  <div className="p-3 bg-[#F6EDD9] rounded-[12px] border border-[#CDBB98]">
+                    <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">
                       Requested Credit
                     </span>
-                    <span className="font-bold text-[#1c1917]">
+                    <span className="font-bold text-[#1E1A1C]">
                       {rfq.requestedCreditDays > 0 ? `Net ${rfq.requestedCreditDays} Days` : 'Cash on Delivery'}
                     </span>
                   </div>
-                  <div className="p-3 bg-[#fbf7ee] rounded-[12px] border border-[#d8cbbe]">
-                    <span className="text-[10px] uppercase text-[#877d73] block font-bold">
+                  <div className="p-3 bg-[#F6EDD9] rounded-[12px] border border-[#CDBB98]">
+                    <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">
                       Buyer Budget Ceiling
                     </span>
-                    <span className="font-mono text-[#877d73] font-bold">
+                    <span className="font-mono text-[#8C7E70] font-bold">
                       [CONFIDENTIAL • MASKED]
                     </span>
                   </div>
                 </div>
 
                 {/* Requested SKU Items */}
-                <div className="border border-[#1c1917] rounded-[14px] overflow-hidden">
+                <div className="border border-[#1E1A1C] rounded-[14px] overflow-hidden">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-[#fbf7ee] font-mono uppercase text-[#1c1917] border-b border-[#1c1917]">
+                    <thead className="bg-[#F6EDD9] font-mono uppercase text-[#1E1A1C] border-b border-[#1E1A1C]">
                       <tr>
                         <th className="px-4 py-2.5">SKU</th>
                         <th className="px-4 py-2.5">Commodity Name</th>
@@ -747,16 +747,16 @@ function SellerWorkspaceContent() {
                         )}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#d8cbbe]">
+                    <tbody className="divide-y divide-[#CDBB98]">
                       {rfq.lines.map((line) => (
-                        <tr key={line.sku} className="hover:bg-[#fbf7ee]/60">
-                          <td className="px-4 py-2.5 font-mono font-bold text-[#1c1917]">{line.sku}</td>
-                          <td className="px-4 py-2.5 text-[#1c1917]">{line.name}</td>
-                          <td className="px-4 py-2.5 text-right font-mono font-bold text-[#85290c]">
+                        <tr key={line.sku} className="hover:bg-[#F6EDD9]/60">
+                          <td className="px-4 py-2.5 font-mono font-bold text-[#1E1A1C]">{line.sku}</td>
+                          <td className="px-4 py-2.5 text-[#1E1A1C]">{line.name}</td>
+                          <td className="px-4 py-2.5 text-right font-mono font-bold text-[#0E4A47]">
                             {line.quantity} {line.unit}s
                           </td>
                           {rfq.sellerQuote && (
-                            <td className="px-4 py-2.5 text-right font-mono font-bold text-[#14532d]">
+                            <td className="px-4 py-2.5 text-right font-mono font-bold text-[#0E4A47]">
                               {rfq.sellerQuote.unitPrices[line.sku] || '₹—'}
                             </td>
                           )}
@@ -772,7 +772,7 @@ function SellerWorkspaceContent() {
                     <div className="flex items-center gap-4 text-xs font-mono">
                       <span>
                         Total Quote:{' '}
-                        <strong className="text-sm font-extrabold text-[#85290c]">
+                        <strong className="text-sm font-extrabold text-[#0E4A47]">
                           {rfq.sellerQuote.totalQuote}
                         </strong>
                       </span>
@@ -784,7 +784,7 @@ function SellerWorkspaceContent() {
                       </span>
                     </div>
                   ) : (
-                    <div className="text-xs text-[#665e55]">
+                    <div className="text-xs text-[#6B5A4B]">
                       Review line quantities against live inventory stock before submitting.
                     </div>
                   )}
@@ -793,7 +793,7 @@ function SellerWorkspaceContent() {
                     <button
                       type="button"
                       onClick={() => handleGenerateQuote(rfq.rfqId)}
-                      className="px-4 py-2 bg-[#85290c] hover:bg-[#9a3412] text-white rounded-[10px] text-xs font-mono font-bold transition-all shadow-xs"
+                      className="px-4 py-2 bg-[#0E4A47] hover:bg-[#C8472F] text-white rounded-[10px] text-xs font-mono font-bold transition-all shadow-xs"
                     >
                       ⚡ Generate Agent Quote (Strategy: {selectedAgent?.strategy_profile || 'Margin'})
                     </button>
@@ -810,10 +810,10 @@ function SellerWorkspaceContent() {
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-extrabold text-[#1c1917]">
+              <h3 className="text-xl font-extrabold text-[#1E1A1C]">
                 Commercial Mandate & Fulfillment Policies
               </h3>
-              <p className="text-xs text-[#665e55]">
+              <p className="text-xs text-[#6B5A4B]">
                 Configure fulfillment lead times, credit options, regional delivery zones, and payment terms published to the marketplace.
               </p>
             </div>
@@ -821,7 +821,7 @@ function SellerWorkspaceContent() {
               <button
                 type="button"
                 onClick={() => setIsEditingPolicies(true)}
-                className="px-4 py-2 bg-[#1c1917] hover:bg-[#85290c] text-white rounded-[10px] text-xs font-mono font-bold transition-all"
+                className="px-4 py-2 bg-[#1E1A1C] hover:bg-[#0E4A47] text-white rounded-[10px] text-xs font-mono font-bold transition-all"
               >
                 ✎ Edit Policies
               </button>
@@ -833,12 +833,12 @@ function SellerWorkspaceContent() {
           )}
 
           {profileSuccess && (
-            <div className="bg-[#dcfce7] border border-[#166534] rounded-[14px] p-3.5 text-[#14532d] text-xs font-bold flex items-center justify-between">
+            <div className="bg-[#BCDFB0] border border-[#0E4A47] rounded-[14px] p-3.5 text-[#0E4A47] text-xs font-bold flex items-center justify-between">
               <span>✓ {profileSuccess}</span>
               <button
                 type="button"
                 onClick={() => setProfileSuccess(null)}
-                className="text-[#14532d] hover:text-[#1c1917] font-mono text-xs px-2"
+                className="text-[#0E4A47] hover:text-[#1E1A1C] font-mono text-xs px-2"
               >
                 ✕
               </button>
@@ -846,18 +846,18 @@ function SellerWorkspaceContent() {
           )}
 
           {loadingProfile ? (
-            <div className="py-16 text-center font-mono text-xs text-[#665e55] bg-[#ffffff] border border-[#1c1917] rounded-[20px]">
-              <span className="inline-block w-4 h-4 border-2 border-[#85290c] border-t-transparent rounded-full animate-spin mr-2" />
+            <div className="py-16 text-center font-mono text-xs text-[#6B5A4B] bg-[#FFFAF0] border border-[#1E1A1C] rounded-[20px]">
+              <span className="inline-block w-4 h-4 border-2 border-[#0E4A47] border-t-transparent rounded-full animate-spin mr-2" />
               Loading commercial policies...
             </div>
           ) : isEditingPolicies ? (
             <form
               onSubmit={handleSavePolicies}
-              className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[20px] p-6 space-y-5 shadow-sm"
+              className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[20px] p-6 space-y-5 shadow-sm"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="policy-delivery-days" className="block text-xs font-mono uppercase text-[#877d73] font-bold mb-1">
+                  <label htmlFor="policy-delivery-days" className="block text-xs font-mono uppercase text-[#8C7E70] font-bold mb-1">
                     Fulfillment Lead Time (Days)
                   </label>
                   <input
@@ -868,12 +868,12 @@ function SellerWorkspaceContent() {
                     required
                     value={deliveryDaysInput}
                     onChange={(e) => setDeliveryDaysInput(Number(e.target.value))}
-                    className="w-full px-3.5 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[8px] text-xs font-mono font-bold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                    className="w-full px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs font-mono font-bold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="policy-credit-days" className="block text-xs font-mono uppercase text-[#877d73] font-bold mb-1">
+                  <label htmlFor="policy-credit-days" className="block text-xs font-mono uppercase text-[#8C7E70] font-bold mb-1">
                     Accepted Credit Windows (Comma-separated days, e.g. 0, 7, 15)
                   </label>
                   <input
@@ -882,13 +882,13 @@ function SellerWorkspaceContent() {
                     value={creditDaysInput}
                     onChange={(e) => setCreditDaysInput(e.target.value)}
                     placeholder="0, 7, 15"
-                    className="w-full px-3.5 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[8px] text-xs font-mono font-bold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                    className="w-full px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs font-mono font-bold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="policy-coverage" className="block text-xs font-mono uppercase text-[#877d73] font-bold mb-1">
+                <label htmlFor="policy-coverage" className="block text-xs font-mono uppercase text-[#8C7E70] font-bold mb-1">
                   Delivery Supply Regions (Comma-separated)
                 </label>
                 <input
@@ -898,12 +898,12 @@ function SellerWorkspaceContent() {
                   value={coverageInput}
                   onChange={(e) => setCoverageInput(e.target.value)}
                   placeholder="Pune, Mumbai, Maharashtra"
-                  className="w-full px-3.5 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[8px] text-xs font-mono text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                  className="w-full px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs font-mono text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                 />
               </div>
 
               <div>
-                <label htmlFor="policy-delivery-terms" className="block text-xs font-mono uppercase text-[#877d73] font-bold mb-1">
+                <label htmlFor="policy-delivery-terms" className="block text-xs font-mono uppercase text-[#8C7E70] font-bold mb-1">
                   Delivery Logistics & Unloading Terms
                 </label>
                 <input
@@ -912,12 +912,12 @@ function SellerWorkspaceContent() {
                   value={deliveryTermsInput}
                   onChange={(e) => setDeliveryTermsInput(e.target.value)}
                   placeholder="Wholesale mandi truck dispatch within 48h of deal lock"
-                  className="w-full px-3.5 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[8px] text-xs text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                  className="w-full px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                 />
               </div>
 
               <div>
-                <label htmlFor="policy-payment-note" className="block text-xs font-mono uppercase text-[#877d73] font-bold mb-1">
+                <label htmlFor="policy-payment-note" className="block text-xs font-mono uppercase text-[#8C7E70] font-bold mb-1">
                   Payment Policy / Settlement Terms
                 </label>
                 <input
@@ -926,7 +926,7 @@ function SellerWorkspaceContent() {
                   value={paymentNoteInput}
                   onChange={(e) => setPaymentNoteInput(e.target.value)}
                   placeholder="20% upfront via simulated escrow, balance upon mandi delivery inspection"
-                  className="w-full px-3.5 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[8px] text-xs text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                  className="w-full px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                 />
               </div>
 
@@ -934,14 +934,14 @@ function SellerWorkspaceContent() {
                 <button
                   type="button"
                   onClick={() => setIsEditingPolicies(false)}
-                  className="px-4 py-2 border border-[#1c1917] rounded-[9px] text-xs font-mono font-bold text-[#1c1917] hover:bg-[#f3ebe0]"
+                  className="px-4 py-2 border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold text-[#1E1A1C] hover:bg-[#EDE0C4]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={savingPolicies}
-                  className="px-5 py-2 bg-[#85290c] hover:bg-[#9a3412] text-white border border-[#1c1917] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
+                  className="px-5 py-2 bg-[#0E4A47] hover:bg-[#C8472F] text-white border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
                 >
                   {savingPolicies ? (
                     <>
@@ -955,45 +955,45 @@ function SellerWorkspaceContent() {
               </div>
             </form>
           ) : (
-            <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[20px] p-6 space-y-5 shadow-sm">
+            <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[20px] p-6 space-y-5 shadow-sm">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-center">
-                <div className="p-4 bg-[#fbf7ee] rounded-[14px] border border-[#d8cbbe]">
-                  <span className="text-[10px] uppercase text-[#877d73] font-bold block mb-1">
+                <div className="p-4 bg-[#F6EDD9] rounded-[14px] border border-[#CDBB98]">
+                  <span className="text-[10px] uppercase text-[#8C7E70] font-bold block mb-1">
                     Fulfillment Speed
                   </span>
-                  <span className="text-base font-extrabold text-[#1c1917]">
+                  <span className="text-base font-extrabold text-[#1E1A1C]">
                     {selectedSeller?.delivery_days} Days
                   </span>
                 </div>
-                <div className="p-4 bg-[#fbf7ee] rounded-[14px] border border-[#d8cbbe]">
-                  <span className="text-[10px] uppercase text-[#877d73] font-bold block mb-1">
+                <div className="p-4 bg-[#F6EDD9] rounded-[14px] border border-[#CDBB98]">
+                  <span className="text-[10px] uppercase text-[#8C7E70] font-bold block mb-1">
                     Credit Windows
                   </span>
-                  <span className="text-base font-extrabold text-[#1c1917]">
+                  <span className="text-base font-extrabold text-[#1E1A1C]">
                     {selectedSeller?.credit_days.length
                       ? selectedSeller.credit_days.map((d) => `Net ${d}`).join(', ')
                       : 'Prepaid Only'}
                   </span>
                 </div>
-                <div className="p-4 bg-[#fbf7ee] rounded-[14px] border border-[#d8cbbe]">
-                  <span className="text-[10px] uppercase text-[#877d73] font-bold block mb-1">
+                <div className="p-4 bg-[#F6EDD9] rounded-[14px] border border-[#CDBB98]">
+                  <span className="text-[10px] uppercase text-[#8C7E70] font-bold block mb-1">
                     Live Catalog SKUs
                   </span>
-                  <span className="text-base font-extrabold text-[#85290c]">
+                  <span className="text-base font-extrabold text-[#0E4A47]">
                     {selectedSeller?.available_sku_count} Items
                   </span>
                 </div>
               </div>
 
               <div>
-                <span className="text-[10px] font-mono uppercase text-[#877d73] font-bold block mb-1.5">
+                <span className="text-[10px] font-mono uppercase text-[#8C7E70] font-bold block mb-1.5">
                   Supply Coverage Zones:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {selectedSeller?.coverage.map((c) => (
                     <span
                       key={c}
-                      className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-[#f3ebe0] text-[#292524] border border-[#d8cbbe] uppercase font-semibold"
+                      className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-[#EDE0C4] text-[#2A2224] border border-[#CDBB98] uppercase font-semibold"
                     >
                       {c}
                     </span>
@@ -1002,21 +1002,21 @@ function SellerWorkspaceContent() {
               </div>
 
               {profileData?.public_policies && (
-                <div className="p-4 bg-[#fbf7ee] rounded-[14px] border border-[#d8cbbe] space-y-2 text-xs">
+                <div className="p-4 bg-[#F6EDD9] rounded-[14px] border border-[#CDBB98] space-y-2 text-xs">
                   {typeof profileData.public_policies.delivery_terms === 'string' && (
                     <div>
-                      <span className="font-mono text-[10px] uppercase text-[#877d73] font-bold block">
+                      <span className="font-mono text-[10px] uppercase text-[#8C7E70] font-bold block">
                         Delivery Logistics:
                       </span>
-                      <p className="text-[#1c1917] font-medium">{profileData.public_policies.delivery_terms}</p>
+                      <p className="text-[#1E1A1C] font-medium">{profileData.public_policies.delivery_terms}</p>
                     </div>
                   )}
                   {typeof profileData.public_policies.payment_note === 'string' && (
                     <div>
-                      <span className="font-mono text-[10px] uppercase text-[#877d73] font-bold block">
+                      <span className="font-mono text-[10px] uppercase text-[#8C7E70] font-bold block">
                         Payment & Settlement Note:
                       </span>
-                      <p className="text-[#1c1917] font-medium">{profileData.public_policies.payment_note}</p>
+                      <p className="text-[#1E1A1C] font-medium">{profileData.public_policies.payment_note}</p>
                     </div>
                   )}
                 </div>
@@ -1036,35 +1036,35 @@ function SellerWorkspaceContent() {
         >
           <div
             ref={stockModalRef}
-            className="w-full max-w-md bg-[#ffffff] border-[2px] border-[#1c1917] rounded-[24px] shadow-2xl p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150"
+            className="w-full max-w-md bg-[#FFFAF0] border-[2px] border-[#1E1A1C] rounded-[24px] shadow-2xl p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150"
           >
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#b45309] font-bold block mb-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#E2A93B] font-bold block mb-1">
                   [ STOCK QUANTITY RECONCILIATION ]
                 </span>
-                <h3 id="seller-stock-dialog-title" className="text-xl font-extrabold text-[#1c1917]">
+                <h3 id="seller-stock-dialog-title" className="text-xl font-extrabold text-[#1E1A1C]">
                   Update On-Hand Stock
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setEditingLine(null)}
-                className="w-7 h-7 rounded-full border border-[#1c1917] flex items-center justify-center font-mono font-bold text-xs hover:bg-[#f3ebe0]"
+                className="w-7 h-7 rounded-full border border-[#1E1A1C] flex items-center justify-center font-mono font-bold text-xs hover:bg-[#EDE0C4]"
                 aria-label="Cancel stock update"
               >
                 ✕
               </button>
             </div>
 
-            <div className="p-3 bg-[#fbf7ee] rounded-[12px] border border-[#d8cbbe] space-y-1">
-              <span className="font-mono text-xs font-bold text-[#1c1917] block">
+            <div className="p-3 bg-[#F6EDD9] rounded-[12px] border border-[#CDBB98] space-y-1">
+              <span className="font-mono text-xs font-bold text-[#1E1A1C] block">
                 {editingLine.product.sku}
               </span>
-              <span className="text-xs text-[#665e55] block">
+              <span className="text-xs text-[#6B5A4B] block">
                 {editingLine.product.name}
               </span>
-              <span className="text-[11px] font-mono text-[#85290c] font-bold block">
+              <span className="text-[11px] font-mono text-[#0E4A47] font-bold block">
                 Current Available: {editingLine.available_qty} {editingLine.product.unit}s
               </span>
             </div>
@@ -1077,7 +1077,7 @@ function SellerWorkspaceContent() {
               <div>
                 <label
                   htmlFor="seller-stock-qty-input"
-                  className="block text-xs font-mono uppercase tracking-wider text-[#877d73] mb-1 font-bold"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#8C7E70] mb-1 font-bold"
                 >
                   New Total Stock Quantity ({editingLine.product.unit}s)
                 </label>
@@ -1091,9 +1091,9 @@ function SellerWorkspaceContent() {
                   value={stockInput}
                   onChange={(e) => setStockInput(e.target.value)}
                   placeholder="e.g. 500"
-                  className="w-full px-3.5 py-2.5 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[9px] text-sm font-mono font-bold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                  className="w-full px-3.5 py-2.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-[9px] text-sm font-mono font-bold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                 />
-                <p className="text-[11px] text-[#665e55] mt-1.5 leading-relaxed">
+                <p className="text-[11px] text-[#6B5A4B] mt-1.5 leading-relaxed">
                   Total on-hand stock. Note: Cannot reduce stock below existing buyer reservations (HTTP 409 Conflict). Requires authenticated Owner/Admin/Operator role.
                 </p>
               </div>
@@ -1102,14 +1102,14 @@ function SellerWorkspaceContent() {
                 <button
                   type="button"
                   onClick={() => setEditingLine(null)}
-                  className="px-4 py-2 border border-[#1c1917] rounded-[9px] text-xs font-mono font-bold text-[#1c1917] hover:bg-[#f3ebe0]"
+                  className="px-4 py-2 border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold text-[#1E1A1C] hover:bg-[#EDE0C4]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={updatingStock}
-                  className="px-5 py-2 bg-[#85290c] hover:bg-[#9a3412] text-white border border-[#1c1917] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
+                  className="px-5 py-2 bg-[#0E4A47] hover:bg-[#C8472F] text-white border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
                 >
                   {updatingStock ? (
                     <>
@@ -1133,8 +1133,8 @@ export default function SellerPage() {
   return (
     <Suspense
       fallback={
-        <div className="vanik-container py-16 text-center font-mono text-xs text-[#665e55]">
-          <span className="inline-block w-4 h-4 border-2 border-[#85290c] border-t-transparent rounded-full animate-spin mr-2" />
+        <div className="vanik-container py-16 text-center font-mono text-xs text-[#6B5A4B]">
+          <span className="inline-block w-4 h-4 border-2 border-[#0E4A47] border-t-transparent rounded-full animate-spin mr-2" />
           Loading Seller Workspace...
         </div>
       }

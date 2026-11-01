@@ -140,29 +140,29 @@ function PrincipalsContent() {
   return (
     <div className="vanik-container py-10 sm:py-14 space-y-8">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#d8cbbe] pb-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#CDBB98] pb-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#877d73] font-bold">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#8C7E70] font-bold">
               [ LEGAL ENTITY REGISTRY ]
             </span>
             {isMock && (
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f3ebe0] text-[#292524] border border-[#d8cbbe] font-bold">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#EDE0C4] text-[#2A2224] border border-[#CDBB98] font-bold">
                 FIXTURE
               </span>
             )}
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1c1917] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E1A1C] tracking-tight">
             Business Principal Profile
           </h1>
-          <p className="text-xs sm:text-sm text-[#665e55]">
+          <p className="text-xs sm:text-sm text-[#6B5A4B]">
             Root legal identity owning agent representatives, commercial policies, and cryptographic authority.
           </p>
         </div>
 
         <Link
           href={`/agents?principalId=${principal?.id || resolvedPrincipalId}`}
-          className="px-4 py-2 bg-[#292524] hover:bg-[#1c1917] text-white rounded-[11px] text-xs font-bold border border-[#1c1917] transition-all shadow-sm self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+          className="px-4 py-2 bg-[#2A2224] hover:bg-[#1E1A1C] text-white rounded-[11px] text-xs font-bold border border-[#1E1A1C] transition-all shadow-sm self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
         >
           Manage Agent Passports →
         </Link>
@@ -171,61 +171,61 @@ function PrincipalsContent() {
       {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
 
       {loading ? (
-        <div className="text-center py-16 text-[#877d73] text-sm font-mono animate-pulse">
+        <div className="text-center py-16 text-[#8C7E70] text-sm font-mono animate-pulse">
           Loading principal credentials...
         </div>
       ) : principal ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Info */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[24px] p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[24px] p-6 sm:p-8 space-y-6 shadow-sm">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-extrabold text-[#1c1917] tracking-tight">{principal.legal_name}</h2>
-                  <p className="text-xs text-[#665e55]">
-                    Trade Name: <span className="text-[#1c1917] font-bold">{principal.trade_name}</span>
+                  <h2 className="text-2xl font-extrabold text-[#1E1A1C] tracking-tight">{principal.legal_name}</h2>
+                  <p className="text-xs text-[#6B5A4B]">
+                    Trade Name: <span className="text-[#1E1A1C] font-bold">{principal.trade_name}</span>
                   </p>
                 </div>
                 <span
-                  className={`px-3 py-0.5 border border-[#1c1917] text-xs font-mono font-bold rounded-full uppercase ${
+                  className={`px-3 py-0.5 border border-[#1E1A1C] text-xs font-mono font-bold rounded-full uppercase ${
                     principal.verification_status === 'demo_verified'
-                      ? 'bg-[#dcfce7] text-[#14532d]'
-                      : 'bg-[#fee2e2] text-[#991b1b]'
+                      ? 'bg-[#BCDFB0] text-[#0E4A47]'
+                      : 'bg-[#F2B6C4] text-[#C8472F]'
                   }`}
                 >
                   {principal.verification_status.replace('_', ' ')}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-[#d8cbbe] text-xs">
-                <div className="bg-[#fbf7ee] p-3 rounded-[12px] border border-[#d8cbbe]">
-                  <span className="text-[#877d73] block uppercase tracking-wider text-[10px] font-mono mb-1">Principal ID</span>
-                  <code className="text-[#1c1917] font-mono text-[11px] font-bold select-all break-all">{principal.id}</code>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-[#CDBB98] text-xs">
+                <div className="bg-[#F6EDD9] p-3 rounded-[12px] border border-[#CDBB98]">
+                  <span className="text-[#8C7E70] block uppercase tracking-wider text-[10px] font-mono mb-1">Principal ID</span>
+                  <code className="text-[#1E1A1C] font-mono text-[11px] font-bold select-all break-all">{principal.id}</code>
                 </div>
-                <div className="bg-[#fbf7ee] p-3 rounded-[12px] border border-[#d8cbbe]">
-                  <span className="text-[#877d73] block uppercase tracking-wider text-[10px] font-mono mb-1">Business Type</span>
-                  <span className="text-[#1c1917] font-bold capitalize">{principal.business_type}</span>
+                <div className="bg-[#F6EDD9] p-3 rounded-[12px] border border-[#CDBB98]">
+                  <span className="text-[#8C7E70] block uppercase tracking-wider text-[10px] font-mono mb-1">Business Type</span>
+                  <span className="text-[#1E1A1C] font-bold capitalize">{principal.business_type}</span>
                 </div>
-                <div className="bg-[#fbf7ee] p-3 rounded-[12px] border border-[#d8cbbe]">
-                  <span className="text-[#877d73] block uppercase tracking-wider text-[10px] font-mono mb-1">Registered Address</span>
-                  <span className="text-[#292524] font-medium">{principal.address}</span>
+                <div className="bg-[#F6EDD9] p-3 rounded-[12px] border border-[#CDBB98]">
+                  <span className="text-[#8C7E70] block uppercase tracking-wider text-[10px] font-mono mb-1">Registered Address</span>
+                  <span className="text-[#2A2224] font-medium">{principal.address}</span>
                 </div>
-                <div className="bg-[#fbf7ee] p-3 rounded-[12px] border border-[#d8cbbe]">
-                  <span className="text-[#877d73] block uppercase tracking-wider text-[10px] font-mono mb-1">Contact Email</span>
-                  <span className="text-[#1c1917] font-mono font-bold">{principal.contact_email}</span>
+                <div className="bg-[#F6EDD9] p-3 rounded-[12px] border border-[#CDBB98]">
+                  <span className="text-[#8C7E70] block uppercase tracking-wider text-[10px] font-mono mb-1">Contact Email</span>
+                  <span className="text-[#1E1A1C] font-mono font-bold">{principal.contact_email}</span>
                 </div>
               </div>
 
               <div>
-                <span className="text-[#877d73] block uppercase tracking-wider text-[10px] font-mono mb-1 font-bold">Marketplace Roles</span>
+                <span className="text-[#8C7E70] block uppercase tracking-wider text-[10px] font-mono mb-1 font-bold">Marketplace Roles</span>
                 <div className="flex gap-1.5 mt-0.5">
                   {principal.roles.map((r) => (
                     <span
                       key={r}
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold border border-[#1c1917] ${
+                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold border border-[#1E1A1C] ${
                         r === 'buyer'
-                          ? 'bg-[#dcfce7] text-[#14532d]'
-                          : 'bg-[#ffedd5] text-[#9a3412]'
+                          ? 'bg-[#BCDFB0] text-[#0E4A47]'
+                          : 'bg-[#D4C2E6] text-[#C8472F]'
                       }`}
                     >
                       {r}
@@ -236,33 +236,33 @@ function PrincipalsContent() {
             </div>
 
             {/* Synthetic Compliance & Verification Module (FR-REG-03) */}
-            <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[24px] p-6 sm:p-8 space-y-4 shadow-sm">
+            <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[24px] p-6 sm:p-8 space-y-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-mono text-xs uppercase font-extrabold text-[#85290c] tracking-wider block">
+                  <span className="font-mono text-xs uppercase font-extrabold text-[#0E4A47] tracking-wider block">
                     [ SYNTHETIC VERIFICATION PORTAL ]
                   </span>
-                  <h3 className="text-lg font-extrabold text-[#1c1917]">Business Identifier & Compliance Seal</h3>
+                  <h3 className="text-lg font-extrabold text-[#1E1A1C]">Business Identifier & Compliance Seal</h3>
                 </div>
-                <span className="px-2.5 py-0.5 rounded bg-[#dcfce7] text-[#14532d] text-[10px] font-mono font-bold border border-[#1c1917]">
+                <span className="px-2.5 py-0.5 rounded bg-[#BCDFB0] text-[#0E4A47] text-[10px] font-mono font-bold border border-[#1E1A1C]">
                   SIMULATED / DEMO
                 </span>
               </div>
 
-              <p className="text-xs text-[#665e55] leading-relaxed">
+              <p className="text-xs text-[#6B5A4B] leading-relaxed">
                 Official PAN, GSTIN, and Udyam credentials are keyed digests for the prototype demonstration. Never enter real identity documents or personal credentials.
               </p>
 
               {/* Separated Success Notice */}
               {verificationSuccess && (
-                <div className="p-3 bg-[#dcfce7]/30 border border-[#003d21] rounded-[10px] text-xs font-mono font-bold text-[#85290c]">
+                <div className="p-3 bg-[#BCDFB0]/30 border border-[#0E4A47] rounded-[10px] text-xs font-mono font-bold text-[#0E4A47]">
                   ✓ {verificationSuccess}
                 </div>
               )}
 
               {/* Separated Error Notice */}
               {verificationError && (
-                <div className="p-3 bg-[#fee2e2] border border-[#1c1917] rounded-[10px] text-xs font-mono font-bold text-[#991b1b]">
+                <div className="p-3 bg-[#F2B6C4] border border-[#1E1A1C] rounded-[10px] text-xs font-mono font-bold text-[#C8472F]">
                   ✕ {verificationError}
                 </div>
               )}
@@ -272,7 +272,7 @@ function PrincipalsContent() {
                 <div>
                   <label
                     htmlFor="synthetic-id-type"
-                    className="block text-[10px] font-mono uppercase text-[#877d73] font-bold mb-1"
+                    className="block text-[10px] font-mono uppercase text-[#8C7E70] font-bold mb-1"
                   >
                     Identifier Type
                   </label>
@@ -280,7 +280,7 @@ function PrincipalsContent() {
                     id="synthetic-id-type"
                     value={idType}
                     onChange={(e) => setIdType(e.target.value as IdentifierType)}
-                    className="w-full px-3 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[9px] text-xs font-semibold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] focus-visible:border-transparent"
+                    className="w-full px-3 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[9px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] focus-visible:border-transparent"
                   >
                     <option value="pan">PAN (Permanent Account)</option>
                     <option value="gstin">GSTIN (Goods & Services Tax)</option>
@@ -293,7 +293,7 @@ function PrincipalsContent() {
                 <div>
                   <label
                     htmlFor="synthetic-id-value"
-                    className="block text-[10px] font-mono uppercase text-[#877d73] font-bold mb-1"
+                    className="block text-[10px] font-mono uppercase text-[#8C7E70] font-bold mb-1"
                   >
                     Synthetic Value
                   </label>
@@ -304,7 +304,7 @@ function PrincipalsContent() {
                     value={idValue}
                     onChange={(e) => setIdValue(e.target.value)}
                     placeholder="e.g. ABCDE1234F"
-                    className="w-full px-3 py-2 bg-[#fbf7ee] border border-[#d8cbbe] rounded-[9px] text-xs font-semibold text-[#1c1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917] focus-visible:border-transparent"
+                    className="w-full px-3 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[9px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] focus-visible:border-transparent"
                   />
                 </div>
 
@@ -312,7 +312,7 @@ function PrincipalsContent() {
                   <button
                     type="submit"
                     disabled={submittingId}
-                    className="w-full py-2 px-3 rounded-[9px] bg-[#292524] hover:bg-[#1c1917] disabled:bg-[#877d73] text-white text-xs font-bold border border-[#1c1917] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                    className="w-full py-2 px-3 rounded-[9px] bg-[#2A2224] hover:bg-[#1E1A1C] disabled:bg-[#8C7E70] text-white text-xs font-bold border border-[#1E1A1C] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                   >
                     {submittingId ? 'Recording...' : 'Add Identifier'}
                   </button>
@@ -320,22 +320,22 @@ function PrincipalsContent() {
               </form>
 
               {identifierRes && (
-                <div className="p-3 bg-[#dcfce7]/20 border border-[#003d21] rounded-[10px] text-xs font-mono flex items-center justify-between">
+                <div className="p-3 bg-[#BCDFB0]/20 border border-[#0E4A47] rounded-[10px] text-xs font-mono flex items-center justify-between">
                   <span>
                     Type: <strong className="uppercase">{identifierRes.identifier_type}</strong> (Masked:{' '}
                     {identifierRes.masked_value})
                   </span>
-                  <span className="text-[10px] uppercase font-bold text-[#85290c]">[HASH PERSISTED]</span>
+                  <span className="text-[10px] uppercase font-bold text-[#0E4A47]">[HASH PERSISTED]</span>
                 </div>
               )}
 
-              <div className="pt-2 border-t border-[#d8cbbe] flex items-center justify-between">
-                <span className="text-xs text-[#665e55]">Seal Principal Authority via local demo verifier:</span>
+              <div className="pt-2 border-t border-[#CDBB98] flex items-center justify-between">
+                <span className="text-xs text-[#6B5A4B]">Seal Principal Authority via local demo verifier:</span>
                 <button
                   type="button"
                   onClick={handleRunDemoVerification}
                   disabled={verifyingDemo || principal.verification_status === 'demo_verified'}
-                  className="py-2 px-4 rounded-[11px] bg-[#003d21] hover:bg-[#002815] disabled:bg-[#d8cbbe] text-white text-xs font-bold border border-[#1c1917] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                  className="py-2 px-4 rounded-[11px] bg-[#0E4A47] hover:bg-[#093432] disabled:bg-[#CDBB98] text-white text-xs font-bold border border-[#1E1A1C] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                 >
                   {verifyingDemo
                     ? 'Verifying...'
@@ -349,41 +349,41 @@ function PrincipalsContent() {
 
           {/* Telegram Linking Card (FR-REG-04) */}
           <div className="space-y-6">
-            <div className="bg-[#ffffff] border-[1.5px] border-[#1c1917] rounded-[24px] p-6 space-y-4 shadow-sm">
+            <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[24px] p-6 space-y-4 shadow-sm">
               <div className="flex items-center justify-between">
-                <h3 className="font-extrabold text-[#1c1917] text-sm">Telegram Bot Linking</h3>
-                <span className="text-[#9a3412] text-[10px] font-mono font-bold bg-[#ffedd5] px-2 py-0.5 rounded border border-[#1c1917]">
+                <h3 className="font-extrabold text-[#1E1A1C] text-sm">Telegram Bot Linking</h3>
+                <span className="text-[#C8472F] text-[10px] font-mono font-bold bg-[#D4C2E6] px-2 py-0.5 rounded border border-[#1E1A1C]">
                   FR-REG-04
                 </span>
               </div>
-              <p className="text-xs text-[#665e55] leading-relaxed">
+              <p className="text-xs text-[#6B5A4B] leading-relaxed">
                 Link your personal Telegram handle to receive cryptographic deal challenges, proactive deadline alerts, and agent progress notifications.
               </p>
 
               {telegramError && (
-                <div className="p-3 bg-[#fee2e2] border border-[#1c1917] rounded-[9px] text-xs text-[#991b1b] font-mono">
+                <div className="p-3 bg-[#F2B6C4] border border-[#1E1A1C] rounded-[9px] text-xs text-[#C8472F] font-mono">
                   ✕ {telegramError}
                 </div>
               )}
 
               {telegramCode ? (
-                <div className="p-4 bg-[#ffedd5]/40 border-[1.5px] border-[#1c1917] rounded-[14px] space-y-2">
+                <div className="p-4 bg-[#D4C2E6]/40 border-[1.5px] border-[#1E1A1C] rounded-[14px] space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-[#9a3412] block font-mono font-bold">
+                    <span className="text-[11px] text-[#C8472F] block font-mono font-bold">
                       Single-Use Linking Code:
                     </span>
                     {linkExpiresAt && (
-                      <span className="text-[10px] font-mono text-[#665e55]">
+                      <span className="text-[10px] font-mono text-[#6B5A4B]">
                         Expires: {new Date(linkExpiresAt).toLocaleTimeString()}
                       </span>
                     )}
                   </div>
-                  <div className="text-base font-mono font-extrabold text-[#1c1917] select-all text-center bg-[#ffffff] py-2 rounded-[8px] border border-[#1c1917]">
+                  <div className="text-base font-mono font-extrabold text-[#1E1A1C] select-all text-center bg-[#FFFAF0] py-2 rounded-[8px] border border-[#1E1A1C]">
                     {telegramCode}
                   </div>
-                  <p className="text-[11px] text-[#665e55]">
-                    Send <code className="text-[#1c1917] font-bold">/link {telegramCode}</code> to{' '}
-                    <span className="text-[#1c1917] font-bold">@vanik_bot</span>. Valid for 10 minutes.
+                  <p className="text-[11px] text-[#6B5A4B]">
+                    Send <code className="text-[#1E1A1C] font-bold">/link {telegramCode}</code> to{' '}
+                    <span className="text-[#1E1A1C] font-bold">@vanik_bot</span>. Valid for 10 minutes.
                   </p>
                 </div>
               ) : (
@@ -391,18 +391,18 @@ function PrincipalsContent() {
                   type="button"
                   onClick={handleGenerateTelegramCode}
                   disabled={linkLoading}
-                  className="w-full py-2.5 px-4 rounded-[11px] bg-[#292524] hover:bg-[#1c1917] disabled:bg-[#877d73] text-white font-bold text-xs border border-[#1c1917] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1917]"
+                  className="w-full py-2.5 px-4 rounded-[11px] bg-[#2A2224] hover:bg-[#1E1A1C] disabled:bg-[#8C7E70] text-white font-bold text-xs border border-[#1E1A1C] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
                 >
                   {linkLoading ? 'Requesting Code from API...' : 'Generate Telegram Link Code'}
                 </button>
               )}
             </div>
 
-            <div className="bg-[#ffffff] border border-[#d8cbbe] rounded-[20px] p-5 space-y-2 text-xs">
-              <h4 className="font-bold text-[#1c1917] text-xs uppercase font-mono">
+            <div className="bg-[#FFFAF0] border border-[#CDBB98] rounded-[20px] p-5 space-y-2 text-xs">
+              <h4 className="font-bold text-[#1E1A1C] text-xs uppercase font-mono">
                 [ PRINCIPAL AUTHORITY BOUNDARIES ]
               </h4>
-              <ul className="list-disc pl-4 space-y-1 text-[#665e55] text-[11px]">
+              <ul className="list-disc pl-4 space-y-1 text-[#6B5A4B] text-[11px]">
                 <li>AI agents inherit maximum constraints from this principal.</li>
                 <li>Tasks narrow authority but can never exceed principal boundaries.</li>
                 <li>Consequential transactions require cryptographic human sign-off.</li>
@@ -420,7 +420,7 @@ export default function PrincipalsPage() {
   return (
     <Suspense
       fallback={
-        <div className="vanik-container py-16 text-center text-[#877d73] text-sm font-mono animate-pulse">
+        <div className="vanik-container py-16 text-center text-[#8C7E70] text-sm font-mono animate-pulse">
           Loading principal registry...
         </div>
       }
