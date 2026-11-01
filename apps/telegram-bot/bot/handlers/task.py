@@ -46,7 +46,13 @@ async def task_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         f"• *Delivery Schedule:* `2 Days` _(Guaranteed pre-Diwali fulfillment)_\n"
         f"• *Reliability Memory:* `98% On-Time Verified`\n"
         f"• *Signature:* `✓ Ed25519 Cryptographically Verified`\n\n"
-        f"👉 [📱 Open Deal in Mini App to Review & Approve](http://localhost:3000/miniapp?view=approval&dealId=deal-diwali-2026-01)\n"
+        f"💳 *Select Payment Method for Principal Auth:*\n"
+        f"1️⃣ *UPI Autopay / Instant QR* (`kisan.wholesale@okicici`)\n"
+        f"2️⃣ *Mandi Smart Escrow* (Funds locked until delivery verified)\n"
+        f"3️⃣ *RTGS / Wholesale Net Banking*\n\n"
+        f"👉 *To Authorize in Chat:* Send `/auth_deal deal-diwali-2026-01 upi`\n"
+        f"👉 [📱 Open Deal in Mini App to Review & Approve]"
+        f"(http://localhost:3000/miniapp?view=approval&dealId=deal-diwali-2026-01)\n"
         f"👉 [View Live Rounds in Web Dashboard](http://localhost:3000/negotiations?tab=timeline)"
     )
 

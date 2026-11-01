@@ -352,6 +352,25 @@ function MiniAppContent() {
               </div>
             </div>
 
+            {/* Payment Method Selector */}
+            {!approved && (
+              <div className="bg-[#FAF5E8] p-3.5 rounded-[14px] border border-[#DDD0B8] text-xs space-y-2">
+                <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block">
+                  Select Payment Method:
+                </span>
+                <div className="space-y-1.5 font-mono text-[11px]">
+                  <label className="flex items-center gap-2 p-2 rounded-[8px] bg-[#FFFDF9] border border-[#0F5B57] text-[#0F5B57] font-bold cursor-pointer">
+                    <input type="radio" name="miniapp-pay" defaultChecked className="accent-[#0F5B57]" />
+                    <span>📱 UPI Instant (kisan.wholesale@okicici)</span>
+                  </label>
+                  <label className="flex items-center gap-2 p-2 rounded-[8px] bg-[#FFFDF9] border border-[#DDD0B8] text-[#5E4E40] cursor-pointer">
+                    <input type="radio" name="miniapp-pay" className="accent-[#0F5B57]" />
+                    <span>🛡️ Mandi Smart Escrow (Delivery Locked)</span>
+                  </label>
+                </div>
+              </div>
+            )}
+
             {/* Cryptographic deal binding warning */}
             <div className="bg-[#FAF5E8] p-3.5 rounded-[14px] border border-[#DDD0B8] text-xs text-[#5E4E40] space-y-1">
               <div className="flex items-center gap-1.5 text-[#1C181A] font-bold font-mono text-[11px] uppercase">
@@ -366,16 +385,25 @@ function MiniAppContent() {
             {/* Action button */}
             <div className="pt-2">
               {approved ? (
-                <div className="p-4 bg-[#C5EDB1] border-[1.5px] border-[#0F5B57] rounded-[16px] text-center space-y-1.5">
+                <div className="p-4 bg-[#C5EDB1] border-[1.5px] border-[#0F5B57] rounded-[16px] text-center space-y-2">
                   <span className="text-xs font-mono font-extrabold text-[#0F5B57] block">
                     ✓ DEAL APPROVED & SETTLED (SIMULATED)
                   </span>
                   <div className="font-mono text-[11px] text-[#0F5B57] font-bold">
                     MOCK UPI: UPI-SIM-2026-9812487
                   </div>
-                  <p className="text-[10px] text-[#0F5B57] font-mono">
-                    Synthetic UPI settlement receipt transmitted to Telegram chat.
-                  </p>
+                  <div className="p-2.5 bg-[#FFFDF9] rounded-[10px] border border-[#0F5B57]/30 text-left text-[11px] font-mono space-y-1 text-[#1C181A]">
+                    <div className="flex justify-between font-bold">
+                      <span>⭐ Buyer Agent Rating:</span>
+                      <span className="text-[#D9381E]">★ 5.0 / 5.0</span>
+                    </div>
+                    <p className="text-[10px] text-[#5E4E40] italic">
+                      &quot;Counterparty honored benchmark price, accepted Net-7 credit terms, 2-day delivery guaranteed. Ed25519 terms signed.&quot;
+                    </p>
+                    <span className="text-[9px] text-[#0F5B57] font-bold block pt-1">
+                      ✓ Committed to Mandi Reputation Ledger
+                    </span>
+                  </div>
                 </div>
               ) : (
                 <button

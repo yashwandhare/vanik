@@ -20,8 +20,14 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             text = (
                 "🔐 *VANIK Deal Approval Challenge*\n\n"
                 f"• *Deal Reference:* `{deal_id}`\n"
-                "• *Action Required:* Principal cryptographic authorization\n\n"
-                "Review structured terms and authorize simulated settlement in the Mini App:\n"
+                "• *Counterparty:* *Kisan Wholesale Traders* (`seller-kisan-01`)\n"
+                "• *Total Amount:* *₹79,850.00* (Saved ₹5,150.00)\n"
+                "• *Action Required:* Principal cryptographic payment authorization\n\n"
+                "💳 *Payment Methods Available:*\n"
+                "1️⃣ *UPI Autopay Instant* (`kisan.wholesale@okicici`)\n"
+                "2️⃣ *Mandi Smart Escrow* (Delivery Locked)\n"
+                "3️⃣ *RTGS Wholesale Credit*\n\n"
+                f"👉 Send `/auth_deal {deal_id} upi` to sign payment and rate seller\n"
                 f"👉 [Open Deal in Mini App](http://localhost:3000/miniapp?view=approval&dealId={deal_id})"
             )
             await update.effective_message.reply_text(

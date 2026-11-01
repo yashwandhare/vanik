@@ -6,6 +6,7 @@ import pytest
 
 from bot.handlers.adversarial_test import adversarial_test_handler
 from bot.handlers.create_agent import create_agent_handler
+from bot.handlers.deal_auth import auth_deal_handler
 from bot.handlers.help import help_handler
 from bot.handlers.link import link_handler
 from bot.handlers.sale import sale_handler
@@ -222,3 +223,24 @@ async def test_sale_handler() -> None:
     assert "Flash Sale Live" in call_args
     assert "STP-RICE-BAS-5K" in call_args
     assert "₹580.00" in call_args
+
+
+@pytest.mark.asyncio
+async def test_auth_deal_handler() -> None:
+    update = MagicMock()
+    update.effective_message = MagicMock()
+    mock_msg = MagicMock()
+    mock_msg.edit_text = AsyncMock()
+    update.effective_message.reply_text = AsyncMock(return_value=mock_msg)
+    context = MagicMock()
+    context.args = ["deal-diwali-2026-01", "upi"]
+
+    await auth_deal_handler(update, context)
+    update.effective_message.reply_text.assert_called_once()
+    mock_msg.edit_text.assert_called_once()
+    edit_args = mock_msg.edit_text.call_args[0][0]
+    assert "DEAL LOCKED & PAYMENT AUTHORIZED" in edit_args
+    assert "Kisan Wholesale Traders" in edit_args
+    assert "₹79,850.00" in edit_args
+    assert "Buyer Agent Autonomous Rating Submitted" in edit_args
+    assert "★ 5.0 / 5.0" in edit_args

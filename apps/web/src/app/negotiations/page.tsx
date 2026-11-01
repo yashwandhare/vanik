@@ -118,11 +118,17 @@ function NegotiationsContent() {
 
   // Negotiation rounds state
   const [sellerRounds, setSellerRounds] = useState<SellerRoundInfo[]>(DEFAULT_SELLER_ROUNDS);
+  const [activeSimRound, setActiveSimRound] = useState<1 | 2 | 3>(2);
+  const [timelineViewMode, setTimelineViewMode] = useState<'cards' | 'stream'>('cards');
+  const [isSimulating, setIsSimulating] = useState(false);
 
-  // Deal Lock & Settlement State
+  // Deal Lock, Payment Method & Rating State
   const [dealApproved, setDealApproved] = useState(false);
   const [submittingApproval, setSubmittingApproval] = useState(false);
   const [approvalError, setApprovalError] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'escrow' | 'rtgs'>('upi');
+  const [sellerRating, setSellerRating] = useState(5.0);
+  const [ratingSubmitted, setRatingSubmitted] = useState(false);
 
   // Resolve principal ID
   const principalId =
@@ -265,11 +271,137 @@ function NegotiationsContent() {
       // Simulate cryptographic challenge authorization
       await new Promise((r) => setTimeout(r, 600));
       setDealApproved(true);
+      setRatingSubmitted(true);
     } catch (err: unknown) {
       setApprovalError(err instanceof Error ? err.message : 'Authorization challenge failed');
     } finally {
       setSubmittingApproval(false);
     }
+  };
+
+  const getRoundData = (round: 1 | 2 | 3): SellerRoundInfo[] => {
+    if (round === 1) {
+      return [
+        {
+          id: 'neg-01',
+          sellerName: 'Mahalaxmi Agro Distributors (Seller A)',
+          strategyProfile: 'Margin Optimizer',
+          status: 'offer_received',
+          roundNo: 1,
+          totalAmount: '₹89,000.00',
+          creditTerms: 'Net 15 Days (20% Upfront)',
+          deliveryDays: 3,
+          signatureVerified: true,
+          signingKeyId: 'ed25519:mhlx:98124',
+        },
+        {
+          id: 'neg-02',
+          sellerName: 'Kisan Wholesale Traders (Seller B)',
+          strategyProfile: 'Inventory Clearance',
+          status: 'offer_received',
+          roundNo: 1,
+          totalAmount: '₹84,500.00',
+          creditTerms: 'Net 7 Days (10% Upfront)',
+          deliveryDays: 2,
+          signatureVerified: true,
+          signingKeyId: 'ed25519:ksn:44192',
+        },
+        {
+          id: 'neg-03',
+          sellerName: 'Vardhaman Bulk Supplies (Seller C)',
+          strategyProfile: 'Payment-Risk Optimizer',
+          status: 'offer_received',
+          roundNo: 1,
+          totalAmount: '₹87,500.00',
+          creditTerms: 'Advance UPI Only (0 Days Credit)',
+          deliveryDays: 4,
+          signatureVerified: true,
+          signingKeyId: 'ed25519:vrdh:33109',
+        },
+        {
+          id: 'neg-04',
+          sellerName: 'QuickDrop Wholesale (Seller D)',
+          strategyProfile: 'Adversarial Participant',
+          status: 'security_flagged',
+          roundNo: 1,
+          totalAmount: '₹95,000.00',
+          creditTerms: 'Advance Only',
+          deliveryDays: 1,
+          signatureVerified: false,
+          signingKeyId: 'ed25519:untrusted:001',
+          securityNotice:
+            'PROMPT INJECTION & FAKE DISCOUNT DETECTED: Claimed 45% discount on inflated benchmark price; seller free-text contained directive injection instruction. Quoted line items evaluated and flagged by backend security guard.',
+        },
+      ];
+    }
+    if (round === 2) {
+      return DEFAULT_SELLER_ROUNDS;
+    }
+    return [
+      {
+        id: 'neg-01',
+        sellerName: 'Mahalaxmi Agro Distributors (Seller A)',
+        strategyProfile: 'Margin Optimizer',
+        status: 'evaluating',
+        roundNo: 3,
+        totalAmount: '₹84,200.00',
+        creditTerms: 'Net 15 Days (20% Upfront)',
+        deliveryDays: 3,
+        signatureVerified: true,
+        signingKeyId: 'ed25519:mhlx:98124',
+      },
+      {
+        id: 'neg-02',
+        sellerName: 'Kisan Wholesale Traders (Seller B)',
+        strategyProfile: 'Inventory Clearance',
+        status: 'accepted',
+        roundNo: 3,
+        totalAmount: '₹79,850.00',
+        creditTerms: 'Net 7 Days (10% Upfront)',
+        deliveryDays: 2,
+        signatureVerified: true,
+        signingKeyId: 'ed25519:ksn:44192',
+      },
+      {
+        id: 'neg-03',
+        sellerName: 'Vardhaman Bulk Supplies (Seller C)',
+        strategyProfile: 'Payment-Risk Optimizer',
+        status: 'evaluating',
+        roundNo: 3,
+        totalAmount: '₹82,400.00',
+        creditTerms: 'Advance UPI Only (0 Days Credit)',
+        deliveryDays: 4,
+        signatureVerified: true,
+        signingKeyId: 'ed25519:vrdh:33109',
+      },
+      {
+        id: 'neg-04',
+        sellerName: 'QuickDrop Wholesale (Seller D)',
+        strategyProfile: 'Adversarial Participant',
+        status: 'security_flagged',
+        roundNo: 1,
+        totalAmount: '₹95,000.00',
+        creditTerms: 'Advance Only',
+        deliveryDays: 1,
+        signatureVerified: false,
+        signingKeyId: 'ed25519:untrusted:001',
+        securityNotice:
+          'PROMPT INJECTION & FAKE DISCOUNT DETECTED: Claimed 45% discount on inflated benchmark price; seller free-text contained directive injection instruction. Quoted line items evaluated and flagged by backend security guard.',
+      },
+    ];
+  };
+
+  const handleSimulateRounds = async () => {
+    setIsSimulating(true);
+    setActiveSimRound(1);
+    setSellerRounds(getRoundData(1));
+    await new Promise((r) => setTimeout(r, 600));
+    setActiveSimRound(2);
+    setSellerRounds(getRoundData(2));
+    await new Promise((r) => setTimeout(r, 600));
+    setActiveSimRound(3);
+    setSellerRounds(getRoundData(3));
+    setIsSimulating(false);
   };
 
   return (
@@ -703,85 +835,279 @@ function NegotiationsContent() {
                 Concurrent negotiation rounds between buyer agent and distinct wholesale seller agents. Failure in one negotiation round does not compromise other threads.
               </p>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {sellerRounds.map((neg) => {
-              const isFlagged = neg.status === 'security_flagged';
-              return (
-                <div
-                  key={neg.id}
-                  className={`bg-[#FFFDF9] border-[1.5px] rounded-[22px] p-6 space-y-4 shadow-sm transition-all flex flex-col justify-between ${
-                    isFlagged ? 'border-[#D9381E] bg-[#F8CBD6]' : 'border-[#1C181A]'
+            {/* Interactive Demo Simulator Controls */}
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handleSimulateRounds}
+                disabled={isSimulating}
+                className="px-4 py-2 bg-[#0F5B57] hover:bg-[#1C181A] text-white rounded-[12px] text-xs font-mono font-bold transition-all shadow-sm flex items-center gap-2 disabled:opacity-50"
+              >
+                {isSimulating ? (
+                  <>
+                    <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Simulating Rounds...
+                  </>
+                ) : (
+                  '▶ Run Live Simulation Demo'
+                )}
+              </button>
+
+              <div className="flex items-center bg-[#FAF5E8] border border-[#DDD0B8] rounded-[10px] p-0.5 text-xs font-mono font-bold">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveSimRound(1);
+                    setSellerRounds(getRoundData(1));
+                  }}
+                  className={`px-2.5 py-1 rounded-[8px] transition-all ${
+                    activeSimRound === 1
+                      ? 'bg-[#1C181A] text-white'
+                      : 'text-[#5E4E40] hover:text-[#1C181A]'
                   }`}
                 >
-                  <div className="space-y-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-base font-extrabold text-[#1C181A]">{neg.sellerName}</h3>
+                  Round 1
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveSimRound(2);
+                    setSellerRounds(getRoundData(2));
+                  }}
+                  className={`px-2.5 py-1 rounded-[8px] transition-all ${
+                    activeSimRound === 2
+                      ? 'bg-[#1C181A] text-white'
+                      : 'text-[#5E4E40] hover:text-[#1C181A]'
+                  }`}
+                >
+                  Round 2
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveSimRound(3);
+                    setSellerRounds(getRoundData(3));
+                  }}
+                  className={`px-2.5 py-1 rounded-[8px] transition-all ${
+                    activeSimRound === 3
+                      ? 'bg-[#1C181A] text-white'
+                      : 'text-[#5E4E40] hover:text-[#1C181A]'
+                  }`}
+                >
+                  Round 3
+                </button>
+              </div>
+
+              <div className="flex items-center bg-[#FFFDF9] border border-[#DDD0B8] rounded-[10px] p-0.5 text-xs font-mono">
+                <button
+                  type="button"
+                  onClick={() => setTimelineViewMode('cards')}
+                  className={`px-2.5 py-1 rounded-[8px] font-bold transition-all ${
+                    timelineViewMode === 'cards'
+                      ? 'bg-[#FAF5E8] text-[#1C181A] border border-[#DDD0B8]'
+                      : 'text-[#7D6F61] hover:text-[#1C181A]'
+                  }`}
+                >
+                  Cards
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTimelineViewMode('stream')}
+                  className={`px-2.5 py-1 rounded-[8px] font-bold transition-all ${
+                    timelineViewMode === 'stream'
+                      ? 'bg-[#FAF5E8] text-[#1C181A] border border-[#DDD0B8]'
+                      : 'text-[#7D6F61] hover:text-[#1C181A]'
+                  }`}
+                >
+                  A2A Protocol Stream
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {timelineViewMode === 'stream' ? (
+            /* Live A2A Protocol Stream View */
+            <div className="bg-[#1C181A] text-[#FAF5E8] border-[1.5px] border-[#1C181A] rounded-[22px] p-6 space-y-4 shadow-sm font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#C5EDB1] animate-pulse" />
+                  <span className="font-bold text-white uppercase tracking-wider">
+                    [ LIVE A2A PROTOCOL LOG STREAM ]
+                  </span>
+                </div>
+                <span className="text-[10px] text-white/60">SCHEMA: A2A-JSON-LD v1.2</span>
+              </div>
+
+              <div className="space-y-3 max-h-[480px] overflow-y-auto pr-2 divide-y divide-white/5">
+                <div className="pt-2 flex items-start gap-3">
+                  <span className="text-[10px] text-white/40">10:14:00</span>
+                  <div className="space-y-1">
+                    <span className="px-2 py-0.5 rounded bg-[#0F5B57] text-[#C5EDB1] text-[10px] font-bold">
+                      BUYER AGENT ➔ BROADCAST
+                    </span>
+                    <p className="text-[#FAF5E8]/90">
+                      Dispatched RFQ for 40-SKU Diwali Restock Basket. Budget ceiling: INR 85,000.00 (Strictly masked). Delivery requirement: ≤3 days.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-start gap-3">
+                  <span className="text-[10px] text-white/40">10:14:01</span>
+                  <div className="space-y-1">
+                    <span className="px-2 py-0.5 rounded bg-[#FAF5E8]/10 text-white text-[10px] font-bold">
+                      KISAN AGENT ➔ BUYER AGENT
+                    </span>
+                    <p className="text-[#FAF5E8]/90">
+                      Quote #1 received: ₹84,500.00. Payment Terms: Net 7 Days (10% upfront). Delivery: 2 Days. Key: ed25519:ksn:44192.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-start gap-3">
+                  <span className="text-[10px] text-white/40">10:14:02</span>
+                  <div className="space-y-1">
+                    <span className="px-2 py-0.5 rounded bg-[#D9381E] text-white text-[10px] font-bold">
+                      SECURITY GUARD ➔ QUARANTINE
+                    </span>
+                    <p className="text-[#F8CBD6]">
+                      Red-team participant &apos;QuickDrop Wholesale&apos; quarantined! Detected prompt injection directive and fake 45% discount on inflated benchmark price.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-start gap-3">
+                  <span className="text-[10px] text-white/40">10:14:03</span>
+                  <div className="space-y-1">
+                    <span className="px-2 py-0.5 rounded bg-[#0F5B57] text-[#C5EDB1] text-[10px] font-bold">
+                      BUYER AGENT ➔ KISAN AGENT
+                    </span>
+                    <p className="text-[#FAF5E8]/90">
+                      Volume Counter-Offer: Proposed ₹79,850.00 (-₹4,650 concession) based on verified Mandi benchmark and bulk basket order.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-start gap-3">
+                  <span className="text-[10px] text-white/40">10:14:04</span>
+                  <div className="space-y-1">
+                    <span className="px-2 py-0.5 rounded bg-[#C5EDB1] text-[#0F5B57] text-[10px] font-bold">
+                      KISAN AGENT ➔ BUYER AGENT
+                    </span>
+                    <p className="text-[#C5EDB1] font-bold">
+                      Concession accepted! Counter-offer ratified at ₹79,850.00. Ed25519 cryptographic commitment signed. Ready for Principal Authorization.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Parallel Cards View */
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {sellerRounds.map((neg) => {
+                const isFlagged = neg.status === 'security_flagged';
+                const isAccepted = neg.status === 'accepted';
+                const agentPassportId =
+                  neg.id === 'neg-02'
+                    ? 'agent-kisan-01'
+                    : neg.id === 'neg-01'
+                    ? 'agent-mhlx-01'
+                    : neg.id === 'neg-03'
+                    ? 'agent-vrdh-01'
+                    : 'agent-redteam-01';
+
+                return (
+                  <div
+                    key={neg.id}
+                    className={`bg-[#FFFDF9] border-[1.5px] rounded-[22px] p-6 space-y-4 shadow-sm transition-all flex flex-col justify-between ${
+                      isFlagged
+                        ? 'border-[#D9381E] bg-[#F8CBD6]'
+                        : isAccepted
+                        ? 'border-[#0F5B57] ring-2 ring-[#0F5B57]/30 bg-[#FFFDF9]'
+                        : 'border-[#1C181A]'
+                    }`}
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-base font-extrabold text-[#1C181A]">{neg.sellerName}</h3>
+                          </div>
+                          <p className="text-xs text-[#5E4E40] font-mono mt-0.5">
+                            Strategy: <strong className="text-[#0F5B57]">{neg.strategyProfile}</strong>
+                          </p>
                         </div>
-                        <p className="text-xs text-[#5E4E40] font-mono mt-0.5">
-                          Strategy: <strong className="text-[#0F5B57]">{neg.strategyProfile}</strong>
-                        </p>
+
+                        <span
+                          className={`text-[10px] px-2.5 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider border ${
+                            isFlagged
+                              ? 'bg-[#F8CBD6] text-[#D9381E] border-[#D9381E]'
+                              : neg.status === 'accepted'
+                              ? 'bg-[#C5EDB1] text-[#0F5B57] border-[#0F5B57]'
+                              : 'bg-[#E2D5F2] text-[#D9381E] border-[#EAA82C]'
+                          }`}
+                        >
+                          {neg.status.replace('_', ' ')}
+                        </span>
                       </div>
 
-                      <span
-                        className={`text-[10px] px-2.5 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider border ${
-                          isFlagged
-                            ? 'bg-[#F8CBD6] text-[#D9381E] border-[#D9381E]'
-                            : neg.status === 'accepted'
-                            ? 'bg-[#C5EDB1] text-[#0F5B57] border-[#0F5B57]'
-                            : 'bg-[#E2D5F2] text-[#D9381E] border-[#EAA82C]'
-                        }`}
-                      >
-                        {neg.status.replace('_', ' ')}
+                      <div className="grid grid-cols-3 gap-2.5 text-center text-xs">
+                        <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                          <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Round</span>
+                          <span className="font-mono text-[#1C181A] font-bold text-sm">{neg.roundNo}</span>
+                        </div>
+                        <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                          <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Quote Total</span>
+                          <span className="font-mono text-[#0F5B57] font-bold text-sm tabular-nums">{neg.totalAmount}</span>
+                        </div>
+                        <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                          <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Delivery</span>
+                          <span className="text-[#1C181A] font-semibold text-xs">{neg.deliveryDays} Days</span>
+                        </div>
+                      </div>
+
+                      <div className="text-xs bg-[#FAF5E8] p-3 rounded-[12px] border border-[#DDD0B8] flex items-center justify-between">
+                        <div>
+                          <span className="text-[#7D6F61] font-mono uppercase text-[10px] block mb-0.5">
+                            Commercial Terms:
+                          </span>
+                          <span className="text-[#262022] font-semibold">{neg.creditTerms}</span>
+                        </div>
+                        <div className="text-right font-mono text-[10px]">
+                          <span className="text-[#0F5B57] font-bold block">
+                            {neg.signatureVerified ? '✓ Ed25519 Signed' : '⚠ Untrusted Key'}
+                          </span>
+                          <span className="text-[#7D6F61]">{neg.signingKeyId}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {neg.securityNotice && (
+                      <div className="p-3 bg-[#F8CBD6] border-[1.5px] border-[#D9381E] rounded-[13px] text-xs text-[#D9381E] space-y-1 mt-2">
+                        <span className="font-mono font-bold text-[10px] block uppercase text-[#1C181A]">
+                          [ SECURITY AUDIT VIOLATION ]
+                        </span>
+                        <p className="font-medium text-[11px] leading-relaxed">{neg.securityNotice}</p>
+                      </div>
+                    )}
+
+                    {/* Agent Passport CTA */}
+                    <div className="pt-3 border-t border-[#DDD0B8] flex items-center justify-between text-xs">
+                      <span className="text-[11px] font-mono text-[#7D6F61]">
+                        Verified Counterparty
                       </span>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-2.5 text-center text-xs">
-                      <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
-                        <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Round</span>
-                        <span className="font-mono text-[#1C181A] font-bold text-sm">{neg.roundNo}</span>
-                      </div>
-                      <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
-                        <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Quote Total</span>
-                        <span className="font-mono text-[#0F5B57] font-bold text-sm tabular-nums">{neg.totalAmount}</span>
-                      </div>
-                      <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
-                        <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Delivery</span>
-                        <span className="text-[#1C181A] font-semibold text-xs">{neg.deliveryDays} Days</span>
-                      </div>
-                    </div>
-
-                    <div className="text-xs bg-[#FAF5E8] p-3 rounded-[12px] border border-[#DDD0B8] flex items-center justify-between">
-                      <div>
-                        <span className="text-[#7D6F61] font-mono uppercase text-[10px] block mb-0.5">
-                          Commercial Terms:
-                        </span>
-                        <span className="text-[#262022] font-semibold">{neg.creditTerms}</span>
-                      </div>
-                      <div className="text-right font-mono text-[10px]">
-                        <span className="text-[#0F5B57] font-bold block">
-                          {neg.signatureVerified ? '✓ Ed25519 Signed' : '⚠ Untrusted Key'}
-                        </span>
-                        <span className="text-[#7D6F61]">{neg.signingKeyId}</span>
-                      </div>
+                      <a
+                        href={`/agents?agentId=${agentPassportId}`}
+                        className="px-3 py-1.5 rounded-[9px] bg-[#FAF5E8] hover:bg-[#F5EBD7] text-[#1C181A] hover:text-[#0F5B57] text-xs font-mono font-bold transition-all border border-[#DDD0B8] inline-flex items-center gap-1 shadow-2xs"
+                      >
+                        View Agent Passport 🛡️
+                      </a>
                     </div>
                   </div>
-
-                  {neg.securityNotice && (
-                    <div className="p-3 bg-[#F8CBD6] border-[1.5px] border-[#D9381E] rounded-[13px] text-xs text-[#D9381E] space-y-1 mt-2">
-                      <span className="font-mono font-bold text-[10px] block uppercase text-[#1C181A]">
-                        [ SECURITY AUDIT VIOLATION ]
-                      </span>
-                      <p className="font-medium text-[11px] leading-relaxed">{neg.securityNotice}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </section>
       )}
 
@@ -893,6 +1219,70 @@ function NegotiationsContent() {
               )}
             </div>
 
+            {/* Payment Method Selection */}
+            {!dealApproved && (
+              <div className="p-4 bg-[#FFFDF9] border border-[#DDD0B8] rounded-[14px] space-y-2">
+                <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block">
+                  Select Settlement Payment Method:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono">
+                  <label
+                    className={`flex items-center gap-2 p-2.5 rounded-[10px] border cursor-pointer transition-all ${
+                      paymentMethod === 'upi'
+                        ? 'bg-[#C5EDB1]/30 border-[#0F5B57] text-[#0F5B57] font-bold'
+                        : 'bg-[#FAF5E8] border-[#DDD0B8] text-[#5E4E40]'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="upi"
+                      checked={paymentMethod === 'upi'}
+                      onChange={() => setPaymentMethod('upi')}
+                      className="accent-[#0F5B57]"
+                    />
+                    <span>📱 UPI Autopay Instant</span>
+                  </label>
+
+                  <label
+                    className={`flex items-center gap-2 p-2.5 rounded-[10px] border cursor-pointer transition-all ${
+                      paymentMethod === 'escrow'
+                        ? 'bg-[#C5EDB1]/30 border-[#0F5B57] text-[#0F5B57] font-bold'
+                        : 'bg-[#FAF5E8] border-[#DDD0B8] text-[#5E4E40]'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="escrow"
+                      checked={paymentMethod === 'escrow'}
+                      onChange={() => setPaymentMethod('escrow')}
+                      className="accent-[#0F5B57]"
+                    />
+                    <span>🛡️ Mandi Smart Escrow</span>
+                  </label>
+
+                  <label
+                    className={`flex items-center gap-2 p-2.5 rounded-[10px] border cursor-pointer transition-all ${
+                      paymentMethod === 'rtgs'
+                        ? 'bg-[#C5EDB1]/30 border-[#0F5B57] text-[#0F5B57] font-bold'
+                        : 'bg-[#FAF5E8] border-[#DDD0B8] text-[#5E4E40]'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="rtgs"
+                      checked={paymentMethod === 'rtgs'}
+                      onChange={() => setPaymentMethod('rtgs')}
+                      className="accent-[#0F5B57]"
+                    />
+                    <span>🏛️ RTGS Net Banking</span>
+                  </label>
+                </div>
+              </div>
+            )}
+
             {/* Exact Locked Terms & Warnings */}
             <div className="p-4 bg-[#FFFDF9] border-[1.5px] border-[#1C181A] rounded-[14px] text-xs space-y-3">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
@@ -907,8 +1297,14 @@ function NegotiationsContent() {
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">Payment Escrow</span>
-                  <span className="text-[11px] text-[#1C181A] font-semibold">kisan.wholesale@okicici</span>
+                  <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">Payment Channel</span>
+                  <span className="text-[11px] text-[#1C181A] font-semibold">
+                    {paymentMethod === 'upi'
+                      ? 'kisan.wholesale@okicici (UPI)'
+                      : paymentMethod === 'escrow'
+                      ? 'Mandi Smart Escrow (Locked)'
+                      : 'RTGS / Net Banking (Net 7)'}
+                  </span>
                 </div>
                 <div>
                   <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">Simulated Receipt</span>
@@ -919,14 +1315,59 @@ function NegotiationsContent() {
               </div>
 
               {dealApproved && (
-                <div className="p-3 bg-[#C5EDB1] border border-[#0F5B57] rounded-[10px] space-y-1">
-                  <div className="flex items-center justify-between font-mono font-bold text-xs text-[#0F5B57]">
-                    <span>[SIMULATED SETTLEMENT - NO REAL FUNDS MOVED]</span>
-                    <span>REF: UPI-SIM-2026-9812487</span>
+                <div className="space-y-3">
+                  <div className="p-3 bg-[#C5EDB1] border border-[#0F5B57] rounded-[10px] space-y-1">
+                    <div className="flex items-center justify-between font-mono font-bold text-xs text-[#0F5B57]">
+                      <span>[SIMULATED SETTLEMENT - NO REAL FUNDS MOVED]</span>
+                      <span>REF: UPI-SIM-2026-9812487</span>
+                    </div>
+                    <p className="text-[#0F5B57] text-[11px]">
+                      Cryptographic challenge signature validated against buyer principal public key. Append-only audit record written to Decision Replay ledger.
+                    </p>
                   </div>
-                  <p className="text-[#0F5B57] text-[11px]">
-                    Cryptographic challenge signature validated against buyer principal public key. Append-only audit record written to Decision Replay ledger.
-                  </p>
+
+                  {/* Buyer Agent Rating Section */}
+                  <div className="p-4 bg-[#FAF5E8] border border-[#0F5B57] rounded-[12px] space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DDD0B8] pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-extrabold text-[#1C181A]">
+                          ⭐ Buyer Agent Rating for Kisan Wholesale
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57]">
+                          AUTOMATIC EVALUATION
+                        </span>
+                      </div>
+                      <span className="font-mono font-bold text-xs text-[#D9381E]">
+                        ★ 5.0 / 5.0 (Top Grade)
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-[#5E4E40] italic leading-relaxed">
+                      &quot;Counterparty honored 40-SKU Diwali restock benchmark price at ₹79,850.00 (6.1% discount), accepted Net-7 credit terms, 2-day delivery guaranteed. Ed25519 terms cryptographically signed.&quot;
+                    </p>
+
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1 font-mono text-xs">
+                      <span className="text-[#0F5B57] font-bold flex items-center gap-1.5">
+                        <span>✓</span>
+                        <span>Rating recorded to immutable Mandi Reputation Ledger</span>
+                      </span>
+
+                      <div className="flex items-center gap-2">
+                        <a
+                          href="/agents?agentId=agent-kisan-01"
+                          className="px-3 py-1.5 bg-[#FFFDF9] hover:bg-[#FAF5E8] border border-[#DDD0B8] text-[#1C181A] text-[11px] font-bold rounded-[8px] transition-all"
+                        >
+                          View Kisan Passport 🛡️
+                        </a>
+                        <a
+                          href="/catalogue?tab=rankings"
+                          className="px-3 py-1.5 bg-[#0F5B57] text-white hover:bg-[#1C181A] text-[11px] font-bold rounded-[8px] transition-all shadow-2xs"
+                        >
+                          View Leaderboard 🏆
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

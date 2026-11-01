@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { apiClient, ApiClientError } from '../../lib/api-client';
+import { ALL_DEMO_PASSPORTS, FIXTURE_AGENT_LIST } from '../../lib/fixtures';
 import { PassportCard } from '../../components/PassportCard';
 import { ErrorAlert } from '../../components/ErrorAlert';
 import type { AgentPassportResponse, BusinessRole, ErrorEnvelope } from '../../lib/types';
@@ -26,6 +27,7 @@ function AgentsContent() {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // Resolved principal ID from search params, session storage, or default fallback
+  const requestedAgentId = searchParams.get('agentId');
   const principalId =
     searchParams.get('principalId') ||
     searchParams.get('id') ||
@@ -36,18 +38,40 @@ function AgentsContent() {
     async function loadAgents() {
       setLoading(true);
       setError(null);
-      if (!principalId) {
-        setAgents([]);
-        setLoading(false);
-        setError('Select or register a business principal before managing agents.');
-        return;
-      }
 
       // Restore session/CSRF state if active
       try {
         await apiClient.getSession();
       } catch {
         // Not logged in or expired session
+      }
+
+      // Priority 1: Direct Agent Passport Lookup (via clickable agent in catalogue/negotiations)
+      if (requestedAgentId) {
+        try {
+          const res = await apiClient.getAgentPassport(requestedAgentId);
+          setAgents([res.data]);
+          setIsMock(res.isMock);
+          setLoading(false);
+          return;
+        } catch {
+          // Fallback to demo fixture passport if specific agent is matched
+          const fixture = ALL_DEMO_PASSPORTS[requestedAgentId] || ALL_DEMO_PASSPORTS['agent-kisan-01'];
+          if (fixture) {
+            setAgents([fixture]);
+            setIsMock(true);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
+      // Priority 2: Principal agent roster
+      if (!principalId) {
+        setAgents([]);
+        setLoading(false);
+        setError('Select or register a business principal before managing agents.');
+        return;
       }
 
       try {
@@ -70,7 +94,7 @@ function AgentsContent() {
       }
     }
     loadAgents();
-  }, [principalId]);
+  }, [principalId, requestedAgentId]);
 
   // Trap Escape key and manage focus for modal
   useEffect(() => {
