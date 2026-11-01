@@ -1,0 +1,24 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/TelegramNaturalTaskRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "telegram_user_id": {
+      "pattern": "^[1-9][0-9]{0,19}$",
+      "title": "Telegram User Id",
+      "type": "string"
+    },
+    "text": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "telegram_user_id",
+    "text"
+  ],
+  "title": "TelegramNaturalTaskRequest",
+  "type": "object"
+}

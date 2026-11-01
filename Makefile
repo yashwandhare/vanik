@@ -25,7 +25,9 @@ help:
 	@echo "build-web      Build production bundle for web application"
 	@echo "contracts      Export versioned JSON schemas"
 	@echo "migrate        Apply database migrations"
-	@echo "seed/demo/reset-demo are not implemented yet"
+	@echo "seed           Insert missing synthetic demo data without resetting existing state"
+	@echo "demo           Run deterministic domain and isolated API workflow rehearsal"
+	@echo "reset-demo     Safety guard; destructive reset is not implemented"
 
 infra:
 	docker compose up -d postgres redis
@@ -95,6 +97,10 @@ migrate:
 seed:
 	$(API) run --locked python -m app.seed
 
-demo reset-demo:
-	@echo "Demo and reset commands are not implemented yet; no demo state was changed." >&2
+demo:
+	$(API) run --locked python scripts/validate_demo.py
+	$(API) run --locked python -m pytest tests/test_workflow.py -q
+
+reset-demo:
+	@echo "Destructive reset is not implemented. No data changed. Use a fresh demo database." >&2
 	@exit 1

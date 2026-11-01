@@ -27,6 +27,13 @@ from app.contracts.marketplace import (
 )
 from app.contracts.pagination import AgentListResponse
 from app.contracts.passport import AgentPassportResponse
+from app.contracts.tasks import (
+    ProcurementPolicyRequest,
+    ProcurementPolicyResponse,
+    TaskCreateRequest,
+    TaskListResponse,
+    TaskResponse,
+)
 from app.contracts.telegram import (
     TelegramLinkCompleteRequest,
     TelegramLinkResponse,
@@ -36,6 +43,28 @@ from app.contracts.verification import (
     BusinessIdentifierCreateRequest,
     BusinessIdentifierResponse,
     DemoVerificationResponse,
+)
+from app.contracts.workflow import (
+    AcceptOfferRequest,
+    AgentEnvelope,
+    ApprovalChallengeResponse,
+    ApproveRequest,
+    DealListResponse,
+    DealResponse,
+    MemoryCorrectionRequest,
+    MemoryDisputeRequest,
+    NaturalTaskRequest,
+    NegotiationListResponse,
+    NegotiationResponse,
+    NotificationAckRequest,
+    NotificationListResponse,
+    OfferResponse,
+    ReceiptResponse,
+    ReplayResponse,
+    SecurityIncidentListResponse,
+    SellerRFQListResponse,
+    SupplierMemoryListResponse,
+    TelegramNaturalTaskRequest,
 )
 
 MODELS: dict[str, type[BaseModel]] = {
@@ -68,6 +97,31 @@ MODELS: dict[str, type[BaseModel]] = {
         SellerListResponse,
         SellerProfileRequest,
         SellerProfileResponse,
+        ProcurementPolicyRequest,
+        ProcurementPolicyResponse,
+        TaskCreateRequest,
+        TaskResponse,
+        TaskListResponse,
+        AgentEnvelope,
+        NegotiationResponse,
+        NegotiationListResponse,
+        MemoryDisputeRequest,
+        MemoryCorrectionRequest,
+        NotificationAckRequest,
+        TelegramNaturalTaskRequest,
+        NaturalTaskRequest,
+        OfferResponse,
+        AcceptOfferRequest,
+        DealResponse,
+        DealListResponse,
+        ApprovalChallengeResponse,
+        ApproveRequest,
+        ReceiptResponse,
+        ReplayResponse,
+        SecurityIncidentListResponse,
+        SellerRFQListResponse,
+        SupplierMemoryListResponse,
+        NotificationListResponse,
     )
 }
 SCHEMA_DIRECTORY = Path(__file__).resolve().parents[3] / "packages/shared-schemas/v1"

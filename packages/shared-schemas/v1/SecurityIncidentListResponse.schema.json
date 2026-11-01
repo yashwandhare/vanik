@@ -1,0 +1,75 @@
+{
+  "$defs": {
+    "SecurityIncidentResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "agent_id": {
+          "format": "uuid",
+          "title": "Agent Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "evidence": {
+          "additionalProperties": true,
+          "title": "Evidence",
+          "type": "object"
+        },
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "incident_type": {
+          "title": "Incident Type",
+          "type": "string"
+        },
+        "principal_id": {
+          "format": "uuid",
+          "title": "Principal Id",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "incident_type",
+        "agent_id",
+        "principal_id",
+        "evidence",
+        "action",
+        "status",
+        "created_at"
+      ],
+      "title": "SecurityIncidentResponse",
+      "type": "object"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/SecurityIncidentListResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/SecurityIncidentResponse"
+      },
+      "title": "Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "items"
+  ],
+  "title": "SecurityIncidentListResponse",
+  "type": "object"
+}

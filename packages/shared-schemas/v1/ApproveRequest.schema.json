@@ -1,0 +1,35 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/ApproveRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "challenge_id": {
+      "format": "uuid",
+      "title": "Challenge Id",
+      "type": "string"
+    },
+    "deal_version": {
+      "minimum": 1,
+      "title": "Deal Version",
+      "type": "integer"
+    },
+    "nonce": {
+      "maxLength": 64,
+      "minLength": 20,
+      "title": "Nonce",
+      "type": "string"
+    },
+    "terms_hash": {
+      "title": "Terms Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "challenge_id",
+    "deal_version",
+    "terms_hash",
+    "nonce"
+  ],
+  "title": "ApproveRequest",
+  "type": "object"
+}

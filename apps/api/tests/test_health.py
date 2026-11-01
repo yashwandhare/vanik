@@ -51,10 +51,10 @@ def test_database_failure_is_unavailable_without_credentials(
     assert "secret" not in response.text
 
 
-def test_unimplemented_commerce_is_not_a_fake_success(client: TestClient) -> None:
+def test_commerce_requires_authentication_before_task_creation(client: TestClient) -> None:
     response = client.post("/v1/tasks", json={})
-    assert response.status_code == 404
-    assert response.json()["error"]["code"] == "not_found"
+    assert response.status_code == 401
+    assert response.json()["error"]["code"] == "unauthenticated"
 
 
 def test_wrong_method_uses_standard_error(client: TestClient) -> None:

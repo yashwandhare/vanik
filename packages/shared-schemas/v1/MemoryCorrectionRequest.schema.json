@@ -1,0 +1,46 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/MemoryCorrectionRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "confidence": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Confidence"
+    },
+    "reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "score": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Score"
+    }
+  },
+  "required": [
+    "score",
+    "confidence",
+    "reason"
+  ],
+  "title": "MemoryCorrectionRequest",
+  "type": "object"
+}

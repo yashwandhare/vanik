@@ -1,0 +1,263 @@
+{
+  "$defs": {
+    "Pagination": {
+      "additionalProperties": false,
+      "properties": {
+        "limit": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        },
+        "total": {
+          "minimum": 0,
+          "title": "Total",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "limit",
+        "offset",
+        "total"
+      ],
+      "title": "Pagination",
+      "type": "object"
+    },
+    "TaskLineSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "product_id": {
+          "format": "uuid",
+          "title": "Product Id",
+          "type": "string"
+        },
+        "quantity": {
+          "title": "Quantity",
+          "type": "string"
+        },
+        "sku": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Sku",
+          "type": "string"
+        },
+        "unit": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product_id",
+        "sku",
+        "quantity",
+        "unit"
+      ],
+      "title": "TaskLineSnapshot",
+      "type": "object"
+    },
+    "TaskMandateResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_tools": {
+          "items": {
+            "enum": [
+              "marketplace_search",
+              "benchmark_compare"
+            ],
+            "type": "string"
+          },
+          "title": "Allowed Tools",
+          "type": "array"
+        },
+        "budget": {
+          "title": "Budget",
+          "type": "string"
+        },
+        "category": {
+          "const": "procurement",
+          "title": "Category",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "delivery_deadline": {
+          "format": "date-time",
+          "title": "Delivery Deadline",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "lines": {
+          "items": {
+            "$ref": "#/$defs/TaskLineSnapshot"
+          },
+          "title": "Lines",
+          "type": "array"
+        },
+        "max_rounds": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Max Rounds",
+          "type": "integer"
+        },
+        "max_upfront_pct": {
+          "title": "Max Upfront Pct",
+          "type": "string"
+        },
+        "min_credit_days": {
+          "maximum": 90,
+          "minimum": 0,
+          "title": "Min Credit Days",
+          "type": "integer"
+        },
+        "objective": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Objective",
+          "type": "string"
+        },
+        "permitted_actions": {
+          "items": {
+            "enum": [
+              "request_quote",
+              "evaluate_offers"
+            ],
+            "type": "string"
+          },
+          "title": "Permitted Actions",
+          "type": "array"
+        },
+        "priorities": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "price",
+              "reliability",
+              "delivery",
+              "credit",
+              "availability"
+            ]
+          },
+          "title": "Priorities",
+          "type": "object"
+        },
+        "requires_human_approval": {
+          "const": true,
+          "title": "Requires Human Approval",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "objective",
+        "category",
+        "lines",
+        "budget",
+        "currency",
+        "delivery_deadline",
+        "expires_at",
+        "priorities",
+        "allowed_tools",
+        "permitted_actions",
+        "max_rounds",
+        "min_credit_days",
+        "max_upfront_pct",
+        "requires_human_approval"
+      ],
+      "title": "TaskMandateResponse",
+      "type": "object"
+    },
+    "TaskResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "format": "uuid",
+          "title": "Agent Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "mandate": {
+          "$ref": "#/$defs/TaskMandateResponse"
+        },
+        "principal_id": {
+          "format": "uuid",
+          "title": "Principal Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "created",
+            "cancelled",
+            "expired",
+            "running",
+            "awaiting_approval",
+            "completed",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "principal_id",
+        "agent_id",
+        "mandate",
+        "status",
+        "created_at"
+      ],
+      "title": "TaskResponse",
+      "type": "object"
+    }
+  },
+  "$id": "https://vanik.invalid/schemas/v1/TaskListResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/TaskResponse"
+      },
+      "title": "Items",
+      "type": "array"
+    },
+    "pagination": {
+      "$ref": "#/$defs/Pagination"
+    }
+  },
+  "required": [
+    "items",
+    "pagination"
+  ],
+  "title": "TaskListResponse",
+  "type": "object"
+}

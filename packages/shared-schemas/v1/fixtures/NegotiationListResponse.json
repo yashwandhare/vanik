@@ -1,0 +1,120 @@
+{
+  "items": [
+    {
+      "id": "0000001e-0000-4000-8000-000000000001",
+      "messages": [
+        {
+          "created_at": "2027-11-01T10:00:00Z",
+          "key_version": 1,
+          "message_id": "0000001f-0000-4000-8000-000000000001",
+          "message_type": "OFFER",
+          "negotiation_id": "0000001e-0000-4000-8000-000000000001",
+          "nonce": "synthetic-single-use-nonce",
+          "payload": {
+            "currency": "INR",
+            "delivery_at": "2027-11-05T10:00:00Z",
+            "expires_at": "2027-11-01T11:00:00Z",
+            "lines": [
+              {
+                "claimed_discount_pct": "3.23",
+                "claimed_original_price": "620.00",
+                "line_total": "600.00",
+                "product_id": "00000015-0000-4000-8000-000000000001",
+                "quantity": "1.000",
+                "sku": "STP-RICE-BAS-5K",
+                "unit": "bag",
+                "unit_price": "600.00"
+              }
+            ],
+            "payment_terms": {
+              "balance_due_days": 15,
+              "credit_days": 15,
+              "type": "credit_net_15",
+              "upfront_pct": "20"
+            },
+            "seller_note": "Synthetic quote",
+            "tax_representation": "not_modeled",
+            "total": "600.00"
+          },
+          "payload_hash": "eb920a74965039b80b4d54fb6f262a4b05ab866a3cf55183075c9b28746ddfe8",
+          "protocol_version": "vanik.a2a.v1",
+          "recipient_agent_id": "00000004-0000-4000-8000-000000000001",
+          "sender_agent_id": "00000003-0000-4000-8000-000000000001",
+          "sender_principal_id": "00000002-0000-4000-8000-000000000001",
+          "signature": "AA==",
+          "task_id": "00000014-0000-4000-8000-000000000001"
+        }
+      ],
+      "offers": [
+        {
+          "id": "00000020-0000-4000-8000-000000000001",
+          "negotiation_id": "0000001e-0000-4000-8000-000000000001",
+          "ranking": {
+            "factors": [
+              {
+                "contribution": "0.5500",
+                "factor": "price",
+                "normalized": "1.0000",
+                "weight": "0.55"
+              }
+            ],
+            "history_confidence": "limited",
+            "reliability_evidence_count": 0,
+            "score": "0.9000",
+            "source_event_ids": []
+          },
+          "seller_agent_id": "00000003-0000-4000-8000-000000000001",
+          "seller_principal_id": "00000002-0000-4000-8000-000000000001",
+          "terms": {
+            "currency": "INR",
+            "delivery_at": "2027-11-05T10:00:00Z",
+            "expires_at": "2027-11-01T11:00:00Z",
+            "lines": [
+              {
+                "claimed_discount_pct": "3.23",
+                "claimed_original_price": "620.00",
+                "line_total": "600.00",
+                "product_id": "00000015-0000-4000-8000-000000000001",
+                "quantity": "1.000",
+                "sku": "STP-RICE-BAS-5K",
+                "unit": "bag",
+                "unit_price": "600.00"
+              }
+            ],
+            "payment_terms": {
+              "balance_due_days": 15,
+              "credit_days": 15,
+              "type": "credit_net_15",
+              "upfront_pct": "20"
+            },
+            "seller_note": "Synthetic quote",
+            "tax_representation": "not_modeled",
+            "total": "600.00"
+          },
+          "terms_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "valid": true,
+          "validation": {
+            "checks": [
+              {
+                "explanation": "Synthetic",
+                "passed": true,
+                "rule": "budget"
+              }
+            ],
+            "flags": [],
+            "note_classification": "commercial_note",
+            "valid": true
+          },
+          "version": 1
+        }
+      ],
+      "round_no": 1,
+      "seller_agent_id": "00000003-0000-4000-8000-000000000001",
+      "seller_principal_id": "00000002-0000-4000-8000-000000000001",
+      "state": "evaluating",
+      "task_id": "00000014-0000-4000-8000-000000000001"
+    }
+  ],
+  "recommendation_offer_id": "00000020-0000-4000-8000-000000000001",
+  "task_id": "00000014-0000-4000-8000-000000000001"
+}

@@ -1,0 +1,39 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/ProcurementPolicyRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "max_budget_inr": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1000000.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Max Budget Inr"
+    },
+    "max_credit_days": {
+      "maximum": 30,
+      "minimum": 0,
+      "title": "Max Credit Days",
+      "type": "integer"
+    },
+    "max_rounds": {
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Max Rounds",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "max_budget_inr",
+    "max_credit_days",
+    "max_rounds"
+  ],
+  "title": "ProcurementPolicyRequest",
+  "type": "object"
+}

@@ -1,4 +1,19 @@
 import type {
+  AcceptOfferRequest,
+  ApprovalChallengeResponse,
+  ApproveRequest,
+  DealListResponse,
+  DealResponse,
+  MemoryCorrectionRequest,
+  MemoryDisputeRequest,
+  NegotiationListResponse,
+  NotificationListResponse,
+  ReceiptResponse,
+  ReplayResponse,
+  SecurityIncidentListResponse,
+  SellerRFQListResponse,
+  SupplierMemoryListResponse,
+  SupplierMemoryResponse,
   AgentCreateRequest,
   AgentListResponse,
   AgentPassportResponse,
@@ -29,10 +44,6 @@ import type {
   TelegramLinkStartResponse,
   UserResponse,
 } from './types';
-import {
-  FIXTURE_AGENT_LIST,
-  FIXTURE_AGENT_PASSPORT,
-} from './fixtures';
 
 export class ApiClientError extends Error {
   public readonly code: string;
@@ -410,13 +421,83 @@ export class ApiClient {
     });
   }
 
-  public async listTasks(
-    principalId?: string
-  ): Promise<{ data: TaskListResponse; isMock: boolean }> {
-    const qs = principalId ? `?principal_id=${encodeURIComponent(principalId)}` : '';
-    return this.request<TaskListResponse>(`/v1/tasks${qs}`, {
-      method: 'GET',
-    });
+  public async listTasks(params?: { limit?: number; offset?: number }): Promise<{ data: TaskListResponse; isMock: boolean }> {
+    const query = new URLSearchParams();
+    if (params?.limit !== undefined) query.set('limit', String(params.limit));
+    if (params?.offset !== undefined) query.set('offset', String(params.offset));
+    return this.request<TaskListResponse>(`/v1/tasks${query.size ? `?${query}` : ''}`, { method: 'GET' });
+  }
+
+  public getTask(taskId: string) {
+    return this.request<TaskResponse>(`/v1/tasks/${encodeURIComponent(taskId)}`, { method: 'GET' });
+  }
+
+  public launchTask(taskId: string) {
+    return this.request<NegotiationListResponse>(`/v1/tasks/${encodeURIComponent(taskId)}/launch`, { method: 'POST' });
+  }
+
+  public taskNegotiations(taskId: string) {
+    return this.request<NegotiationListResponse>(`/v1/tasks/${encodeURIComponent(taskId)}/negotiations`, { method: 'GET' });
+  }
+
+  public acceptOffer(negotiationId: string, payload: AcceptOfferRequest) {
+    return this.request<DealResponse>(`/v1/negotiations/${encodeURIComponent(negotiationId)}/accept`, { method: 'POST', body: JSON.stringify(payload) });
+  }
+
+  public listDeals() {
+    return this.request<DealListResponse>('/v1/deals', { method: 'GET' });
+  }
+
+  public getDeal(dealId: string) {
+    return this.request<DealResponse>(`/v1/deals/${encodeURIComponent(dealId)}`, { method: 'GET' });
+  }
+
+  public challenge(dealId: string) {
+    return this.request<ApprovalChallengeResponse>(`/v1/deals/${encodeURIComponent(dealId)}/approval-challenge`, { method: 'POST' });
+  }
+
+  public approve(dealId: string, payload: ApproveRequest) {
+    return this.request<DealResponse>(`/v1/deals/${encodeURIComponent(dealId)}/approve`, { method: 'POST', body: JSON.stringify(payload) });
+  }
+
+  public reject(dealId: string) {
+    return this.request<DealResponse>(`/v1/deals/${encodeURIComponent(dealId)}/reject`, { method: 'POST' });
+  }
+
+  public settle(dealId: string, idempotencyKey: string) {
+    return this.request<ReceiptResponse>(`/v1/deals/${encodeURIComponent(dealId)}/settle`, { method: 'POST', headers: { 'Idempotency-Key': idempotencyKey } });
+  }
+
+  public receipt(dealId: string) {
+    return this.request<ReceiptResponse>(`/v1/deals/${encodeURIComponent(dealId)}/receipt`, { method: 'GET' });
+  }
+
+  public replay(taskId: string) {
+    return this.request<ReplayResponse>(`/v1/tasks/${encodeURIComponent(taskId)}/replay`, { method: 'GET' });
+  }
+
+  public security(taskId: string) {
+    return this.request<SecurityIncidentListResponse>(`/v1/tasks/${encodeURIComponent(taskId)}/security`, { method: 'GET' });
+  }
+
+  public memory(principalId: string) {
+    return this.request<SupplierMemoryListResponse>(`/v1/principals/${encodeURIComponent(principalId)}/supplier-memory`, { method: 'GET' });
+  }
+
+  public disputeMemory(memoryId: string, payload: MemoryDisputeRequest) {
+    return this.request<SupplierMemoryResponse>(`/v1/supplier-memory/${encodeURIComponent(memoryId)}/dispute`, { method: 'POST', body: JSON.stringify(payload) });
+  }
+
+  public correctMemory(memoryId: string, payload: MemoryCorrectionRequest) {
+    return this.request<SupplierMemoryResponse>(`/v1/supplier-memory/${encodeURIComponent(memoryId)}/correct`, { method: 'POST', body: JSON.stringify(payload) });
+  }
+
+  public notifications() {
+    return this.request<NotificationListResponse>('/v1/notifications', { method: 'GET' });
+  }
+
+  public sellerRFQs(principalId: string) {
+    return this.request<SellerRFQListResponse>(`/v1/principals/${encodeURIComponent(principalId)}/rfqs`, { method: 'GET' });
   }
 }
 

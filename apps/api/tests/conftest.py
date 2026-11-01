@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from collections.abc import Iterator
 
@@ -18,6 +19,8 @@ from app.main import create_app
 def isolate_settings(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setitem(Settings.model_config, "env_file", None)
     for field in Settings.model_fields:
+        if field == "database_url" and os.environ.get("RUN_POSTGRES_INTEGRATION") == "1":
+            continue
         monkeypatch.delenv(field.upper(), raising=False)
 
 

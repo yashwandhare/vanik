@@ -4,6 +4,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import SellerPage from '../src/app/seller/page';
 
 const mocks = vi.hoisted(() => ({
+  sellerRFQs: vi.fn(),
   getSession: vi.fn(),
   listMarketplaceSellers: vi.fn(),
   getSellerInventory: vi.fn(),
@@ -150,6 +151,13 @@ describe('Seller Workspace Page', () => {
   });
 
   it('strictly masks buyer maximum budget in the incoming RFQs view', async () => {
+    mocks.sellerRFQs.mockResolvedValueOnce({ data: { items: [{
+      id: 'negotiation-real-response', task_id: 'task-from-api', state: 'evaluating', round_no: 1,
+      offers: [], messages: [{ message_type: 'REQUEST_FOR_QUOTE', sender_principal_id: 'buyer-principal',
+        sender_agent_id: 'buyer-agent', key_version: 1, signature: 'backend-signature',
+        payload: { lines: [{ sku: 'STP-RICE-BAS-5K', quantity: '2', unit: 'bag' }], currency: 'INR' },
+      }],
+    }] } });
     render(<SellerPage />);
     await waitFor(() => expect(mocks.listMarketplaceSellers).toHaveBeenCalled());
     await waitFor(() => expect(mocks.getSellerInventory).toHaveBeenCalled());
@@ -159,7 +167,9 @@ describe('Seller Workspace Page', () => {
 
     // Verify critical privacy banner and budget masking
     expect(await screen.findByText(/BUYER BUDGET PRIVACY/i)).toBeDefined();
-    expect(await screen.findByText(/Shree Ganesh Kirana Store/i)).toBeDefined();
+    expect(await screen.findByText(/RFQ \/ Negotiation: negotiation-real-response/i)).toBeDefined();
+    expect(mocks.sellerRFQs).toHaveBeenCalledWith('20000000-0000-4000-8000-000000000002');
+    expect(screen.queryByRole('button', { name: /Generate Agent Quote/i })).toBeNull();
     expect(screen.getAllByText(/\[CONFIDENTIAL • MASKED\]/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.queryByText(/₹85,000/i)).toBeNull(); // Buyer budget never exposed
   });

@@ -1,0 +1,47 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/ProcurementPolicyResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "credit_score": {
+      "title": "Credit Score",
+      "type": "integer"
+    },
+    "label": {
+      "const": "SYNTHETIC PROCUREMENT AUTHORITY",
+      "default": "SYNTHETIC PROCUREMENT AUTHORITY",
+      "title": "Label",
+      "type": "string"
+    },
+    "max_budget_inr": {
+      "title": "Max Budget Inr",
+      "type": "string"
+    },
+    "max_credit_days": {
+      "maximum": 30,
+      "minimum": 0,
+      "title": "Max Credit Days",
+      "type": "integer"
+    },
+    "max_rounds": {
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Max Rounds",
+      "type": "integer"
+    },
+    "principal_id": {
+      "format": "uuid",
+      "title": "Principal Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "max_budget_inr",
+    "max_credit_days",
+    "max_rounds",
+    "principal_id",
+    "credit_score"
+  ],
+  "title": "ProcurementPolicyResponse",
+  "type": "object"
+}
