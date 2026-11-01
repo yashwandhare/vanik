@@ -22,7 +22,9 @@ Do not assume that a feature exists because a document specifies it.
 10. [Implementation plan](delivery/IMPLEMENTATION_PLAN.md)
 11. [Team execution plan](delivery/TEAM_EXECUTION_PLAN.md)
 12. [Project TODO](delivery/PROJECT_TODO.md)
-13. [Demo runbook](delivery/DEMO_RUNBOOK.md)
+13. [Three-developer completion plan](delivery/THREE_DEV_EXECUTION.md)
+14. [DevA TODO](delivery/DEVA_TODO.md)
+15. [Demo runbook](delivery/DEMO_RUNBOOK.md)
 
 ## Documentation map
 
@@ -45,6 +47,8 @@ Do not assume that a feature exists because a document specifies it.
 - `delivery/IMPLEMENTATION_PLAN.md` defines build order and developer commands.
 - `delivery/TEAM_EXECUTION_PLAN.md` defines ownership and collaboration rules.
 - `delivery/PROJECT_TODO.md` tracks implementation by phase.
+- `delivery/THREE_DEV_EXECUTION.md` defines the current DevA/DevB/DevC ownership split.
+- `delivery/DEVA_TODO.md` tracks Main's critical-path backend and integration work.
 - `delivery/DEMO_RUNBOOK.md` defines the required demonstration.
 
 ### Decisions
@@ -65,8 +69,9 @@ Report unresolved conflicts to Main. Do not silently choose a new requirement or
 
 ## Change rules
 
-- Main owns product architecture, backend contracts and final integration.
-- Teammate B owns the web, Telegram Bot and Telegram Mini App implementations.
+- Main (DevA) owns product architecture, backend contracts and final integration.
+- DevB owns the web, Telegram Bot and Telegram Mini App implementations.
+- DevC owns only its assigned pure deterministic domain modules and tests.
 - Update affected links when a document moves.
 - Update contracts before clients depend on changed fields or states.
 - Clearly label simulations and proposed functionality.
