@@ -1,25 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --color-cream-parchment: #f8f9eb;
+  /* Indic Mandi & Festive Kirana Palette */
+  --color-cream-parchment: #fbf7ee; /* Warm Sandalwood / Desi Khadi Parchment */
   --color-pure-white: #ffffff;
-  --color-obsidian: #000000;
-  --color-charcoal: #202020;
-  --color-sage-mist: #c0c2a9;
-  --color-olive-slate: #5a5a4f;
-  --color-pebble: #7c7d76;
-  --color-bone: #edeee1;
-  --color-forest-depths: #003d21;
-  --color-mint-sprout: #aafdc0;
-  --color-cobalt-ink: #041668;
-  --color-plum-depth: #2d0078;
-  --color-wine-shadow: #3f0929;
-  --color-lilac-wash: #d3beff;
-  --color-sky-wash: #b0f4ff;
-  --color-rose-wash: #ffc0e6;
+  --color-obsidian: #1c1917; /* Warm Deep Obsidian Espresso */
+  --color-charcoal: #292524; /* Warm Earthen Charcoal */
+  --color-sage-mist: #d8cbbe; /* Warm Sandstone & Brass Border */
+  --color-olive-slate: #665e55; /* Warm Spiced Earth Text */
+  --color-pebble: #877d73; /* Warm Sand Subdued Label */
+  --color-bone: #f3ebe0; /* Warm Champa / Multani Mitti */
+  --color-forest-depths: #85290c; /* Deep Royal Terracotta / Gerua */
+  --color-mint-sprout: #fde68a; /* Festive Marigold / Genda Phool Gold */
+  --color-cobalt-ink: #7c2d12; /* Deep Terracotta Ink */
+  --color-plum-depth: #78350f; /* Deep Kesar Amber */
+  --color-wine-shadow: #881337; /* Deep Sindoor / Kumkum */
+  --color-lilac-wash: #fed7aa; /* Warm Mitti / Terracotta Clay Wash */
+  --color-sky-wash: #fef3c7; /* Warm Kesar / Haldi Silk Wash */
+  --color-rose-wash: #ffe4e6; /* Festive Gulal Rose Wash */
 
-  --background: #f8f9eb;
-  --foreground: #000000;
+  /* Semantic Indic Tokens */
+  --color-terracotta: #85290c;
+  --color-marigold: #f59e0b;
+  --color-haldi-gold: #fef3c7;
+  --color-neem-green: #14532d;
+  --color-tulsi-wash: #dcfce7;
+  --color-kumkum-crimson: #991b1b;
+
+  --background: #fbf7ee;
+  --foreground: #1c1917;
 }
 
 * {
@@ -41,8 +50,8 @@ code, kbd, samp, pre, .font-mono {
 }
 
 ::selection {
-  background-color: #aafdc0;
-  color: #003d21;
+  background-color: #fde68a;
+  color: #78350f;
 }
 
 /* Master container class for strict horizontal alignment across all views */
