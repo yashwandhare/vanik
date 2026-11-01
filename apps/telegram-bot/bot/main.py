@@ -4,6 +4,7 @@ import logging
 import sys
 from typing import Any
 
+from telegram import BotCommand, MenuButtonCommands
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
 from bot.client import BackendClient
@@ -11,9 +12,11 @@ from bot.config import BotSettings
 from bot.handlers.adversarial_test import adversarial_test_handler
 from bot.handlers.create_agent import create_agent_handler
 from bot.handlers.deal_auth import auth_deal_handler
+from bot.handlers.disconnect import disconnect_handler
 from bot.handlers.ganesh_onboarding import ganesh_agent_handler, ganesh_kirana_handler
 from bot.handlers.help import help_handler
 from bot.handlers.link import link_handler
+from bot.handlers.miniapp import miniapp_handler
 from bot.handlers.natural_chat import natural_chat_handler
 from bot.handlers.sale import sale_handler
 from bot.handlers.start import start_handler
@@ -70,6 +73,25 @@ def configure_logging(token: str = "", bot_secret: str = "") -> None:
 async def start_worker(application: Application[Any, Any, Any, Any, Any, Any]) -> None:
     worker: NotificationWorker = application.bot_data["worker"]
     worker.start()
+    try:
+        commands = [
+            BotCommand("start", "Welcome & live business onboarding guide"),
+            BotCommand("ganesh_kirana", "Quick-load Shree Ganesh Kirana persona"),
+            BotCommand("ganesh_agent", "Spawn verified Kirana Buyer Agent"),
+            BotCommand("task", "Deploy 40-SKU Diwali restock mandate"),
+            BotCommand("miniapp", "Open VANIK Interactive Mini App"),
+            BotCommand("sale", "Put wholesale items on sale (Seller)"),
+            BotCommand("auth_deal", "Cryptographically lock & authorize deal"),
+            BotCommand("test", "Simulate adversarial seller / injection attack"),
+            BotCommand("disconnect", "Reset session to rerun demo from start"),
+            BotCommand("status", "Check current agent and market status"),
+            BotCommand("help", "Architecture details & all commands"),
+        ]
+        await application.bot.set_my_commands(commands)
+        await application.bot.set_chat_menu_button(menu_button=MenuButtonCommands())
+        logger.info("Configured slash commands and chat menu button")
+    except Exception as exc:
+        logger.warning("Could not set bot commands: %s", exc)
 
 
 async def stop_worker(application: Application[Any, Any, Any, Any, Any, Any]) -> None:
@@ -119,6 +141,9 @@ def build_application(
     app.add_handler(CommandHandler("auth_deal", auth_deal_handler))
     app.add_handler(CommandHandler("test", adversarial_test_handler))
     app.add_handler(CommandHandler("sale", sale_handler))
+    app.add_handler(CommandHandler("miniapp", miniapp_handler))
+    app.add_handler(CommandHandler("disconnect", disconnect_handler))
+    app.add_handler(CommandHandler("reset", disconnect_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, natural_chat_handler), group=1)
     app.add_error_handler(error_handler)
 

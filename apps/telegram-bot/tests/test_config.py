@@ -66,6 +66,9 @@ async def test_application_wires_real_worker_lifecycle_and_commands() -> None:
         "auth_deal",
         "test",
         "sale",
+        "miniapp",
+        "disconnect",
+        "reset",
     }
     assert app.post_init is start_worker
     assert app.post_stop is stop_worker

@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { apiClient } from '../../lib/api-client';
 
-type MiniAppTab = 'mandate' | 'passport' | 'timeline' | 'comparison' | 'approval';
+type MiniAppTab = 'mandate' | 'passport' | 'timeline' | 'comparison' | 'approval' | 'a2a';
 
 function MiniAppContent() {
   const searchParams = useSearchParams();
@@ -15,7 +15,7 @@ function MiniAppContent() {
   const dealId = searchParams.get('dealId') || 'deal-diwali-2026-01';
 
   const [activeTab, setActiveTab] = useState<MiniAppTab>(
-    ['mandate', 'passport', 'timeline', 'comparison', 'approval'].includes(initialView)
+    ['mandate', 'passport', 'timeline', 'comparison', 'approval', 'a2a'].includes(initialView)
       ? initialView
       : 'approval'
   );
@@ -52,13 +52,13 @@ function MiniAppContent() {
         <div
           role="tablist"
           aria-label="Mini App Views"
-          className="grid grid-cols-5 gap-1 bg-[#FFFDF9] border-[1.5px] border-[#1C181A] p-1 rounded-[16px] text-center shadow-xs text-[11px] font-mono font-bold"
+          className="grid grid-cols-6 gap-1 bg-[#FFFDF9] border-[1.5px] border-[#1C181A] p-1 rounded-[16px] text-center shadow-xs text-[10px] font-mono font-bold"
         >
           <button
             role="tab"
             aria-selected={activeTab === 'mandate'}
             onClick={() => setActiveTab('mandate')}
-            className={`py-2 px-1 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
+            className={`py-2 px-0.5 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
               activeTab === 'mandate'
                 ? 'bg-[#1C181A] text-white shadow-2xs'
                 : 'text-[#5E4E40] hover:text-[#1C181A]'
@@ -70,7 +70,7 @@ function MiniAppContent() {
             role="tab"
             aria-selected={activeTab === 'passport'}
             onClick={() => setActiveTab('passport')}
-            className={`py-2 px-1 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
+            className={`py-2 px-0.5 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
               activeTab === 'passport'
                 ? 'bg-[#1C181A] text-white shadow-2xs'
                 : 'text-[#5E4E40] hover:text-[#1C181A]'
@@ -82,7 +82,7 @@ function MiniAppContent() {
             role="tab"
             aria-selected={activeTab === 'timeline'}
             onClick={() => setActiveTab('timeline')}
-            className={`py-2 px-1 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
+            className={`py-2 px-0.5 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
               activeTab === 'timeline'
                 ? 'bg-[#1C181A] text-white shadow-2xs'
                 : 'text-[#5E4E40] hover:text-[#1C181A]'
@@ -94,7 +94,7 @@ function MiniAppContent() {
             role="tab"
             aria-selected={activeTab === 'comparison'}
             onClick={() => setActiveTab('comparison')}
-            className={`py-2 px-1 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
+            className={`py-2 px-0.5 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
               activeTab === 'comparison'
                 ? 'bg-[#1C181A] text-white shadow-2xs'
                 : 'text-[#5E4E40] hover:text-[#1C181A]'
@@ -106,13 +106,25 @@ function MiniAppContent() {
             role="tab"
             aria-selected={activeTab === 'approval'}
             onClick={() => setActiveTab('approval')}
-            className={`py-2 px-1 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
+            className={`py-2 px-0.5 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
               activeTab === 'approval'
                 ? 'bg-[#0F5B57] text-white shadow-2xs'
                 : 'text-[#0F5B57] hover:bg-[#0F5B57]/10'
             }`}
           >
             Approve
+          </button>
+          <button
+            role="tab"
+            aria-selected={activeTab === 'a2a'}
+            onClick={() => setActiveTab('a2a')}
+            className={`py-2 px-0.5 rounded-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
+              activeTab === 'a2a'
+                ? 'bg-[#1C181A] text-white shadow-2xs'
+                : 'text-[#5E4E40] hover:text-[#1C181A]'
+            }`}
+          >
+            A2A
           </button>
         </div>
 
@@ -172,8 +184,8 @@ function MiniAppContent() {
                 <span className="text-[10px] font-mono text-[#0F5B57] uppercase tracking-wider font-bold block">
                   [ VERIFIED AGENT CREDENTIAL ]
                 </span>
-                <h2 className="text-xl font-extrabold text-[#1C181A]">Diwali Restock Agent</h2>
-                <p className="text-xs text-[#5E4E40]">Kirana Autonomous Procurement Bot</p>
+                <h2 className="text-xl font-extrabold text-[#1C181A]">Shree Ganesh Kirana Buyer Agent</h2>
+                <p className="text-xs text-[#5E4E40]">Diwali Restock Agent • Autonomous Procurement Bot</p>
               </div>
               <span className="px-2.5 py-0.5 rounded-full bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57] font-mono font-bold text-[10px] uppercase">
                 ACTIVE
@@ -182,20 +194,24 @@ function MiniAppContent() {
 
             <div className="space-y-2.5 text-xs font-mono">
               <div className="flex justify-between p-2.5 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8]">
+                <span className="text-[#7D6F61]">Agent ID:</span>
+                <span className="text-[#1C181A] font-bold">`7a1bd7b3-308a`</span>
+              </div>
+              <div className="flex justify-between p-2.5 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8]">
                 <span className="text-[#7D6F61]">Cryptographic Key:</span>
                 <span className="text-[#1C181A] font-bold">Ed25519 (v1 Active)</span>
               </div>
               <div className="flex justify-between p-2.5 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8]">
+                <span className="text-[#7D6F61]">Principal:</span>
+                <span className="text-[#0F5B57] font-bold">Shree Ganesh Kirana</span>
+              </div>
+              <div className="flex justify-between p-2.5 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8]">
                 <span className="text-[#7D6F61]">Strategy Profile:</span>
-                <span className="text-[#0F5B57] font-bold">Price & Speed Optimizer</span>
+                <span className="text-[#0F5B57] font-bold">Volume Clearance Maximizer</span>
               </div>
               <div className="flex justify-between p-2.5 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8]">
-                <span className="text-[#7D6F61]">Tool Ceiling:</span>
-                <span className="text-[#1C181A]">Marketplace Search, Benchmark</span>
-              </div>
-              <div className="flex justify-between p-2.5 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8]">
-                <span className="text-[#7D6F61]">Principal Verification:</span>
-                <span className="text-[#0F5B57] font-bold">Demo Verified</span>
+                <span className="text-[#7D6F61]">Spend Ceiling:</span>
+                <span className="text-[#1C181A] font-bold">INR ₹85,000.00 (Masked)</span>
               </div>
             </div>
           </div>
@@ -206,36 +222,36 @@ function MiniAppContent() {
           <div className="space-y-3">
             {[
               {
-                name: 'Kisan Wholesale (Seller B)',
-                strategy: 'Clearance',
+                name: 'Kisan Wholesale / Utsav Distributors (Seller B)',
+                strategy: 'Clearance Max',
                 status: 'accepted',
                 quote: '₹79,850.00',
                 round: 2,
-                terms: 'Net 7 Days',
+                terms: 'Net 7 Days (10% Upfront)',
               },
               {
-                name: 'Mahalaxmi Agro (Seller A)',
-                strategy: 'Margin',
+                name: 'Mangal Wholesale / Mahalaxmi Agro (Seller A)',
+                strategy: 'Margin Optimizer',
                 status: 'evaluating',
                 quote: '₹84,200.00',
                 round: 2,
-                terms: 'Net 15 Days',
+                terms: 'Net 15 Days (20% Upfront)',
               },
               {
-                name: 'Vardhaman Bulk (Seller C)',
+                name: 'Suraksha Trade Co (Seller C)',
                 strategy: 'Payment-Risk',
                 status: 'offer_received',
                 quote: '₹82,400.00',
                 round: 1,
-                terms: 'Prepaid 0 Days',
+                terms: 'Advance UPI Only (0 Days)',
               },
               {
-                name: 'QuickDrop Wholesale (Seller D)',
-                strategy: 'Adversarial',
+                name: 'Synthetic Red Team / QuickDrop Wholesale (Seller D)',
+                strategy: 'Adversarial Injection',
                 status: 'flagged',
                 quote: '₹95,000.00',
                 round: 1,
-                terms: 'Injection Blocked',
+                terms: 'Attack Mitigated',
               },
             ].map((s) => (
               <div
@@ -410,7 +426,7 @@ function MiniAppContent() {
                       <strong>Buyer:</strong> Rameshwar Patil (Shree Ganesh Kirana) — <code>+91 98220 14298</code>
                     </div>
                     <div className="text-[10px]">
-                      <strong>Seller:</strong> Suresh Agarwal (Kisan Wholesale) — <code>+91 94225 88124</code>
+                      <strong>Seller:</strong> Suresh Agarwal (Utsav Distributors) — <code>+91 94225 88124</code>
                     </div>
                   </div>
                 </div>
@@ -434,6 +450,67 @@ function MiniAppContent() {
                   )}
                 </button>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* VIEW 6: A2A PROTOCOL INSPECTOR */}
+        {activeTab === 'a2a' && (
+          <div className="bg-[#1C181A] border-[1.5px] border-[#1C181A] rounded-[24px] p-5 text-white space-y-4 shadow-sm font-mono text-xs">
+            <div className="flex items-center justify-between border-b border-[#5E4E40] pb-3">
+              <div>
+                <span className="text-[10px] text-[#F7CE58] uppercase font-bold block">
+                  [ RFC-8785 PROTOCOL ]
+                </span>
+                <h3 className="text-sm font-extrabold text-white">Canonical A2A Signed Envelope</h3>
+              </div>
+              <span className="px-2 py-0.5 rounded bg-[#0F5B57] text-[9px] font-bold text-[#C5EDB1]">
+                ✓ Ed25519 VERIFIED
+              </span>
+            </div>
+
+            <div className="bg-[#121011] p-3 rounded-[12px] border border-[#2B2528] text-[10px] text-[#ECE3D4] overflow-x-auto max-h-[320px]">
+              <pre>{JSON.stringify(
+                {
+                  protocol: 'vanik.a2a.v1',
+                  message_id: 'msg-utsav-01b1-2026-rfq-deal',
+                  sender: {
+                    agent_id: '7a1bd7b3-308a-5f49-ba8a-0dd1ec451c88',
+                    principal: 'Shree Ganesh Kirana',
+                    key_version: 1,
+                  },
+                  recipient: {
+                    agent_id: '01b1b22a-c8d4-5f27-ad88-0da5fd25d4bb',
+                    trade_name: 'Utsav Distributors',
+                  },
+                  message_type: 'DEAL_LOCKED_SETTLEMENT',
+                  payload: {
+                    basket_hash: 'sha256:7f9a8b1c4d2e5f60a1b...',
+                    total_amount_inr: '79850.00',
+                    credit_terms: 'Net 7 Days (10% Upfront)',
+                    delivery_schedule_days: 2,
+                    budget_masked: true,
+                  },
+                  signature: 'c+Kx9vL2...[Ed25519 Canonical RFC-8785]...',
+                },
+                null,
+                2
+              )}</pre>
+            </div>
+
+            <div className="space-y-1.5 text-[10px] text-[#A69788]">
+              <div className="flex justify-between">
+                <span>Zero-Knowledge Masking:</span>
+                <span className="text-[#C5EDB1] font-bold">Budget Protected</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Free-Text Directives:</span>
+                <span className="text-[#F7CE58] font-bold">Strictly Quarantined</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Sovereign Principal Auth:</span>
+                <span className="text-white font-bold">Required for Fund Movement</span>
+              </div>
             </div>
           </div>
         )}
