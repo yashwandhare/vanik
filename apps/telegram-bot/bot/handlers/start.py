@@ -87,19 +87,21 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             await update.effective_message.reply_text(text, parse_mode="Markdown")
             return
 
-    # Standard onboarding welcome message
+    # Standard onboarding welcome message with interactive questions
     text = (
         "👋 *Welcome to VANIK B2B Agentic Marketplace Bot*\n\n"
-        "This bot provides real-time notification alerts, cryptographic deal challenges, "
-        "and agent progress reports for your verified business principal.\n\n"
-        "🔗 *Account Linking:*\n"
-        "1. Open the VANIK web portal at `http://localhost:3000`\n"
-        "2. Navigate to *Business Principal Profile*\n"
-        "3. Click *Generate Telegram Link Code*\n"
-        "4. Reply here with: `/link <YOUR_CODE>`\n\n"
-        "📱 *Mini App Navigation:*\n"
-        "Open `http://localhost:3000/miniapp` for mandate management, offer comparisons, "
-        "and one-touch deal approvals.\n\n"
-        "Type `/help` to see all available commands."
+        "VANIK connects retail kirana businesses with verified wholesale mandi distributors "
+        "using autonomous negotiating agents and cryptographic Ed25519 passports.\n\n"
+        "🌾 *Step 1: Tell Us About Your Business:*\n"
+        "• What is your kirana store or business trade name?\n"
+        "• Who is the primary owner or authorized signatory?\n"
+        "• In which city or mandi yard are you located?\n"
+        "• What are your primary restock categories (Staples, Oils, Spices)?\n\n"
+        "💡 *Live Presentation Shortcut:*\n"
+        "Send `/ganesh_kirana` to instantly feed the pre-seeded character for "
+        "*Shree Ganesh Kirana Store (Market Yard, Pune)*!\n\n"
+        "🔗 *Account Linking:* If you already have a code, reply with `/link <YOUR_CODE>`.\n"
+        "📱 *Mini App:* Access structured deals at `http://localhost:3000/miniapp`.\n\n"
+        "💬 *You can also ask me anything about VANIK, agent passports, or mandi trading!*"
     )
     await update.effective_message.reply_text(text, parse_mode="Markdown")

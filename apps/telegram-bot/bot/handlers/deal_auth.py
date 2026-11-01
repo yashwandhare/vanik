@@ -45,6 +45,12 @@ async def auth_deal_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         f'• *Review:* _"Counterparty honored benchmark price, accepted Net-7 credit terms, '
         f'2-day delivery guaranteed. Ed25519 terms signed."_\n'
         f"• *Ledger Status:* `✓ Committed to immutable Mandi Reputation Ledger`\n\n"
+        f"🤝 *Direct Counterparty Contact Exchange:*\n"
+        f"• *Buyer Principal:* Rameshwar Patil (Shree Ganesh Kirana)\n"
+        f"  📞 `+91 98220 14298` | 📍 Shop 4, Market Yard, Gultekdi, Pune\n"
+        f"• *Seller Principal:* Suresh Agarwal (Kisan Wholesale Traders)\n"
+        f"  📞 `+91 94225 88124` | 📦 Godown 12, APMC Market Yard, Pune\n"
+        f"  _(Parties can coordinate physical logistics directly, or let AI settle payments)_\n\n"
         f"👉 [Inspect Seller in Live Rankings](http://localhost:3000/catalogue?tab=rankings)\n"
         f"👉 [Inspect Seller Agent Passport](http://localhost:3000/agents?agentId=agent-kisan-01)\n"
         f"👉 [View Deal Replay in Dashboard](http://localhost:3000/negotiations?tab=comparison)"

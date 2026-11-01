@@ -4,14 +4,16 @@ import logging
 import sys
 from typing import Any
 
-from telegram.ext import Application, CommandHandler
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
 
 from bot.config import BotSettings
 from bot.handlers.adversarial_test import adversarial_test_handler
 from bot.handlers.create_agent import create_agent_handler
 from bot.handlers.deal_auth import auth_deal_handler
+from bot.handlers.ganesh_onboarding import ganesh_agent_handler, ganesh_kirana_handler
 from bot.handlers.help import help_handler
 from bot.handlers.link import link_handler
+from bot.handlers.natural_chat import natural_chat_handler
 from bot.handlers.sale import sale_handler
 from bot.handlers.start import start_handler
 from bot.handlers.status import status_handler
@@ -73,6 +75,8 @@ def build_application(
     app = Application.builder().token(token).build()
 
     app.add_handler(CommandHandler("start", start_handler))
+    app.add_handler(CommandHandler("ganesh_kirana", ganesh_kirana_handler))
+    app.add_handler(CommandHandler("ganesh_agent", ganesh_agent_handler))
     app.add_handler(CommandHandler("link", link_handler))
     app.add_handler(CommandHandler("status", status_handler))
     app.add_handler(CommandHandler("help", help_handler))
@@ -81,6 +85,7 @@ def build_application(
     app.add_handler(CommandHandler("auth_deal", auth_deal_handler))
     app.add_handler(CommandHandler("test", adversarial_test_handler))
     app.add_handler(CommandHandler("sale", sale_handler))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, natural_chat_handler))
 
     return app
 

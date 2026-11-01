@@ -404,6 +404,15 @@ function MiniAppContent() {
                       ✓ Committed to Mandi Reputation Ledger
                     </span>
                   </div>
+                  <div className="p-2.5 bg-[#FFFDF9] rounded-[10px] border border-[#0F5B57]/30 text-left text-[11px] font-mono space-y-1 text-[#1C181A]">
+                    <div className="font-bold text-[#0F5B57]">🤝 Counterparty Contact Exchange:</div>
+                    <div className="text-[10px]">
+                      <strong>Buyer:</strong> Rameshwar Patil (Shree Ganesh Kirana) — <code>+91 98220 14298</code>
+                    </div>
+                    <div className="text-[10px]">
+                      <strong>Seller:</strong> Suresh Agarwal (Kisan Wholesale) — <code>+91 94225 88124</code>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <button

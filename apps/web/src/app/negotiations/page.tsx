@@ -1368,6 +1368,41 @@ function NegotiationsContent() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Direct Counterparty Contact Exchange */}
+                  <div className="p-4 bg-[#FFFDF9] border border-[#DDD0B8] rounded-[12px] space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#DDD0B8] pb-2">
+                      <span className="font-extrabold text-xs text-[#1C181A] flex items-center gap-1.5">
+                        <span>🤝</span>
+                        <span>Direct Counterparty Contact Exchange (Logistics & Settlement)</span>
+                      </span>
+                      <span className="text-[10px] font-mono font-bold text-[#0F5B57] bg-[#C5EDB1] px-2 py-0.5 rounded-full border border-[#0F5B57]">
+                        VERIFIED TRADERS
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div className="p-3 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8] space-y-1">
+                        <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block">
+                          Buyer Principal (Kirana)
+                        </span>
+                        <div className="font-bold text-[#1C181A]">Rameshwar Patil</div>
+                        <div className="text-[11px] font-mono text-[#5E4E40]">Shree Ganesh Kirana Store</div>
+                        <div className="text-[11px] font-mono text-[#0F5B57] font-semibold">📞 +91 98220 14298</div>
+                        <div className="text-[10px] text-[#7D6F61]">📍 Shop 4, Market Yard, Gultekdi, Pune</div>
+                      </div>
+
+                      <div className="p-3 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8] space-y-1">
+                        <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block">
+                          Seller Principal (Wholesale)
+                        </span>
+                        <div className="font-bold text-[#1C181A]">Suresh Agarwal</div>
+                        <div className="text-[11px] font-mono text-[#5E4E40]">Kisan Wholesale Traders</div>
+                        <div className="text-[11px] font-mono text-[#0F5B57] font-semibold">📞 +91 94225 88124</div>
+                        <div className="text-[10px] text-[#7D6F61]">📦 Godown 12, APMC Market Yard, Pune</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

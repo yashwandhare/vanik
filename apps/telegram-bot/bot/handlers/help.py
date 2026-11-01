@@ -12,6 +12,8 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     text = (
         "📖 *VANIK Telegram Bot Commands*\n\n"
         "• `/start` — Welcome message and deep-link processor\n"
+        "• `/ganesh_kirana` — Onboard pre-seeded Shree Ganesh Kirana Store (Pune)\n"
+        "• `/ganesh_agent` — Spawn pre-seeded Diwali Bulk Procurement Agent\n"
         "• `/link <CODE>` — Link your Telegram user ID using a single-use code\n"
         "• `/create_agent` — Conversational creation of your buyer/seller AI agent\n"
         "• `/task <MANDATE>` — Launch parallel procurement negotiation across sellers\n"
