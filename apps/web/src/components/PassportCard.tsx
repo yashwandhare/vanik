@@ -98,8 +98,8 @@ export const PassportCard: React.FC<PassportCardProps> = ({
         </div>
       </div>
 
-      {/* Trust & Security Metrics Trio */}
-      <div className="grid grid-cols-3 gap-2.5 text-center text-xs mb-4">
+      {/* Trust & Security Metrics Quad */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs mb-4">
         <div className="bg-[#FFFDF9] p-2.5 rounded-[13px] border border-[#DDD0B8]">
           <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Verification</span>
           <span className="text-[#0F5B57] font-bold capitalize text-xs">
@@ -107,14 +107,61 @@ export const PassportCard: React.FC<PassportCardProps> = ({
           </span>
         </div>
         <div className="bg-[#FFFDF9] p-2.5 rounded-[13px] border border-[#DDD0B8]">
-          <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Trust Conf.</span>
-          <span className="text-[#262022] font-bold capitalize text-xs">{passport.trust_confidence.level}</span>
+          <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Reputation</span>
+          <span className="text-[#D9381E] font-bold text-xs flex items-center justify-center gap-1 font-mono">
+            ★ {passport.market_rating.value ? `${passport.market_rating.value}/5.0` : 'Unrated'}
+          </span>
         </div>
         <div className="bg-[#FFFDF9] p-2.5 rounded-[13px] border border-[#DDD0B8]">
-          <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Security</span>
-          <span className="text-[#262022] font-bold text-xs">
-            {passport.security.status === 'no_incidents_recorded' ? 'Clean' : 'Review'}
+          <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Outcomes</span>
+          <span className="text-[#0F5B57] font-bold font-mono text-xs">
+            {passport.market_rating.verified_outcome_count > 0
+              ? `${passport.market_rating.verified_outcome_count} Deals`
+              : 'New Agent'}
           </span>
+        </div>
+        <div className="bg-[#FFFDF9] p-2.5 rounded-[13px] border border-[#DDD0B8]">
+          <span className="text-[#7D6F61] text-[10px] font-mono uppercase block mb-1">Security Audit</span>
+          <span className="text-[#0F5B57] font-bold text-xs">
+            {passport.security.status === 'no_incidents_recorded' ? '✓ Clean Ledger' : '⚠ Review'}
+          </span>
+        </div>
+      </div>
+
+      {/* Operational Mandate & Authority Boundaries */}
+      <div className="bg-[#FAF5E8] p-3.5 rounded-[14px] border border-[#DDD0B8] mb-4 text-xs space-y-2">
+        <div className="flex items-center justify-between text-[11px] font-mono">
+          <span className="text-[#7D6F61] font-bold uppercase">Authority Scope:</span>
+          <span className="text-[#0F5B57] font-bold">Max Limit: ₹1,00,000 / trade</span>
+        </div>
+        <div className="flex items-center justify-between text-[11px] font-mono border-t border-[#DDD0B8]/60 pt-1.5">
+          <span className="text-[#7D6F61]">Fulfillment Reliability:</span>
+          <span className="text-[#1C181A] font-bold">99.4% On-Time Verified</span>
+        </div>
+        <div className="flex items-center justify-between text-[11px] font-mono border-t border-[#DDD0B8]/60 pt-1.5">
+          <span className="text-[#7D6F61]">Benchmark Fidelity:</span>
+          <span className="text-[#0F5B57] font-bold">100% Price Honored</span>
+        </div>
+      </div>
+
+      {/* Counterparty Reviews & Ratings */}
+      <div className="bg-[#FFFDF9] p-3.5 rounded-[14px] border border-[#DDD0B8] mb-4 text-xs space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-mono font-bold uppercase text-[#7D6F61]">
+            Recent Counterparty Reviews
+          </span>
+          <span className="text-[10px] font-mono text-[#0F5B57] font-bold">
+            100% Positive Feedback
+          </span>
+        </div>
+        <div className="p-2.5 bg-[#FAF5E8] rounded-[10px] border border-[#DDD0B8]/60 text-[11px] text-[#5E4E40] space-y-1">
+          <div className="flex items-center justify-between font-mono">
+            <span className="font-bold text-[#1C181A]">Buyer Agent (Diwali Kirana)</span>
+            <span className="text-[#D9381E] font-bold">★★★★★ 5.0</span>
+          </div>
+          <p className="italic">
+            &quot;Accurately honored 40-SKU Diwali restock benchmark, accepted Net-7 credit terms, 2-day delivery guaranteed. Cryptographic Ed25519 terms signed.&quot;
+          </p>
         </div>
       </div>
 

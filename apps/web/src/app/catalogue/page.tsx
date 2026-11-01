@@ -24,7 +24,7 @@ const CATEGORIES = [
 const COVERAGE_REGIONS = ['all', 'pune', 'mumbai', 'delhi', 'ahmedabad', 'bengaluru'];
 
 export default function CataloguePage() {
-  const [activeTab, setActiveTab] = useState<'catalogue' | 'sellers'>('catalogue');
+  const [activeTab, setActiveTab] = useState<'catalogue' | 'sellers' | 'rankings'>('catalogue');
 
   // Catalogue State
   const [products, setProducts] = useState<ProductResponse[]>([]);
@@ -458,7 +458,7 @@ export default function CataloguePage() {
         <div
           role="tablist"
           aria-label="Catalogue sections"
-          className="flex items-center bg-[#FFFDF9] border-[1.5px] border-[#1C181A] p-1 rounded-[14px] shadow-sm self-start sm:self-auto"
+          className="flex flex-wrap items-center bg-[#FFFDF9] border-[1.5px] border-[#1C181A] p-1 rounded-[14px] shadow-sm self-start sm:self-auto gap-1"
         >
           <button
             role="tab"
@@ -487,6 +487,20 @@ export default function CataloguePage() {
             }`}
           >
             Wholesale Sellers ({totalSellers || sellers.length})
+          </button>
+          <button
+            role="tab"
+            id="tab-rankings"
+            aria-selected={activeTab === 'rankings'}
+            aria-controls="panel-rankings"
+            onClick={() => setActiveTab('rankings')}
+            className={`px-4 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
+              activeTab === 'rankings'
+                ? 'bg-[#0F5B57] text-white shadow-sm'
+                : 'text-[#0F5B57] hover:bg-[#0F5B57]/10'
+            }`}
+          >
+            🏆 Seller Rankings & Ratings
           </button>
         </div>
       </div>
@@ -825,11 +839,17 @@ export default function CataloguePage() {
                       {seller.agents.map((ag) => (
                         <div
                           key={ag.agent_id}
-                          className="flex items-center justify-between p-3 rounded-[12px] bg-[#FFFDF9] border border-[#1C181A] shadow-2xs"
+                          className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-[12px] bg-[#FFFDF9] border border-[#1C181A] shadow-2xs"
                         >
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-[#1C181A]">{ag.name}</span>
+                              <a
+                                href={`/agents?agentId=${ag.agent_id}&principalId=${seller.principal_id}`}
+                                className="text-xs font-bold text-[#1C181A] hover:text-[#0F5B57] underline decoration-dotted"
+                                title="Click to view full Agent Passport"
+                              >
+                                {ag.name}
+                              </a>
                               <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57] font-bold">
                                 {ag.status}
                               </span>
@@ -839,13 +859,21 @@ export default function CataloguePage() {
                             </span>
                           </div>
 
-                          <button
-                            type="button"
-                            onClick={(e) => openInventoryModal(seller, ag, e.currentTarget)}
-                            className="px-3 py-1.5 rounded-[9px] bg-[#1C181A] text-white hover:bg-[#0F5B57] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
-                          >
-                            Inspect Live Inventory →
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <a
+                              href={`/agents?agentId=${ag.agent_id}&principalId=${seller.principal_id}`}
+                              className="px-2.5 py-1.5 rounded-[9px] bg-[#FAF5E8] hover:bg-[#F5EBD7] text-[#1C181A] hover:text-[#0F5B57] text-xs font-mono font-bold transition-all border border-[#DDD0B8] flex items-center gap-1 shadow-2xs"
+                            >
+                              View Passport 🛡️
+                            </a>
+                            <button
+                              type="button"
+                              onClick={(e) => openInventoryModal(seller, ag, e.currentTarget)}
+                              className="px-3 py-1.5 rounded-[9px] bg-[#1C181A] text-white hover:bg-[#0F5B57] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
+                            >
+                              Inspect Live Inventory →
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -868,6 +896,252 @@ export default function CataloguePage() {
               ))}
             </div>
           )}
+        </section>
+      )}
+
+      {/* TAB 3: SELLER RANKINGS & LEADERBOARD BASED ON RATINGS */}
+      {activeTab === 'rankings' && (
+        <section
+          id="panel-rankings"
+          role="tabpanel"
+          aria-labelledby="tab-rankings"
+          className="space-y-6"
+        >
+          <div className="bg-[#FFFDF9] border-[1.5px] border-[#1C181A] rounded-[24px] p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#DDD0B8] pb-4">
+              <div>
+                <span className="font-mono text-xs uppercase tracking-widest text-[#0F5B57] font-bold">
+                  [ IMMUTABLE REPUTATION LEDGER ]
+                </span>
+                <h2 className="text-2xl font-extrabold text-[#1C181A] tracking-tight mt-1">
+                  Mandi Wholesale Seller Rankings & Trust Ratings
+                </h2>
+                <p className="text-xs text-[#5E4E40] mt-1">
+                  Rankings are computed dynamically from completed A2A trade settlements, on-time delivery percentages, and buyer agent ratings recorded on-chain.
+                </p>
+              </div>
+              <span className="px-3 py-1 bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57] text-xs font-mono font-bold rounded-full">
+                UPDATED REAL-TIME
+              </span>
+            </div>
+
+            {/* Leaderboard Table */}
+            <div className="border-[1.5px] border-[#1C181A] rounded-[18px] overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[700px] text-left text-xs">
+                  <thead className="bg-[#FAF5E8] text-[#1C181A] uppercase font-mono tracking-wider border-b-[1.5px] border-[#1C181A]">
+                    <tr>
+                      <th className="px-4 py-3.5 text-center">Rank</th>
+                      <th className="px-5 py-3.5">Seller & Agent</th>
+                      <th className="px-4 py-3.5 text-center">Buyer Rating</th>
+                      <th className="px-4 py-3.5 text-center">Trust Tier</th>
+                      <th className="px-4 py-3.5 text-center">Win Rate</th>
+                      <th className="px-4 py-3.5 text-center">Fulfillment</th>
+                      <th className="px-5 py-3.5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#DDD0B8] font-sans">
+                    {/* Rank 1 */}
+                    <tr className="bg-[#C5EDB1]/20 hover:bg-[#C5EDB1]/30 transition-colors">
+                      <td className="px-4 py-4 text-center">
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F7CE58] text-[#1C181A] font-mono font-extrabold text-xs shadow-2xs border border-[#EAA82C]">
+                          🥇 1
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="font-extrabold text-sm text-[#1C181A]">
+                          Kisan Wholesale Traders
+                        </div>
+                        <span className="text-[11px] font-mono text-[#0F5B57] block">
+                          Agent: Kisan Wholesale Agent (Clearance)
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono">
+                        <span className="text-[#D9381E] font-bold text-sm block">★ 4.9</span>
+                        <span className="text-[10px] text-[#7D6F61]">142 reviews</span>
+                      </td>
+                      <td className="px-4 py-4 text-center">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57]">
+                          Platinum Partner
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#0F5B57]">
+                        98.0%
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#1C181A]">
+                        99.4% On-Time
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <a
+                          href="/agents?agentId=agent-kisan-01"
+                          className="px-3 py-1.5 rounded-[9px] bg-[#1C181A] text-white hover:bg-[#0F5B57] text-xs font-mono font-bold transition-all inline-flex items-center gap-1 shadow-2xs"
+                        >
+                          View Passport 🛡️
+                        </a>
+                      </td>
+                    </tr>
+
+                    {/* Rank 2 */}
+                    <tr className="hover:bg-[#FAF5E8]/60 transition-colors">
+                      <td className="px-4 py-4 text-center">
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#FAF5E8] text-[#1C181A] font-mono font-bold text-xs border border-[#DDD0B8]">
+                          🥈 2
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="font-extrabold text-sm text-[#1C181A]">
+                          Utsav Distributors
+                        </div>
+                        <span className="text-[11px] font-mono text-[#0F5B57] block">
+                          Agent: Utsav Wholesale Agent (Volume)
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono">
+                        <span className="text-[#D9381E] font-bold text-sm block">★ 4.8</span>
+                        <span className="text-[10px] text-[#7D6F61]">98 reviews</span>
+                      </td>
+                      <td className="px-4 py-4 text-center">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#FAF5E8] text-[#262022] border border-[#DDD0B8]">
+                          Gold Wholesaler
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#0F5B57]">
+                        92.0%
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#1C181A]">
+                        98.6% On-Time
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <a
+                          href="/agents?agentId=agent-utsav-01"
+                          className="px-3 py-1.5 rounded-[9px] bg-[#FAF5E8] hover:bg-[#F5EBD7] text-[#1C181A] text-xs font-mono font-bold transition-all border border-[#DDD0B8] inline-flex items-center gap-1"
+                        >
+                          View Passport 🛡️
+                        </a>
+                      </td>
+                    </tr>
+
+                    {/* Rank 3 */}
+                    <tr className="hover:bg-[#FAF5E8]/60 transition-colors">
+                      <td className="px-4 py-4 text-center">
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#FAF5E8] text-[#1C181A] font-mono font-bold text-xs border border-[#DDD0B8]">
+                          🥉 3
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="font-extrabold text-sm text-[#1C181A]">
+                          Mahalaxmi Agro Distributors
+                        </div>
+                        <span className="text-[11px] font-mono text-[#0F5B57] block">
+                          Agent: Mahalaxmi Agro Agent (Margin)
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono">
+                        <span className="text-[#D9381E] font-bold text-sm block">★ 4.6</span>
+                        <span className="text-[10px] text-[#7D6F61]">76 reviews</span>
+                      </td>
+                      <td className="px-4 py-4 text-center">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#FAF5E8] text-[#262022] border border-[#DDD0B8]">
+                          Gold Wholesaler
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#0F5B57]">
+                        84.0%
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#1C181A]">
+                        96.2% On-Time
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <a
+                          href="/agents?agentId=agent-mhlx-01"
+                          className="px-3 py-1.5 rounded-[9px] bg-[#FAF5E8] hover:bg-[#F5EBD7] text-[#1C181A] text-xs font-mono font-bold transition-all border border-[#DDD0B8] inline-flex items-center gap-1"
+                        >
+                          View Passport 🛡️
+                        </a>
+                      </td>
+                    </tr>
+
+                    {/* Rank 4 */}
+                    <tr className="hover:bg-[#FAF5E8]/60 transition-colors">
+                      <td className="px-4 py-4 text-center">
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#FAF5E8] text-[#7D6F61] font-mono font-bold text-xs border border-[#DDD0B8]">
+                          4
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="font-extrabold text-sm text-[#1C181A]">
+                          Vardhaman Bulk Supplies
+                        </div>
+                        <span className="text-[11px] font-mono text-[#0F5B57] block">
+                          Agent: Vardhaman Bulk Agent (Advance)
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono">
+                        <span className="text-[#D9381E] font-bold text-sm block">★ 4.3</span>
+                        <span className="text-[10px] text-[#7D6F61]">54 reviews</span>
+                      </td>
+                      <td className="px-4 py-4 text-center">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#FAF5E8] text-[#7D6F61] border border-[#DDD0B8]">
+                          Silver Partner
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#5E4E40]">
+                        71.0%
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#1C181A]">
+                        91.0% On-Time
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <a
+                          href="/agents?agentId=agent-vrdh-01"
+                          className="px-3 py-1.5 rounded-[9px] bg-[#FAF5E8] hover:bg-[#F5EBD7] text-[#1C181A] text-xs font-mono font-bold transition-all border border-[#DDD0B8] inline-flex items-center gap-1"
+                        >
+                          View Passport 🛡️
+                        </a>
+                      </td>
+                    </tr>
+
+                    {/* Rank 5 (Red Team) */}
+                    <tr className="bg-[#F8CBD6]/30 hover:bg-[#F8CBD6]/40 transition-colors">
+                      <td className="px-4 py-4 text-center">
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F8CBD6] text-[#D9381E] font-mono font-bold text-xs border border-[#D9381E]">
+                          ⚠
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="font-extrabold text-sm text-[#D9381E]">
+                          QuickDrop Wholesale (Red Team)
+                        </div>
+                        <span className="text-[11px] font-mono text-[#D9381E] block">
+                          Adversarial participant (Fake Discount & Injection)
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono">
+                        <span className="text-[#D9381E] font-bold text-sm block">★ 1.2</span>
+                        <span className="text-[10px] text-[#D9381E]">Security Flagged</span>
+                      </td>
+                      <td className="px-4 py-4 text-center">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#F8CBD6] text-[#D9381E] border border-[#D9381E]">
+                          Quarantined
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#D9381E]">
+                        0.0%
+                      </td>
+                      <td className="px-4 py-4 text-center font-mono font-bold text-[#D9381E]">
+                        Blocked
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <span className="text-[10px] font-mono text-[#D9381E] font-bold uppercase">
+                          Terms Rejected
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </section>
       )}
 

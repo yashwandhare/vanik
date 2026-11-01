@@ -2,31 +2,31 @@
 
 :root {
   /* Luminous Coda Indic Palette */
-  --color-cream-parchment: #FAF5E8; /* Luminous Chuna (fresh lime-wash) */
-  --color-pure-white: #FFFDF9; /* Pure Ivory surface */
-  --color-obsidian: #1C181A; /* Kajal (deep warm kohl) */
-  --color-charcoal: #262022; /* Dark kajal (action buttons) */
-  --color-sage-mist: #DDD0B8; /* Warm Sandstone Retā (refined borders) */
-  --color-olive-slate: #5E4E40; /* Mitti (warm clay body text, 6.8:1 contrast) */
-  --color-pebble: #7D6F61; /* Khaki dust (secondary metadata) */
-  --color-bone: #F5EBD7; /* Woven Khadi (card fills & table headers) */
-  --color-forest-depths: #0F5B57; /* Radiant Mor Pankh (royal peacock teal) */
-  --color-forest-depths-hover: #0A4744; /* Mor Pankh deep accent */
-  --color-mint-sprout: #C5EDB1; /* Fresh Neem wash (verified status) */
-  --color-cobalt-ink: #233380; /* Royal Nila (indigo) */
-  --color-plum-depth: #55216D; /* Regal Jamun */
-  --color-wine-shadow: #6D183B; /* Manjistha (madder ruby) */
-  --color-lilac-wash: #E2D5F2; /* Jamuni wash */
-  --color-sky-wash: #BAECE7; /* Peacock wash (turquoise water) */
-  --color-rose-wash: #F8CBD6; /* Gulabi (lotus wash) */
+  --color-cream-parchment: #F6EDD9; /* Chuna (lime-wash) */
+  --color-pure-white: #FFFAF0; /* Ivory */
+  --color-obsidian: #1E1A1C; /* Kajal (kohl) */
+  --color-charcoal: #2A2224; /* Dark kajal (buttons) */
+  --color-sage-mist: #CDBB98; /* Retā (sandstone) */
+  --color-olive-slate: #6B5A4B; /* Mitti (clay) */
+  --color-pebble: #8C7E70; /* Khaki dust */
+  --color-bone: #EDE0C4; /* Khadi */
+  --color-forest-depths: #0E4447; /* Mor Pankh (deep peacock) */
+  --color-forest-depths-hover: #083331; /* Mor Pankh deep accent */
+  --color-mint-sprout: #BCDFB0; /* Neem wash */
+  --color-cobalt-ink: #1F2A66; /* Nila (indigo) */
+  --color-plum-depth: #4A1D5E; /* Jamun */
+  --color-wine-shadow: #5A1530; /* Manjistha (madder red) */
+  --color-lilac-wash: #D4C2E6; /* Jamuni wash */
+  --color-sky-wash: #A8DDD8; /* Peacock wash */
+  --color-rose-wash: #F2B6C4; /* Gulabi (lotus) wash */
 
   /* Radiant Indic Accents */
-  --color-genda-wash: #F7CE58; /* Vibrant Genda (marigold wash) */
-  --color-sindoor: #D9381E; /* Sacred vivid Sindoor (tiny accents, critical alerts) */
-  --color-haldi: #EAA82C; /* Luminous Haldi (golden amber borders, badges) */
+  --color-genda-wash: #F2C85B; /* Genda (marigold) wash */
+  --color-sindoor: #C8472F; /* Sindoor (tiny accents only) */
+  --color-haldi: #E2A93B; /* Haldi (borders, icons) */
 
-  --background: #FAF5E8;
-  --foreground: #1C181A;
+  --background: #F6EDD9;
+  --foreground: #1E1A1C;
 }
 
 * {

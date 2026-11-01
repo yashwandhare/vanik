@@ -54,7 +54,19 @@ async def test_application_wires_real_worker_lifecycle_and_commands() -> None:
     for handler in app.handlers[0]:
         assert isinstance(handler, CommandHandler)  # No approval/settlement callbacks.
         commands.update(handler.commands)
-    assert commands == {"start", "link", "task", "help", "status"}
+    assert commands == {
+        "start",
+        "link",
+        "task",
+        "help",
+        "status",
+        "ganesh_kirana",
+        "ganesh_agent",
+        "create_agent",
+        "auth_deal",
+        "test",
+        "sale",
+    }
     assert app.post_init is start_worker
     assert app.post_stop is stop_worker
     assert app.post_shutdown is stop_worker
