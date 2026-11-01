@@ -9,5 +9,6 @@ Read:
 3. `docs/engineering/TRUST_AND_SECURITY.md`.
 4. `docs/delivery/THREE_DEV_EXECUTION.md`.
 5. `teammateC/TODO.md`.
+6. `teammateC/DOMAIN_API.md` for the integration surface.
 
 Work only on `devc`. Pull `main`; never push to `main`. DevA reviews and integrates your PR.
