@@ -28,6 +28,8 @@ Own only new files under `apps/api/app/domain/`, matching tests under `apps/api/
 ## Delivery
 
 - [x] Run Ruff, strict Mypy and focused tests.
-- [ ] Push only `devc`; open PR to `main`; include concise integration API for DevA.
+- [x] Push only `devc`; open PR to `main`; include concise integration API for DevA.
+
+PR: https://github.com/yashwandhare/vanik/pull/15
 
 Integration API: `teammateC/DOMAIN_API.md`.
