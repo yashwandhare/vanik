@@ -1,6 +1,6 @@
 {
   "project": "VANIK",
-  "version": "0.5.0-agent-passports",
+  "version": "0.6.0-marketplace-foundation",
   "status": "persistent-agent-identities-implemented-commerce-pending",
   "implemented_application": true,
   "implemented_identity_workflows": true,
@@ -15,6 +15,9 @@
     "single-use-telegram-account-linking",
     "persistent-agent-passports-and-encrypted-ed25519-keys",
     "agent-lifecycle-and-append-only-audit-events",
+    "persistent-catalogue-seller-discovery-and-inventory",
+    "safe-deterministic-40-sku-seed",
+    "web-and-telegram-bot-identity-clients",
     "identity-database-migration",
     "initial-identity-wire-contracts",
     "backend-contract-and-postgresql-integration-tests"
@@ -36,6 +39,8 @@
     "docs/decisions/DECISIONS.md",
     "docs/delivery/IMPLEMENTATION_PLAN.md",
     "docs/delivery/TEAM_EXECUTION_PLAN.md",
+    "docs/delivery/THREE_DEV_EXECUTION.md",
+    "docs/delivery/DEVA_TODO.md",
     "docs/delivery/PROJECT_TODO.md",
     "docs/delivery/DEMO_RUNBOOK.md"
   ],
@@ -47,7 +52,15 @@
     "teammateB/WORKING_INSTRUCTIONS.md",
     "teammateB/PHASE_0_HANDOFF.md",
     "teammateB/PHASE_1_IDENTITY_HANDOFF.md",
-    "teammateB/AGENT_PASSPORT_HANDOFF.md"
+    "teammateB/AGENT_PASSPORT_HANDOFF.md",
+    "teammateB/MARKETPLACE_HANDOFF.md",
+    "teammateB/RETURN_PROMPT.md"
   ],
-  "important": "Identity, verification, Telegram linking and persistent agents are implemented. Marketplace, task mandates, negotiation and settlement remain pending."
+  "teammate_c_documents": [
+    "teammateC/README.md",
+    "teammateC/TODO.md",
+    "teammateC/GIT_PROTOCOL.md",
+    "teammateC/ONBOARDING_PROMPT.md"
+  ],
+  "important": "Identity, catalogue/discovery/inventory and Web/Bot foundations are implemented. Tasks are an unintegrated draft; negotiation, settlement and proactivity/memory remain pending."
 }

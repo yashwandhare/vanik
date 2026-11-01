@@ -11,6 +11,8 @@ from app.contracts.marketplace import (
     InventoryUpdateRequest,
     ProductListResponse,
     SellerListResponse,
+    SellerProfileRequest,
+    SellerProfileResponse,
 )
 from app.db.session import get_session
 from app.services.auth import AuthContext
@@ -19,12 +21,42 @@ from app.services.marketplace import (
     InventoryPermissionError,
     MarketplaceNotFoundError,
     get_inventory,
+    get_seller_profile,
     list_products,
     list_sellers,
+    set_seller_profile,
     update_inventory,
 )
 
 router = APIRouter(prefix="/v1", tags=["marketplace"])
+
+
+@router.get("/marketplace/sellers/{principal_id}", response_model=SellerProfileResponse)
+def seller_profile(
+    principal_id: UUID, db: Annotated[Session, Depends(get_session)]
+) -> SellerProfileResponse:
+    try:
+        return get_seller_profile(db, principal_id)
+    except MarketplaceNotFoundError as exc:
+        raise HTTPException(status_code=404) from exc
+
+
+@router.post("/principals/{principal_id}/seller-profile", response_model=SellerProfileResponse)
+def update_seller_profile(
+    principal_id: UUID,
+    payload: SellerProfileRequest,
+    context: Annotated[AuthContext, Depends(require_csrf)],
+    db: Annotated[Session, Depends(get_session)],
+    _origin: Annotated[None, Depends(require_allowed_origin)],
+) -> SellerProfileResponse:
+    try:
+        return set_seller_profile(db, context, principal_id, payload)
+    except MarketplaceNotFoundError as exc:
+        raise HTTPException(status_code=404) from exc
+    except InventoryPermissionError as exc:
+        raise HTTPException(status_code=403) from exc
+    except InventoryConflictError as exc:
+        raise HTTPException(status_code=409) from exc
 
 
 @router.get("/catalogue/products", response_model=ProductListResponse)

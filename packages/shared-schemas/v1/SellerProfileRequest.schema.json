@@ -1,0 +1,61 @@
+{
+  "$id": "https://vanik.invalid/schemas/v1/SellerProfileRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "items": {
+        "maxLength": 80,
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "maxItems": 30,
+      "minItems": 1,
+      "title": "Coverage",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "credit_days": {
+      "items": {
+        "enum": [
+          0,
+          7,
+          15,
+          30
+        ],
+        "type": "integer"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "title": "Credit Days",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "delivery_days": {
+      "maximum": 30,
+      "minimum": 1,
+      "title": "Delivery Days",
+      "type": "integer"
+    },
+    "delivery_terms": {
+      "default": "",
+      "maxLength": 500,
+      "title": "Delivery Terms",
+      "type": "string"
+    },
+    "payment_note": {
+      "default": "",
+      "maxLength": 500,
+      "title": "Payment Note",
+      "type": "string"
+    }
+  },
+  "required": [
+    "coverage",
+    "delivery_days",
+    "credit_days"
+  ],
+  "title": "SellerProfileRequest",
+  "type": "object"
+}

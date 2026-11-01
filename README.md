@@ -14,7 +14,7 @@ All surfaces use the same backend, identity system, marketplace registry, negoti
 
 ## Repository status
 
-The repository now includes registration, principals, synthetic verification, Telegram linking, persistent Agent Passports, encrypted Ed25519 identities and lifecycle controls. It is **not a completed marketplace implementation**. Marketplace, task mandates, negotiation, settlement, Telegram commands and the web UI remain unintegrated or unimplemented.
+The repository includes real identity/Agent Passport services, a persisted 40-SKU catalogue, seller discovery, public inventory and authorized stock updates. The web/Bot foundation and identity integration are merged. It is **not a completed marketplace implementation**: task routes, negotiation, deals, memory/proactivity and deterministic reset remain pending.
 
 ## Core hierarchy
 
@@ -98,7 +98,7 @@ The API runs at `http://localhost:8000`. `/health` checks process liveness; `/he
 
 Copy `.env.example` to `.env` if you need to override development defaults. Never commit `.env`.
 
-Current application Make targets cover the API only. The web and Bot will get their own commands when B creates them. `make migrate` applies the identity schema. `seed`, `demo` and `reset-demo` fail explicitly instead of reporting fake success.
+Application Make targets cover the API, web and Bot. `make migrate` applies the current schema. Configure `AGENT_KEY_ENCRYPTION_SECRET` and `DEMO_ACCOUNT_PASSWORD` in `.env`, then run `make seed` to create missing synthetic records without resetting permissions, lifecycle or reservations. `demo` and `reset-demo` remain unimplemented.
 
 See [API setup](apps/api/README.md) and the [Phase 1 B handoff](teammateB/PHASE_1_IDENTITY_HANDOFF.md) for the next steps.
 
