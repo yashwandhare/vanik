@@ -9,6 +9,8 @@ const mocks = vi.hoisted(() => ({
   listMarketplaceSellers: vi.fn(),
   getSellerInventory: vi.fn(),
   updateSellerInventory: vi.fn(),
+  getSellerProfile: vi.fn(),
+  updateSellerProfile: vi.fn(),
 }));
 
 vi.mock('../src/lib/api-client', () => ({
@@ -91,12 +93,24 @@ const mockInventoryData = {
   pagination: { total: 1, limit: 100, offset: 0 },
 };
 
+const mockProfileData = {
+  seller: mockSellersData.items[0],
+  legal_name: 'Mangal Wholesale Synthetic Business',
+  business_type: 'synthetic_distributor',
+  address: 'Synthetic Market Yard, Pune',
+  public_policies: {
+    delivery_terms: 'Direct wholesale delivery',
+    payment_note: 'Standard mandi terms',
+  },
+};
+
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.getSession.mockResolvedValue({ data: { csrf_token: 'test-token' } });
   mocks.listCatalogueProducts.mockResolvedValue({ data: mockProductsData, isMock: false });
   mocks.listMarketplaceSellers.mockResolvedValue({ data: mockSellersData, isMock: false });
   mocks.getSellerInventory.mockResolvedValue({ data: mockInventoryData, isMock: false });
+  mocks.getSellerProfile.mockResolvedValue({ data: mockProfileData, isMock: false });
 });
 
 afterEach(cleanup);
@@ -198,5 +212,67 @@ describe('Catalogue and Marketplace Page', () => {
     ));
 
     expect(await screen.findByText(/successfully updated to 500.00 bag/i)).toBeDefined();
+  });
+
+  it('opens seller profile modal and displays legal name and policies', async () => {
+    render(<CataloguePage />);
+    const sellersTab = screen.getByRole('tab', { name: /Wholesale Sellers/i });
+    fireEvent.click(sellersTab);
+
+    await screen.findByText('Mangal Wholesale');
+    const profileBtn = screen.getByRole('button', { name: /View Business Profile & Policies/i });
+    fireEvent.click(profileBtn);
+
+    await waitFor(() =>
+      expect(mocks.getSellerProfile).toHaveBeenCalledWith('20000000-0000-4000-8000-000000000002')
+    );
+
+    expect(await screen.findByText('Mangal Wholesale Synthetic Business')).toBeDefined();
+    expect(screen.getByText('Direct wholesale delivery')).toBeDefined();
+    expect(screen.getByText('Standard mandi terms')).toBeDefined();
+  });
+
+  it('allows editing seller commercial policies in modal', async () => {
+    mocks.updateSellerProfile.mockResolvedValueOnce({
+      data: {
+        ...mockProfileData,
+        seller: {
+          ...mockProfileData.seller,
+          delivery_days: 2,
+        },
+      },
+      isMock: false,
+    });
+
+    render(<CataloguePage />);
+    const sellersTab = screen.getByRole('tab', { name: /Wholesale Sellers/i });
+    fireEvent.click(sellersTab);
+
+    await screen.findByText('Mangal Wholesale');
+    const profileBtn = screen.getByRole('button', { name: /View Business Profile & Policies/i });
+    fireEvent.click(profileBtn);
+
+    await screen.findByText('Mangal Wholesale Synthetic Business');
+    const editBtn = screen.getByRole('button', { name: /Edit Seller Policies/i });
+    fireEvent.click(editBtn);
+
+    const deliveryInput = screen.getByLabelText(/Fulfillment Lead/i);
+    fireEvent.change(deliveryInput, { target: { value: '2' } });
+
+    const saveBtn = screen.getByRole('button', { name: /Save Commercial Policies/i });
+    fireEvent.click(saveBtn);
+
+    await waitFor(() =>
+      expect(mocks.updateSellerProfile).toHaveBeenCalledWith(
+        '20000000-0000-4000-8000-000000000002',
+        expect.objectContaining({
+          delivery_days: 2,
+        })
+      )
+    );
+
+    expect(
+      await screen.findByText(/Seller profile and commercial policies successfully updated/i)
+    ).toBeDefined();
   });
 });

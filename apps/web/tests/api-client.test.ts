@@ -456,4 +456,76 @@ describe('ApiClient', () => {
       })
     );
   });
+
+  it('fetches and updates public seller profile', async () => {
+    const mockProfile = {
+      seller: {
+        principal_id: '20000000-0000-4000-8000-000000000002',
+        trade_name: 'Mangal Wholesale',
+        verification_status: 'demo_verified',
+        coverage: ['Pune', 'Maharashtra'],
+        delivery_days: 3,
+        credit_days: [7, 15],
+        available_sku_count: 40,
+        reliability_score: null,
+        reliability_evidence_count: 0,
+        evidence_is_simulated: true,
+        agents: [],
+      },
+      legal_name: 'Mangal Wholesale Synthetic Business',
+      business_type: 'synthetic_distributor',
+      address: 'Synthetic Market Yard, Pune',
+      public_policies: { strategy: 'margin' },
+    };
+
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => mockProfile,
+      headers: new Headers(),
+    });
+    global.fetch = mockFetch;
+
+    const client = new ApiClient({ baseUrl: 'http://localhost:8000', useMockFallback: false });
+    const res = await client.getSellerProfile('20000000-0000-4000-8000-000000000002');
+    expect(res.data.legal_name).toBe('Mangal Wholesale Synthetic Business');
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/v1/marketplace/sellers/20000000-0000-4000-8000-000000000002',
+      expect.objectContaining({ method: 'GET' })
+    );
+
+    // Update seller profile
+    client.setCsrfToken('profile-csrf');
+    const updatedProfile = {
+      ...mockProfile,
+      seller: {
+        ...mockProfile.seller,
+        delivery_days: 2,
+      },
+    };
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => updatedProfile,
+      headers: new Headers(),
+    });
+
+    const updateRes = await client.updateSellerProfile('20000000-0000-4000-8000-000000000002', {
+      coverage: ['Pune', 'Mumbai'],
+      delivery_days: 2,
+      credit_days: [0, 7, 15],
+      delivery_terms: 'Direct wholesale delivery',
+      payment_note: 'Standard mandi terms',
+    });
+    expect(updateRes.data.seller.delivery_days).toBe(2);
+    expect(mockFetch).toHaveBeenLastCalledWith(
+      'http://localhost:8000/v1/principals/20000000-0000-4000-8000-000000000002/seller-profile',
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({
+          'X-CSRF-Token': 'profile-csrf',
+        }),
+      })
+    );
+  });
 });

@@ -23,16 +23,16 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#f8f9eb] text-[#000000] antialiased min-h-screen flex flex-col font-['Space_Grotesk',sans-serif]">
+      <body className="bg-[#FAF5E8] text-[#1C181A] antialiased min-h-screen flex flex-col font-['Space_Grotesk',sans-serif]">
         <SimulatedBanner />
         <Navbar />
         <main className="flex-1">{children}</main>
-        <footer className="border-t-[1.5px] border-[#c0c2a9] bg-[#edeee1] py-10 text-center text-xs text-[#5a5a4f]">
+        <footer className="border-t-[1.5px] border-[#DDD0B8] bg-[#F5EBD7] py-10 text-center text-xs text-[#5E4E40]">
           <div className="vanik-container space-y-2">
-            <p className="font-extrabold uppercase tracking-widest text-[#000000] text-sm">
+            <p className="font-extrabold uppercase tracking-widest text-[#1C181A] text-sm">
               VANIK • Autonomous Commerce. Verifiable Trust.
             </p>
-            <p className="text-[#7c7d76] font-mono text-[11px] max-w-xl mx-auto">
+            <p className="text-[#7D6F61] font-mono text-[11px] max-w-xl mx-auto">
               Prototype environment for AI-02 hackathon track. All GSTIN, PAN, official credentials, and UPI payment settlements are synthetic simulations.
             </p>
           </div>

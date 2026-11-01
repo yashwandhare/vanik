@@ -19,8 +19,13 @@ import type {
   ReadinessResponse,
   RegisterRequest,
   SellerListResponse,
+  SellerProfileRequest,
+  SellerProfileResponse,
   SellerSummary,
   SessionResponse,
+  TaskCreateRequest,
+  TaskListResponse,
+  TaskResponse,
   TelegramLinkStartResponse,
   UserResponse,
 } from './types';
@@ -372,6 +377,46 @@ export class ApiClient {
         body: JSON.stringify(payload),
       }
     );
+  }
+
+  public async getSellerProfile(
+    principalId: string
+  ): Promise<{ data: SellerProfileResponse; isMock: boolean }> {
+    return this.request<SellerProfileResponse>(
+      `/v1/marketplace/sellers/${encodeURIComponent(principalId)}`,
+      { method: 'GET' }
+    );
+  }
+
+  public async updateSellerProfile(
+    principalId: string,
+    payload: SellerProfileRequest
+  ): Promise<{ data: SellerProfileResponse; isMock: boolean }> {
+    return this.request<SellerProfileResponse>(
+      `/v1/principals/${encodeURIComponent(principalId)}/seller-profile`,
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }
+    );
+  }
+
+  public async createTask(
+    payload: TaskCreateRequest
+  ): Promise<{ data: TaskResponse; isMock: boolean }> {
+    return this.request<TaskResponse>('/v1/tasks', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  }
+
+  public async listTasks(
+    principalId?: string
+  ): Promise<{ data: TaskListResponse; isMock: boolean }> {
+    const qs = principalId ? `?principal_id=${encodeURIComponent(principalId)}` : '';
+    return this.request<TaskListResponse>(`/v1/tasks${qs}`, {
+      method: 'GET',
+    });
   }
 }
 
