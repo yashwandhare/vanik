@@ -436,20 +436,20 @@ export default function CataloguePage() {
   return (
     <div className="vanik-container py-10 sm:py-14 space-y-8">
       {/* Top Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#CDBB98] pb-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b-[1.5px] border-[#DDD0B8] pb-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#E2A93B] font-bold">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#EAA82C] font-bold">
               [ MANDI COMMODITY & COUNTERPARTY LEDGER ]
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F2C85B] text-[#1E1A1C] border border-[#E2A93B] font-bold shadow-2xs">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F7CE58] text-[#1C181A] border border-[#EAA82C] font-bold shadow-2xs">
               PHASE 2 LIVE
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E1A1C] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1C181A] tracking-tight">
             Diwali Restock Catalogue & Marketplace
           </h1>
-          <p className="text-xs sm:text-sm text-[#6B5A4B] max-w-3xl">
+          <p className="text-xs sm:text-sm text-[#5E4E40] max-w-3xl">
             Live commodity catalogue with benchmark reference prices, verified wholesale supplier discovery, and real-time inventory ledger powered by autonomous A2A negotiation agents.
           </p>
         </div>
@@ -458,7 +458,7 @@ export default function CataloguePage() {
         <div
           role="tablist"
           aria-label="Catalogue sections"
-          className="flex items-center bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] p-1 rounded-[14px] shadow-sm self-start sm:self-auto"
+          className="flex items-center bg-[#FFFDF9] border-[1.5px] border-[#1C181A] p-1 rounded-[14px] shadow-sm self-start sm:self-auto"
         >
           <button
             role="tab"
@@ -466,10 +466,10 @@ export default function CataloguePage() {
             aria-selected={activeTab === 'catalogue'}
             aria-controls="panel-catalogue"
             onClick={() => setActiveTab('catalogue')}
-            className={`px-4 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] ${
+            className={`px-4 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
               activeTab === 'catalogue'
-                ? 'bg-[#1E1A1C] text-white shadow-sm'
-                : 'text-[#6B5A4B] hover:text-[#1E1A1C]'
+                ? 'bg-[#1C181A] text-white shadow-sm'
+                : 'text-[#5E4E40] hover:text-[#1C181A]'
             }`}
           >
             40-SKU Catalogue ({totalProducts || products.length})
@@ -480,10 +480,10 @@ export default function CataloguePage() {
             aria-selected={activeTab === 'sellers'}
             aria-controls="panel-sellers"
             onClick={() => setActiveTab('sellers')}
-            className={`px-4 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] ${
+            className={`px-4 py-2 rounded-[10px] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
               activeTab === 'sellers'
-                ? 'bg-[#1E1A1C] text-white shadow-sm'
-                : 'text-[#6B5A4B] hover:text-[#1E1A1C]'
+                ? 'bg-[#1C181A] text-white shadow-sm'
+                : 'text-[#5E4E40] hover:text-[#1C181A]'
             }`}
           >
             Wholesale Sellers ({totalSellers || sellers.length})
@@ -493,12 +493,12 @@ export default function CataloguePage() {
 
       {/* Global Success / Notice Alert */}
       {stockSuccess && (
-        <div className="bg-[#BCDFB0] border-[1.5px] border-[#0E4A47] rounded-[16px] p-4 text-[#0E4A47] text-xs font-bold flex items-center justify-between shadow-xs">
+        <div className="bg-[#C5EDB1] border-[1.5px] border-[#0F5B57] rounded-[16px] p-4 text-[#0F5B57] text-xs font-bold flex items-center justify-between shadow-xs">
           <span>✓ {stockSuccess}</span>
           <button
             type="button"
             onClick={() => setStockSuccess(null)}
-            className="text-[#0E4A47] hover:text-[#1E1A1C] font-mono text-xs px-2 py-1"
+            className="text-[#0F5B57] hover:text-[#1C181A] font-mono text-xs px-2 py-1"
           >
             ✕
           </button>
@@ -514,14 +514,14 @@ export default function CataloguePage() {
           className="space-y-6"
         >
           {/* Filter Bar */}
-          <div className="flex flex-wrap items-center gap-3 bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] p-4 rounded-[16px] shadow-xs">
+          <div className="flex flex-wrap items-center gap-3 bg-[#FFFDF9] border-[1.5px] border-[#1C181A] p-4 rounded-[16px] shadow-xs">
             <input
               type="text"
               aria-label="Search catalogue products by SKU code or name"
               placeholder="Filter by SKU (e.g. STP-RICE) or product name..."
               value={catalogueSearch}
               onChange={(e) => setCatalogueSearch(e.target.value)}
-              className="flex-1 min-w-[220px] px-3.5 py-2 bg-[#F6EDD9] border border-[#CDBB98] rounded-[9px] text-xs text-[#1E1A1C] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+              className="flex-1 min-w-[220px] px-3.5 py-2 bg-[#FAF5E8] border border-[#DDD0B8] rounded-[9px] text-xs text-[#1C181A] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
             />
 
             <div className="flex flex-wrap gap-1.5" role="toolbar" aria-label="Filter products by category">
@@ -530,10 +530,10 @@ export default function CataloguePage() {
                   key={cat.slug}
                   type="button"
                   onClick={() => setSelectedCategory(cat.slug)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C] ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57] ${
                     selectedCategory === cat.slug
-                      ? 'bg-[#0E4A47] text-white border border-[#0E4A47] shadow-2xs'
-                      : 'bg-[#F6EDD9] text-[#6B5A4B] hover:text-[#1E1A1C] border border-[#CDBB98]'
+                      ? 'bg-[#0F5B57] text-white border border-[#0F5B57] shadow-2xs'
+                      : 'bg-[#FAF5E8] text-[#5E4E40] hover:text-[#1C181A] border border-[#DDD0B8]'
                   }`}
                 >
                   {cat.label}
@@ -547,10 +547,10 @@ export default function CataloguePage() {
           )}
 
           {/* Table Container */}
-          <div className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[20px] overflow-hidden shadow-sm">
+          <div className="bg-[#FFFDF9] border-[1.5px] border-[#1C181A] rounded-[20px] overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[700px] text-left text-xs">
-                <thead className="bg-[#F6EDD9] text-[#1E1A1C] uppercase font-mono tracking-wider border-b-[1.5px] border-[#1E1A1C]">
+                <thead className="bg-[#FAF5E8] text-[#1C181A] uppercase font-mono tracking-wider border-b-[1.5px] border-[#1C181A]">
                   <tr>
                     <th className="px-5 py-3.5">SKU Code</th>
                     <th className="px-5 py-3.5">Product Name</th>
@@ -560,48 +560,49 @@ export default function CataloguePage() {
                     <th className="px-5 py-3.5 text-center">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#CDBB98] font-sans">
+                <tbody className="divide-y divide-[#DDD0B8] font-sans">
                   {loadingProducts ? (
                     <tr>
-                      <td colSpan={6} className="px-5 py-12 text-center text-[#6B5A4B] font-mono">
-                        <span className="inline-block w-4 h-4 border-2 border-[#0E4A47] border-t-transparent rounded-full animate-spin mr-2" />
+                      <td colSpan={6} className="px-5 py-12 text-center text-[#5E4E40] font-mono">
+                        <span className="inline-block w-4 h-4 border-2 border-[#0F5B57] border-t-transparent rounded-full animate-spin mr-2" />
                         Querying live mandi catalogue (/v1/catalogue/products)...
                       </td>
                     </tr>
                   ) : products.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-5 py-12 text-center text-[#6B5A4B]">
+                      <td colSpan={6} className="px-5 py-12 text-center text-[#5E4E40]">
                         No matching catalogue items found.
                       </td>
                     </tr>
                   ) : (
                     products.map((item) => (
-                      <tr key={item.id} className="hover:bg-[#F6EDD9]/60 transition-colors">
-                        <td className="px-5 py-3.5 font-mono text-[#1E1A1C] font-bold">
+                      <tr key={item.id} className="hover:bg-[#FAF5E8]/60 transition-colors">
+                        <td className="px-5 py-3.5 font-mono text-[#1C181A] font-bold">
                           {item.sku}
                         </td>
-                        <td className="px-5 py-3.5 text-[#1E1A1C] font-semibold">
+                        <td className="px-5 py-3.5 text-[#1C181A] font-semibold">
                           {item.name}
                         </td>
                         <td className="px-5 py-3.5">
-                          <span className="px-2.5 py-0.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-full text-[11px] font-mono capitalize text-[#2A2224]">
+                          <span className="px-2.5 py-0.5 bg-[#FAF5E8] border border-[#DDD0B8] rounded-full text-[11px] font-mono capitalize text-[#262022]">
                             {item.category.replace('_', ' ')}
                           </span>
                         </td>
-                        <td className="px-5 py-3.5 text-[#8C7E70] capitalize font-mono">
+                        <td className="px-5 py-3.5 text-[#7D6F61] capitalize font-mono">
                           {item.unit}
                         </td>
-                        <td className="px-5 py-3.5 text-right font-mono text-[#0E4A47] font-bold text-sm">
+                        <td className="px-5 py-3.5 text-right font-mono text-[#0F5B57] font-bold text-sm tabular-nums">
                           ₹{item.benchmark_price}
                         </td>
                         <td className="px-5 py-3.5 text-center">
                           <span
-                            className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${
                               item.active
-                                ? 'bg-[#BCDFB0] text-[#0E4A47] border border-[#0E4A47]'
-                                : 'bg-[#EDE0C4] text-[#8C7E70] border border-[#CDBB98]'
+                                ? 'bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57]'
+                                : 'bg-[#F5EBD7] text-[#7D6F61] border border-[#DDD0B8]'
                             }`}
                           >
+                            {item.active && <span className="w-1.5 h-1.5 rounded-full bg-[#0F5B57] animate-pulse" />}
                             {item.active ? 'Active' : 'Inactive'}
                           </span>
                         </td>
@@ -613,11 +614,11 @@ export default function CataloguePage() {
             </div>
 
             {/* Footer Status */}
-            <div className="p-4 bg-[#F6EDD9] border-t border-[#CDBB98] text-xs text-[#6B5A4B] flex flex-wrap items-center justify-between gap-2">
+            <div className="p-4 bg-[#FAF5E8] border-t border-[#DDD0B8] text-xs text-[#5E4E40] flex flex-wrap items-center justify-between gap-2">
               <span className="font-mono">
                 Showing {products.length} of {totalProducts} verified mandi items
               </span>
-              <span className="font-mono text-[#8C7E70] text-[11px]">
+              <span className="font-mono text-[#7D6F61] text-[11px]">
                 GET /v1/catalogue/products
               </span>
             </div>
@@ -634,9 +635,9 @@ export default function CataloguePage() {
           className="space-y-6"
         >
           {/* Seller Filter Toolbar */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] p-4 rounded-[16px] shadow-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#FFFDF9] border-[1.5px] border-[#1C181A] p-4 rounded-[16px] shadow-xs">
             <div>
-              <label htmlFor="seller-query" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+              <label htmlFor="seller-query" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                 Search Sellers
               </label>
               <input
@@ -645,19 +646,19 @@ export default function CataloguePage() {
                 placeholder="Search trade name..."
                 value={sellerSearch}
                 onChange={(e) => setSellerSearch(e.target.value)}
-                className="w-full px-3 py-1.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                className="w-full px-3 py-1.5 bg-[#FAF5E8] border border-[#DDD0B8] rounded-[8px] text-xs text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
               />
             </div>
 
             <div>
-              <label htmlFor="seller-coverage" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+              <label htmlFor="seller-coverage" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                 Coverage Region
               </label>
               <select
                 id="seller-coverage"
                 value={sellerCoverage}
                 onChange={(e) => setSellerCoverage(e.target.value)}
-                className="w-full px-3 py-1.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                className="w-full px-3 py-1.5 bg-[#FAF5E8] border border-[#DDD0B8] rounded-[8px] text-xs font-semibold text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
               >
                 {COVERAGE_REGIONS.map((r) => (
                   <option key={r} value={r}>
@@ -668,14 +669,14 @@ export default function CataloguePage() {
             </div>
 
             <div>
-              <label htmlFor="seller-delivery" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+              <label htmlFor="seller-delivery" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                 Max Delivery Days
               </label>
               <select
                 id="seller-delivery"
                 value={maxDeliveryDays}
                 onChange={(e) => setMaxDeliveryDays(e.target.value)}
-                className="w-full px-3 py-1.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                className="w-full px-3 py-1.5 bg-[#FAF5E8] border border-[#DDD0B8] rounded-[8px] text-xs font-semibold text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
               >
                 <option value="">Any Fulfillment Speed</option>
                 <option value="2">Within 2 Days</option>
@@ -685,14 +686,14 @@ export default function CataloguePage() {
             </div>
 
             <div>
-              <label htmlFor="seller-credit" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+              <label htmlFor="seller-credit" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                 Min Credit Terms
               </label>
               <select
                 id="seller-credit"
                 value={minCreditDays}
                 onChange={(e) => setMinCreditDays(e.target.value)}
-                className="w-full px-3 py-1.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-[8px] text-xs font-semibold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                className="w-full px-3 py-1.5 bg-[#FAF5E8] border border-[#DDD0B8] rounded-[8px] text-xs font-semibold text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
               >
                 <option value="">Any Credit Window</option>
                 <option value="0">Net 0 (Cash only)</option>
@@ -709,12 +710,12 @@ export default function CataloguePage() {
 
           {/* Sellers Grid */}
           {loadingSellers ? (
-            <div className="p-12 text-center text-[#6B5A4B] bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[20px] font-mono text-xs shadow-xs">
-              <span className="inline-block w-4 h-4 border-2 border-[#0E4A47] border-t-transparent rounded-full animate-spin mr-2" />
+            <div className="p-12 text-center text-[#5E4E40] bg-[#FFFDF9] border-[1.5px] border-[#1C181A] rounded-[20px] font-mono text-xs shadow-xs">
+              <span className="inline-block w-4 h-4 border-2 border-[#0F5B57] border-t-transparent rounded-full animate-spin mr-2" />
               Discovering verified wholesale sellers (/v1/marketplace/sellers)...
             </div>
           ) : sellers.length === 0 ? (
-            <div className="p-12 text-center text-[#6B5A4B] bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[20px]">
+            <div className="p-12 text-center text-[#5E4E40] bg-[#FFFDF9] border-[1.5px] border-[#1C181A] rounded-[20px]">
               No sellers match the selected delivery criteria or coverage zone.
             </div>
           ) : (
@@ -722,23 +723,23 @@ export default function CataloguePage() {
               {sellers.map((seller) => (
                 <div
                   key={seller.principal_id}
-                  className="bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[20px] p-6 shadow-sm flex flex-col justify-between space-y-6"
+                  className="bg-[#FFFDF9] border-[1.5px] border-[#1C181A] rounded-[20px] p-6 shadow-sm flex flex-col justify-between space-y-6"
                 >
                   <div className="space-y-4">
                     {/* Seller Header */}
-                    <div className="flex items-start justify-between gap-3 border-b border-[#CDBB98] pb-4">
+                    <div className="flex items-start justify-between gap-3 border-b border-[#DDD0B8] pb-4">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h2 className="text-xl font-extrabold text-[#1E1A1C]">
+                          <h2 className="text-xl font-extrabold text-[#1C181A]">
                             {seller.trade_name}
                           </h2>
                           {seller.evidence_is_simulated && (
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F6EDD9] text-[#8C7E70] border border-[#CDBB98] font-bold">
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#FAF5E8] text-[#7D6F61] border border-[#DDD0B8] font-bold">
                               SYNTHETIC
                             </span>
                           )}
                         </div>
-                        <p className="font-mono text-[11px] text-[#8C7E70] mt-0.5">
+                        <p className="font-mono text-[11px] text-[#7D6F61] mt-0.5">
                           ID: {seller.principal_id}
                         </p>
                       </div>
@@ -746,8 +747,8 @@ export default function CataloguePage() {
                       <span
                         className={`text-[10px] font-mono px-2.5 py-1 rounded-full uppercase font-bold border ${
                           seller.verification_status === 'demo_verified'
-                            ? 'bg-[#BCDFB0] text-[#0E4A47] border-[#0E4A47]'
-                            : 'bg-[#EDE0C4] text-[#2A2224] border-[#CDBB98]'
+                            ? 'bg-[#C5EDB1] text-[#0F5B57] border-[#0F5B57]'
+                            : 'bg-[#F5EBD7] text-[#262022] border-[#DDD0B8]'
                         }`}
                       >
                         {seller.verification_status.replace('_', ' ')}
@@ -756,25 +757,25 @@ export default function CataloguePage() {
 
                     {/* Commercial Terms Badges */}
                     <div className="grid grid-cols-3 gap-2.5 font-mono text-center">
-                      <div className="bg-[#F6EDD9] p-2.5 rounded-[12px] border border-[#CDBB98]">
-                        <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">Fulfillment</span>
-                        <span className="text-xs font-extrabold text-[#1E1A1C]">
+                      <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                        <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">Fulfillment</span>
+                        <span className="text-xs font-extrabold text-[#1C181A]">
                           {seller.delivery_days} {seller.delivery_days === 1 ? 'day' : 'days'}
                         </span>
                       </div>
 
-                      <div className="bg-[#F6EDD9] p-2.5 rounded-[12px] border border-[#CDBB98]">
-                        <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">Credit Terms</span>
-                        <span className="text-xs font-extrabold text-[#1E1A1C]">
+                      <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                        <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">Credit Terms</span>
+                        <span className="text-xs font-extrabold text-[#1C181A]">
                           {seller.credit_days.length > 0
                             ? seller.credit_days.map((d) => `Net ${d}`).join(', ')
                             : 'Prepaid'}
                         </span>
                       </div>
 
-                      <div className="bg-[#F6EDD9] p-2.5 rounded-[12px] border border-[#CDBB98]">
-                        <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">Live Basket</span>
-                        <span className="text-xs font-extrabold text-[#0E4A47]">
+                      <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                        <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">Live Basket</span>
+                        <span className="text-xs font-extrabold text-[#0F5B57]">
                           {seller.available_sku_count} SKUs
                         </span>
                       </div>
@@ -782,14 +783,14 @@ export default function CataloguePage() {
 
                     {/* Regional Coverage */}
                     <div>
-                      <span className="text-[10px] font-mono uppercase text-[#8C7E70] font-bold block mb-1.5">
+                      <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block mb-1.5">
                         Supply Coverage:
                       </span>
                       <div className="flex flex-wrap gap-1.5">
                         {seller.coverage.map((city) => (
                           <span
                             key={city}
-                            className="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#EDE0C4] text-[#2A2224] border border-[#CDBB98] font-medium uppercase"
+                            className="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#F5EBD7] text-[#262022] border border-[#DDD0B8] font-medium uppercase"
                           >
                             {city}
                           </span>
@@ -798,18 +799,18 @@ export default function CataloguePage() {
                     </div>
 
                     {/* Reliability & Trade History */}
-                    <div className="p-3 bg-[#F6EDD9] rounded-[13px] border border-[#CDBB98] space-y-1">
+                    <div className="p-3 bg-[#FAF5E8] rounded-[13px] border border-[#DDD0B8] space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-mono font-bold text-[#1E1A1C]">
+                        <span className="text-[11px] font-mono font-bold text-[#1C181A]">
                           Mandi Reliability Record:
                         </span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#FFFAF0] text-[#8C7E70] border border-[#CDBB98]">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#FFFDF9] text-[#7D6F61] border border-[#DDD0B8]">
                           {seller.reliability_score !== null
                             ? `Score: ${seller.reliability_score}`
                             : 'Unrated (New Seller)'}
                         </span>
                       </div>
-                      <p className="text-[11px] text-[#6B5A4B]">
+                      <p className="text-[11px] text-[#5E4E40]">
                         {seller.reliability_evidence_count === 0
                           ? '0 verified trade outcomes recorded on-chain. Counterparties establish trust through cryptographic passports and deposit guarantees.'
                           : `${seller.reliability_evidence_count} settled contract outcomes.`}
@@ -818,30 +819,30 @@ export default function CataloguePage() {
 
                     {/* Autonomous Trading Agents */}
                     <div className="space-y-2">
-                      <span className="text-[10px] font-mono uppercase text-[#8C7E70] font-bold block">
+                      <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block">
                         Assigned Autonomous Negotiation Agents:
                       </span>
                       {seller.agents.map((ag) => (
                         <div
                           key={ag.agent_id}
-                          className="flex items-center justify-between p-3 rounded-[12px] bg-[#FFFAF0] border border-[#1E1A1C] shadow-2xs"
+                          className="flex items-center justify-between p-3 rounded-[12px] bg-[#FFFDF9] border border-[#1C181A] shadow-2xs"
                         >
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-[#1E1A1C]">{ag.name}</span>
-                              <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-[#BCDFB0] text-[#0E4A47] border border-[#0E4A47] font-bold">
+                              <span className="text-xs font-bold text-[#1C181A]">{ag.name}</span>
+                              <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57] font-bold">
                                 {ag.status}
                               </span>
                             </div>
-                            <span className="text-[11px] font-mono text-[#6B5A4B] block">
-                              Strategy: <strong className="text-[#0E4A47] capitalize">{ag.strategy_profile.replace('_', ' ')}</strong>
+                            <span className="text-[11px] font-mono text-[#5E4E40] block">
+                              Strategy: <strong className="text-[#0F5B57] capitalize">{ag.strategy_profile.replace('_', ' ')}</strong>
                             </span>
                           </div>
 
                           <button
                             type="button"
                             onClick={(e) => openInventoryModal(seller, ag, e.currentTarget)}
-                            className="px-3 py-1.5 rounded-[9px] bg-[#1E1A1C] text-white hover:bg-[#0E4A47] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                            className="px-3 py-1.5 rounded-[9px] bg-[#1C181A] text-white hover:bg-[#0F5B57] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                           >
                             Inspect Live Inventory →
                           </button>
@@ -850,14 +851,14 @@ export default function CataloguePage() {
                     </div>
 
                     {/* Seller Profile Action */}
-                    <div className="pt-3 border-t border-[#CDBB98] flex items-center justify-between">
-                      <span className="text-[11px] font-mono text-[#8C7E70]">
+                    <div className="pt-3 border-t border-[#DDD0B8] flex items-center justify-between">
+                      <span className="text-[11px] font-mono text-[#7D6F61]">
                         Verified Mandi Entity
                       </span>
                       <button
                         type="button"
                         onClick={(e) => openProfileModal(seller, e.currentTarget)}
-                        className="px-3 py-1.5 rounded-[9px] bg-[#F6EDD9] hover:bg-[#EDE0C4] border border-[#1E1A1C] text-[#1E1A1C] hover:text-[#0E4A47] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                        className="px-3 py-1.5 rounded-[9px] bg-[#FAF5E8] hover:bg-[#F5EBD7] border border-[#1C181A] text-[#1C181A] hover:text-[#0F5B57] text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                       >
                         View Business Profile & Policies ↗
                       </button>
@@ -880,26 +881,26 @@ export default function CataloguePage() {
         >
           <div
             ref={inventoryDialogRef}
-            className="w-full max-w-4xl max-h-[90vh] bg-[#FFFAF0] border-[2px] border-[#1E1A1C] rounded-[24px] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+            className="w-full max-w-4xl max-h-[90vh] bg-[#FFFDF9] border-[2px] border-[#1C181A] rounded-[24px] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150"
           >
             {/* Modal Header */}
-            <div className="p-6 border-b-[1.5px] border-[#1E1A1C] bg-[#F6EDD9] flex items-start justify-between gap-4">
+            <div className="p-6 border-b-[1.5px] border-[#1C181A] bg-[#FAF5E8] flex items-start justify-between gap-4">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#E2A93B] font-bold block mb-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#EAA82C] font-bold block mb-1">
                   [ LIVE AGENT INVENTORY LEDGER ]
                 </span>
-                <h2 id="inventory-dialog-title" className="text-2xl font-extrabold text-[#1E1A1C]">
+                <h2 id="inventory-dialog-title" className="text-2xl font-extrabold text-[#1C181A]">
                   {inspectingSeller.trade_name}
                 </h2>
-                <p className="text-xs text-[#6B5A4B] mt-1 font-mono">
-                  Agent: <strong className="text-[#0E4A47]">{inspectingAgent.name}</strong> ({inspectingAgent.strategy_profile}) | ID: {inspectingAgent.agent_id}
+                <p className="text-xs text-[#5E4E40] mt-1 font-mono">
+                  Agent: <strong className="text-[#0F5B57]">{inspectingAgent.name}</strong> ({inspectingAgent.strategy_profile}) | ID: {inspectingAgent.agent_id}
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={closeInventoryModal}
-                className="w-8 h-8 rounded-full border border-[#1E1A1C] bg-[#FFFAF0] hover:bg-[#EDE0C4] flex items-center justify-center font-mono font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                className="w-8 h-8 rounded-full border border-[#1C181A] bg-[#FFFDF9] hover:bg-[#F5EBD7] flex items-center justify-center font-mono font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                 aria-label="Close inventory dialog"
               >
                 ✕
@@ -907,11 +908,11 @@ export default function CataloguePage() {
             </div>
 
             {/* Inventory Informational Banner */}
-            <div className="bg-[#EDE0C4] px-6 py-3 border-b border-[#CDBB98] text-xs text-[#6B5A4B] flex items-center justify-between">
+            <div className="bg-[#F5EBD7] px-6 py-3 border-b border-[#DDD0B8] text-xs text-[#5E4E40] flex items-center justify-between">
               <span>
                 💡 <strong>Public Free-to-Sell Inventory</strong>: Available quantities reflect unreserved on-hand allocations.
               </span>
-              <span className="font-mono text-[11px] text-[#1E1A1C] font-bold">
+              <span className="font-mono text-[11px] text-[#1C181A] font-bold">
                 {inventoryItems.length} lines listed
               </span>
             </div>
@@ -923,18 +924,18 @@ export default function CataloguePage() {
               )}
 
               {loadingInventory ? (
-                <div className="py-16 text-center font-mono text-xs text-[#6B5A4B]">
-                  <span className="inline-block w-4 h-4 border-2 border-[#0E4A47] border-t-transparent rounded-full animate-spin mr-2" />
+                <div className="py-16 text-center font-mono text-xs text-[#5E4E40]">
+                  <span className="inline-block w-4 h-4 border-2 border-[#0F5B57] border-t-transparent rounded-full animate-spin mr-2" />
                   Querying seller inventory allocation...
                 </div>
               ) : inventoryItems.length === 0 ? (
-                <div className="py-16 text-center text-xs text-[#6B5A4B]">
+                <div className="py-16 text-center text-xs text-[#5E4E40]">
                   No active inventory lines discovered for this agent.
                 </div>
               ) : (
-                <div className="border border-[#1E1A1C] rounded-[16px] overflow-hidden shadow-2xs">
+                <div className="border border-[#1C181A] rounded-[16px] overflow-hidden shadow-2xs">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-[#F6EDD9] border-b border-[#1E1A1C] font-mono text-[#1E1A1C] uppercase">
+                    <thead className="bg-[#FAF5E8] border-b border-[#1C181A] font-mono text-[#1C181A] uppercase">
                       <tr>
                         <th className="px-4 py-3">SKU</th>
                         <th className="px-4 py-3">Commodity</th>
@@ -943,22 +944,22 @@ export default function CataloguePage() {
                         <th className="px-4 py-3 text-center">Manage</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#CDBB98]">
+                    <tbody className="divide-y divide-[#DDD0B8]">
                       {inventoryItems.map((line) => (
-                        <tr key={line.product.id} className="hover:bg-[#F6EDD9]/60">
-                          <td className="px-4 py-3 font-mono font-bold text-[#1E1A1C]">
+                        <tr key={line.product.id} className="hover:bg-[#FAF5E8]/60">
+                          <td className="px-4 py-3 font-mono font-bold text-[#1C181A]">
                             {line.product.sku}
                           </td>
                           <td className="px-4 py-3">
-                            <span className="font-semibold text-[#1E1A1C] block">{line.product.name}</span>
-                            <span className="text-[10px] text-[#8C7E70] font-mono capitalize">
+                            <span className="font-semibold text-[#1C181A] block">{line.product.name}</span>
+                            <span className="text-[10px] text-[#7D6F61] font-mono capitalize">
                               {line.product.category.replace('_', ' ')} • {line.product.unit}
                             </span>
                           </td>
-                          <td className="px-4 py-3 font-mono text-[#6B5A4B]">
+                          <td className="px-4 py-3 font-mono text-[#5E4E40]">
                             ₹{line.product.benchmark_price}
                           </td>
-                          <td className="px-4 py-3 text-right font-mono font-bold text-sm text-[#0E4A47]">
+                          <td className="px-4 py-3 text-right font-mono font-bold text-sm text-[#0F5B57]">
                             {line.available_qty} {line.product.unit}s
                           </td>
                           <td className="px-4 py-3 text-center">
@@ -969,7 +970,7 @@ export default function CataloguePage() {
                                 setStockInput(line.available_qty);
                                 setStockError(null);
                               }}
-                              className="px-2.5 py-1 bg-[#FFFAF0] hover:bg-[#EDE0C4] border border-[#1E1A1C] rounded-[7px] text-[11px] font-mono font-bold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                              className="px-2.5 py-1 bg-[#FFFDF9] hover:bg-[#F5EBD7] border border-[#1C181A] rounded-[7px] text-[11px] font-mono font-bold text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                             >
                               Update Stock
                             </button>
@@ -983,14 +984,14 @@ export default function CataloguePage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-[#CDBB98] bg-[#F6EDD9] flex items-center justify-between">
-              <span className="text-[11px] font-mono text-[#8C7E70]">
+            <div className="p-4 border-t border-[#DDD0B8] bg-[#FAF5E8] flex items-center justify-between">
+              <span className="text-[11px] font-mono text-[#7D6F61]">
                 POST /v1/principals/{'{id}'}/agents/{'{agent_id}'}/inventory requires principal auth & CSRF token
               </span>
               <button
                 type="button"
                 onClick={closeInventoryModal}
-                className="px-4 py-2 bg-[#1E1A1C] text-white hover:bg-[#0E4A47] text-xs font-mono font-bold rounded-[10px]"
+                className="px-4 py-2 bg-[#1C181A] text-white hover:bg-[#0F5B57] text-xs font-mono font-bold rounded-[10px]"
               >
                 Close Inspector
               </button>
@@ -1009,35 +1010,35 @@ export default function CataloguePage() {
         >
           <div
             ref={stockDialogRef}
-            className="w-full max-w-md bg-[#FFFAF0] border-[2px] border-[#1E1A1C] rounded-[24px] shadow-2xl overflow-hidden p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150"
+            className="w-full max-w-md bg-[#FFFDF9] border-[2px] border-[#1C181A] rounded-[24px] shadow-2xl overflow-hidden p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150"
           >
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#E2A93B] font-bold block mb-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#EAA82C] font-bold block mb-1">
                   [ STOCK QUANTITY RECONCILIATION ]
                 </span>
-                <h3 id="stock-dialog-title" className="text-xl font-extrabold text-[#1E1A1C]">
+                <h3 id="stock-dialog-title" className="text-xl font-extrabold text-[#1C181A]">
                   Update On-Hand Stock
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setEditingLine(null)}
-                className="w-7 h-7 rounded-full border border-[#1E1A1C] flex items-center justify-center font-mono font-bold text-xs hover:bg-[#EDE0C4]"
+                className="w-7 h-7 rounded-full border border-[#1C181A] flex items-center justify-center font-mono font-bold text-xs hover:bg-[#F5EBD7]"
                 aria-label="Cancel stock update"
               >
                 ✕
               </button>
             </div>
 
-            <div className="p-3 bg-[#F6EDD9] rounded-[12px] border border-[#CDBB98] space-y-1">
-              <span className="font-mono text-xs font-bold text-[#1E1A1C] block">
+            <div className="p-3 bg-[#FAF5E8] rounded-[12px] border border-[#DDD0B8] space-y-1">
+              <span className="font-mono text-xs font-bold text-[#1C181A] block">
                 {editingLine.product.sku}
               </span>
-              <span className="text-xs text-[#6B5A4B] block">
+              <span className="text-xs text-[#5E4E40] block">
                 {editingLine.product.name}
               </span>
-              <span className="text-[11px] font-mono text-[#0E4A47] font-bold block">
+              <span className="text-[11px] font-mono text-[#0F5B57] font-bold block">
                 Current Available: {editingLine.available_qty} {editingLine.product.unit}s
               </span>
             </div>
@@ -1050,7 +1051,7 @@ export default function CataloguePage() {
               <div>
                 <label
                   htmlFor="stock-qty-input"
-                  className="block text-xs font-mono uppercase tracking-wider text-[#8C7E70] mb-1 font-bold"
+                  className="block text-xs font-mono uppercase tracking-wider text-[#7D6F61] mb-1 font-bold"
                 >
                   New Total Stock Quantity ({editingLine.product.unit}s)
                 </label>
@@ -1064,9 +1065,9 @@ export default function CataloguePage() {
                   value={stockInput}
                   onChange={(e) => setStockInput(e.target.value)}
                   placeholder="e.g. 500"
-                  className="w-full px-3.5 py-2.5 bg-[#F6EDD9] border border-[#CDBB98] rounded-[9px] text-sm font-mono font-bold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                  className="w-full px-3.5 py-2.5 bg-[#FAF5E8] border border-[#DDD0B8] rounded-[9px] text-sm font-mono font-bold text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                 />
-                <p className="text-[11px] text-[#6B5A4B] mt-1.5 leading-relaxed">
+                <p className="text-[11px] text-[#5E4E40] mt-1.5 leading-relaxed">
                   Total on-hand stock. Note: Cannot reduce stock below existing buyer reservations (HTTP 409 Conflict). Requires authenticated Owner/Admin/Operator role.
                 </p>
               </div>
@@ -1075,14 +1076,14 @@ export default function CataloguePage() {
                 <button
                   type="button"
                   onClick={() => setEditingLine(null)}
-                  className="px-4 py-2 border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold text-[#1E1A1C] hover:bg-[#EDE0C4]"
+                  className="px-4 py-2 border border-[#1C181A] rounded-[9px] text-xs font-mono font-bold text-[#1C181A] hover:bg-[#F5EBD7]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={updatingStock}
-                  className="px-5 py-2 bg-[#0E4A47] hover:bg-[#C8472F] text-white border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
+                  className="px-5 py-2 bg-[#0F5B57] hover:bg-[#D9381E] text-white border border-[#1C181A] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
                 >
                   {updatingStock ? (
                     <>
@@ -1109,26 +1110,26 @@ export default function CataloguePage() {
         >
           <div
             ref={profileDialogRef}
-            className="w-full max-w-2xl max-h-[90vh] bg-[#FFFAF0] border-[2px] border-[#1E1A1C] rounded-[24px] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+            className="w-full max-w-2xl max-h-[90vh] bg-[#FFFDF9] border-[2px] border-[#1C181A] rounded-[24px] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150"
           >
             {/* Modal Header */}
-            <div className="p-6 border-b-[1.5px] border-[#1E1A1C] bg-[#F6EDD9] flex items-start justify-between gap-4">
+            <div className="p-6 border-b-[1.5px] border-[#1C181A] bg-[#FAF5E8] flex items-start justify-between gap-4">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#E2A93B] font-bold block mb-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#EAA82C] font-bold block mb-1">
                   [ VERIFIED BUSINESS PROFILE & POLICIES ]
                 </span>
-                <h2 id="profile-dialog-title" className="text-2xl font-extrabold text-[#1E1A1C]">
+                <h2 id="profile-dialog-title" className="text-2xl font-extrabold text-[#1C181A]">
                   {profileSeller.trade_name}
                 </h2>
-                <p className="text-xs text-[#6B5A4B] mt-1 font-mono">
-                  Principal ID: <strong className="text-[#0E4A47]">{profileSeller.principal_id}</strong>
+                <p className="text-xs text-[#5E4E40] mt-1 font-mono">
+                  Principal ID: <strong className="text-[#0F5B57]">{profileSeller.principal_id}</strong>
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={closeProfileModal}
-                className="w-8 h-8 rounded-full border border-[#1E1A1C] bg-[#FFFAF0] hover:bg-[#EDE0C4] flex items-center justify-center font-mono font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                className="w-8 h-8 rounded-full border border-[#1C181A] bg-[#FFFDF9] hover:bg-[#F5EBD7] flex items-center justify-center font-mono font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                 aria-label="Close profile dialog"
               >
                 ✕
@@ -1142,12 +1143,12 @@ export default function CataloguePage() {
               )}
 
               {profileSuccess && (
-                <div className="bg-[#BCDFB0] border border-[#0E4A47] rounded-[14px] p-3.5 text-[#0E4A47] text-xs font-bold flex items-center justify-between">
+                <div className="bg-[#C5EDB1] border border-[#0F5B57] rounded-[14px] p-3.5 text-[#0F5B57] text-xs font-bold flex items-center justify-between">
                   <span>✓ {profileSuccess}</span>
                   <button
                     type="button"
                     onClick={() => setProfileSuccess(null)}
-                    className="text-[#0E4A47] hover:text-[#1E1A1C] font-mono text-xs px-2"
+                    className="text-[#0F5B57] hover:text-[#1C181A] font-mono text-xs px-2"
                   >
                     ✕
                   </button>
@@ -1155,32 +1156,32 @@ export default function CataloguePage() {
               )}
 
               {loadingProfile ? (
-                <div className="py-16 text-center font-mono text-xs text-[#6B5A4B]">
-                  <span className="inline-block w-4 h-4 border-2 border-[#0E4A47] border-t-transparent rounded-full animate-spin mr-2" />
+                <div className="py-16 text-center font-mono text-xs text-[#5E4E40]">
+                  <span className="inline-block w-4 h-4 border-2 border-[#0F5B57] border-t-transparent rounded-full animate-spin mr-2" />
                   Querying verified counterparty profile (/v1/marketplace/sellers/{profileSeller.principal_id})...
                 </div>
               ) : profileData ? (
                 <div className="space-y-5">
                   {/* Business Entity Info */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="p-3.5 bg-[#F6EDD9] rounded-[14px] border border-[#CDBB98] space-y-1">
-                      <span className="text-[10px] font-mono uppercase text-[#8C7E70] font-bold block">
+                    <div className="p-3.5 bg-[#FAF5E8] rounded-[14px] border border-[#DDD0B8] space-y-1">
+                      <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block">
                         Legal Entity Name
                       </span>
-                      <span className="text-xs font-bold text-[#1E1A1C] block">
+                      <span className="text-xs font-bold text-[#1C181A] block">
                         {profileData.legal_name}
                       </span>
                     </div>
 
-                    <div className="p-3.5 bg-[#F6EDD9] rounded-[14px] border border-[#CDBB98] space-y-1">
-                      <span className="text-[10px] font-mono uppercase text-[#8C7E70] font-bold block">
+                    <div className="p-3.5 bg-[#FAF5E8] rounded-[14px] border border-[#DDD0B8] space-y-1">
+                      <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block">
                         Business Structure & Verification
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-[#1E1A1C] capitalize">
+                        <span className="text-xs font-semibold text-[#1C181A] capitalize">
                           {profileData.business_type.replace('_', ' ')}
                         </span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#BCDFB0] text-[#0E4A47] border border-[#0E4A47] font-bold">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57] font-bold">
                           {profileData.seller.verification_status}
                         </span>
                       </div>
@@ -1188,11 +1189,11 @@ export default function CataloguePage() {
                   </div>
 
                   {/* Registered Address */}
-                  <div className="p-3.5 bg-[#F6EDD9] rounded-[14px] border border-[#CDBB98] space-y-1">
-                    <span className="text-[10px] font-mono uppercase text-[#8C7E70] font-bold block">
+                  <div className="p-3.5 bg-[#FAF5E8] rounded-[14px] border border-[#DDD0B8] space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block">
                       Registered Mandi / Warehouse Address
                     </span>
-                    <span className="text-xs text-[#1E1A1C] block font-medium">
+                    <span className="text-xs text-[#1C181A] block font-medium">
                       {profileData.address || 'Address registered on state Mandi ledger'}
                     </span>
                   </div>
@@ -1200,56 +1201,56 @@ export default function CataloguePage() {
                   {/* Commercial Terms View or Edit Form */}
                   {!isEditingProfile ? (
                     <div className="space-y-4">
-                      <div className="p-4 bg-[#FFFAF0] border-[1.5px] border-[#1E1A1C] rounded-[16px] space-y-3">
-                        <div className="flex items-center justify-between border-b border-[#CDBB98] pb-2">
-                          <span className="font-mono text-xs font-bold text-[#1E1A1C] uppercase">
+                      <div className="p-4 bg-[#FFFDF9] border-[1.5px] border-[#1C181A] rounded-[16px] space-y-3">
+                        <div className="flex items-center justify-between border-b border-[#DDD0B8] pb-2">
+                          <span className="font-mono text-xs font-bold text-[#1C181A] uppercase">
                             Published Commercial Policies
                           </span>
-                          <span className="text-[10px] font-mono text-[#0E4A47] font-bold">
+                          <span className="text-[10px] font-mono text-[#0F5B57] font-bold">
                             Live on Marketplace
                           </span>
                         </div>
 
                         <div className="grid grid-cols-3 gap-2.5 text-center font-mono">
-                          <div className="bg-[#F6EDD9] p-2.5 rounded-[12px] border border-[#CDBB98]">
-                            <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">
+                          <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                            <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">
                               Fulfillment Lead
                             </span>
-                            <span className="text-xs font-extrabold text-[#1E1A1C]">
+                            <span className="text-xs font-extrabold text-[#1C181A]">
                               {profileData.seller.delivery_days} {profileData.seller.delivery_days === 1 ? 'day' : 'days'}
                             </span>
                           </div>
 
-                          <div className="bg-[#F6EDD9] p-2.5 rounded-[12px] border border-[#CDBB98]">
-                            <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">
+                          <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                            <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">
                               Credit Windows
                             </span>
-                            <span className="text-xs font-extrabold text-[#1E1A1C]">
+                            <span className="text-xs font-extrabold text-[#1C181A]">
                               {profileData.seller.credit_days.length > 0
                                 ? profileData.seller.credit_days.map((d) => `Net ${d}`).join(', ')
                                 : 'Prepaid (Net 0)'}
                             </span>
                           </div>
 
-                          <div className="bg-[#F6EDD9] p-2.5 rounded-[12px] border border-[#CDBB98]">
-                            <span className="text-[10px] uppercase text-[#8C7E70] block font-bold">
+                          <div className="bg-[#FAF5E8] p-2.5 rounded-[12px] border border-[#DDD0B8]">
+                            <span className="text-[10px] uppercase text-[#7D6F61] block font-bold">
                               Live SKUs
                             </span>
-                            <span className="text-xs font-extrabold text-[#0E4A47]">
+                            <span className="text-xs font-extrabold text-[#0F5B57]">
                               {profileData.seller.available_sku_count} items
                             </span>
                           </div>
                         </div>
 
                         <div>
-                          <span className="text-[10px] font-mono uppercase text-[#8C7E70] font-bold block mb-1">
+                          <span className="text-[10px] font-mono uppercase text-[#7D6F61] font-bold block mb-1">
                             Supply Coverage Regions:
                           </span>
                           <div className="flex flex-wrap gap-1.5">
                             {profileData.seller.coverage.map((c) => (
                               <span
                                 key={c}
-                                className="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#EDE0C4] text-[#2A2224] border border-[#CDBB98] font-medium uppercase"
+                                className="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#F5EBD7] text-[#262022] border border-[#DDD0B8] font-medium uppercase"
                               >
                                 {c}
                               </span>
@@ -1258,21 +1259,21 @@ export default function CataloguePage() {
                         </div>
 
                         {profileData.public_policies && (
-                          <div className="space-y-2 pt-2 border-t border-[#CDBB98]">
+                          <div className="space-y-2 pt-2 border-t border-[#DDD0B8]">
                             {typeof profileData.public_policies.delivery_terms === 'string' && (
                               <div className="text-xs">
-                                <span className="font-mono text-[10px] uppercase text-[#8C7E70] font-bold block">
+                                <span className="font-mono text-[10px] uppercase text-[#7D6F61] font-bold block">
                                   Delivery Terms:
                                 </span>
-                                <span className="text-[#1E1A1C]">{profileData.public_policies.delivery_terms}</span>
+                                <span className="text-[#1C181A]">{profileData.public_policies.delivery_terms}</span>
                               </div>
                             )}
                             {typeof profileData.public_policies.payment_note === 'string' && (
                               <div className="text-xs">
-                                <span className="font-mono text-[10px] uppercase text-[#8C7E70] font-bold block">
+                                <span className="font-mono text-[10px] uppercase text-[#7D6F61] font-bold block">
                                   Payment Note:
                                 </span>
-                                <span className="text-[#1E1A1C]">{profileData.public_policies.payment_note}</span>
+                                <span className="text-[#1C181A]">{profileData.public_policies.payment_note}</span>
                               </div>
                             )}
                           </div>
@@ -1280,32 +1281,32 @@ export default function CataloguePage() {
                       </div>
 
                       <div className="flex items-center justify-between pt-2">
-                        <span className="text-[11px] font-mono text-[#8C7E70]">
+                        <span className="text-[11px] font-mono text-[#7D6F61]">
                           POST /v1/principals/{'{id}'}/seller-profile requires authenticated principal member
                         </span>
                         <button
                           type="button"
                           onClick={() => setIsEditingProfile(true)}
-                          className="px-4 py-2 bg-[#1E1A1C] text-white hover:bg-[#0E4A47] text-xs font-mono font-bold rounded-[10px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                          className="px-4 py-2 bg-[#1C181A] text-white hover:bg-[#0F5B57] text-xs font-mono font-bold rounded-[10px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                         >
                           ✎ Edit Seller Policies
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <form onSubmit={handleUpdateProfile} className="space-y-4 p-4 bg-[#F6EDD9] border-[1.5px] border-[#1E1A1C] rounded-[16px]">
-                      <div className="flex items-center justify-between border-b border-[#CDBB98] pb-2">
-                        <span className="font-mono text-xs font-bold text-[#1E1A1C] uppercase">
+                    <form onSubmit={handleUpdateProfile} className="space-y-4 p-4 bg-[#FAF5E8] border-[1.5px] border-[#1C181A] rounded-[16px]">
+                      <div className="flex items-center justify-between border-b border-[#DDD0B8] pb-2">
+                        <span className="font-mono text-xs font-bold text-[#1C181A] uppercase">
                           Edit Commercial Mandate & Policies
                         </span>
-                        <span className="text-[10px] font-mono text-[#0E4A47] font-bold">
+                        <span className="text-[10px] font-mono text-[#0F5B57] font-bold">
                           POST /v1/principals/{profileSeller.principal_id}/seller-profile
                         </span>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <label htmlFor="edit-delivery-days" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+                          <label htmlFor="edit-delivery-days" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                             Fulfillment Lead (Days)
                           </label>
                           <input
@@ -1316,12 +1317,12 @@ export default function CataloguePage() {
                             required
                             value={profileDeliveryDays}
                             onChange={(e) => setProfileDeliveryDays(Number(e.target.value))}
-                            className="w-full px-3 py-2 bg-[#FFFAF0] border border-[#CDBB98] rounded-[8px] text-xs font-mono font-bold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                            className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#DDD0B8] rounded-[8px] text-xs font-mono font-bold text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="edit-credit-days" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+                          <label htmlFor="edit-credit-days" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                             Credit Windows (Comma-separated days, e.g. 0, 7, 15)
                           </label>
                           <input
@@ -1330,13 +1331,13 @@ export default function CataloguePage() {
                             value={profileCreditDaysText}
                             onChange={(e) => setProfileCreditDaysText(e.target.value)}
                             placeholder="0, 7, 15"
-                            className="w-full px-3 py-2 bg-[#FFFAF0] border border-[#CDBB98] rounded-[8px] text-xs font-mono font-bold text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                            className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#DDD0B8] rounded-[8px] text-xs font-mono font-bold text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label htmlFor="edit-coverage" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+                        <label htmlFor="edit-coverage" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                           Coverage Regions (Comma-separated cities/states)
                         </label>
                         <input
@@ -1346,12 +1347,12 @@ export default function CataloguePage() {
                           value={profileCoverageText}
                           onChange={(e) => setProfileCoverageText(e.target.value)}
                           placeholder="Pune, Mumbai, Maharashtra"
-                          className="w-full px-3 py-2 bg-[#FFFAF0] border border-[#CDBB98] rounded-[8px] text-xs font-mono text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                          className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#DDD0B8] rounded-[8px] text-xs font-mono text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="edit-delivery-terms" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+                        <label htmlFor="edit-delivery-terms" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                           Delivery Terms Note
                         </label>
                         <input
@@ -1360,12 +1361,12 @@ export default function CataloguePage() {
                           value={profileDeliveryTerms}
                           onChange={(e) => setProfileDeliveryTerms(e.target.value)}
                           placeholder="Wholesale truckload delivery to retail doorstep"
-                          className="w-full px-3 py-2 bg-[#FFFAF0] border border-[#CDBB98] rounded-[8px] text-xs text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                          className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#DDD0B8] rounded-[8px] text-xs text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="edit-payment-note" className="block text-[11px] font-mono font-bold text-[#8C7E70] uppercase mb-1">
+                        <label htmlFor="edit-payment-note" className="block text-[11px] font-mono font-bold text-[#7D6F61] uppercase mb-1">
                           Payment Policy Note
                         </label>
                         <input
@@ -1374,7 +1375,7 @@ export default function CataloguePage() {
                           value={profilePaymentNote}
                           onChange={(e) => setProfilePaymentNote(e.target.value)}
                           placeholder="Standard mandi credit terms with post-dated cheque or UPI"
-                          className="w-full px-3 py-2 bg-[#FFFAF0] border border-[#CDBB98] rounded-[8px] text-xs text-[#1E1A1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1A1C]"
+                          className="w-full px-3 py-2 bg-[#FFFDF9] border border-[#DDD0B8] rounded-[8px] text-xs text-[#1C181A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F5B57]"
                         />
                       </div>
 
@@ -1382,14 +1383,14 @@ export default function CataloguePage() {
                         <button
                           type="button"
                           onClick={() => setIsEditingProfile(false)}
-                          className="px-4 py-2 border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold text-[#1E1A1C] hover:bg-[#EDE0C4]"
+                          className="px-4 py-2 border border-[#1C181A] rounded-[9px] text-xs font-mono font-bold text-[#1C181A] hover:bg-[#F5EBD7]"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
                           disabled={savingProfile}
-                          className="px-5 py-2 bg-[#0E4A47] hover:bg-[#C8472F] text-white border border-[#1E1A1C] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
+                          className="px-5 py-2 bg-[#0F5B57] hover:bg-[#D9381E] text-white border border-[#1C181A] rounded-[9px] text-xs font-mono font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-xs"
                         >
                           {savingProfile ? (
                             <>
@@ -1408,14 +1409,14 @@ export default function CataloguePage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-[#CDBB98] bg-[#F6EDD9] flex items-center justify-between">
-              <span className="text-[11px] font-mono text-[#8C7E70]">
+            <div className="p-4 border-t border-[#DDD0B8] bg-[#FAF5E8] flex items-center justify-between">
+              <span className="text-[11px] font-mono text-[#7D6F61]">
                 Mandi Counterparty Trust Protocol
               </span>
               <button
                 type="button"
                 onClick={closeProfileModal}
-                className="px-4 py-2 bg-[#1E1A1C] text-white hover:bg-[#0E4A47] text-xs font-mono font-bold rounded-[10px]"
+                className="px-4 py-2 bg-[#1C181A] text-white hover:bg-[#0F5B57] text-xs font-mono font-bold rounded-[10px]"
               >
                 Close Profile
               </button>
