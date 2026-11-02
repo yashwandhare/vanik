@@ -23,9 +23,9 @@ async def disconnect_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
     reset_message = (
         "🔄 *VANIK Session Reset Complete!*\n\n"
         "Your temporary negotiation context, link cache, and demo state have been cleared.\n"
-        "You can now run the complete hackathon presentation from the very beginning.\n\n"
+        "You can now run the complete demonstration sequence from the very beginning.\n\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-        "🎬 *Judge Demo Presentation Sequence:*\n\n"
+        "🎬 *Interactive Workflow Sequence:*\n\n"
         "1️⃣ Send `/ganesh_kirana`\n"
         "   └─ _Onboard Shree Ganesh Kirana Store persona_\n\n"
         "2️⃣ Send `/ganesh_agent`\n"

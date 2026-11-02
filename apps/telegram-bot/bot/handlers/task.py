@@ -3,8 +3,10 @@
 import asyncio
 from uuid import uuid4
 
-from telegram import Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
 from telegram.ext import ContextTypes
+
+from bot.handlers.miniapp import resolve_base_url
 
 
 async def task_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -22,6 +24,7 @@ async def task_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         )
 
     task_id = str(uuid4())
+    base_url = resolve_base_url(context)
 
     msg = await update.effective_message.reply_text(
         f"📋 *Task Mandate Registered*\n\n"
@@ -51,9 +54,38 @@ async def task_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         f"2️⃣ *Mandi Smart Escrow* (Funds locked until delivery verified)\n"
         f"3️⃣ *RTGS / Wholesale Net Banking*\n\n"
         f"👉 *To Authorize in Chat:* Send `/auth_deal deal-diwali-2026-01 upi`\n"
-        f"👉 [📱 Open Deal in Mini App](http://localhost:3000/miniapp?view=approval&dealId=deal-diwali-2026-01)\n"
-        f"👉 [⚡ Watch Live Rounds Simulation in Web Dashboard](http://localhost:3000/negotiations?tab=timeline&autoSim=true&taskId={task_id})\n"
-        f"👉 [🤝 Inspect A2A Signed Protocols](http://localhost:3000/negotiations?tab=a2a)"
+        f"👉 [📱 Open Deal in Mini App]("
+        f"{base_url}/miniapp?view=approval&dealId=deal-diwali-2026-01)\n"
+        f"👉 [⚡ Watch Live Rounds Simulation in Web Dashboard]("
+        f"{base_url}/negotiations?tab=timeline&autoSim=true&taskId={task_id})\n"
+        f"👉 [🤝 Inspect A2A Signed Protocols]({base_url}/negotiations?tab=a2a)"
     )
 
-    await msg.edit_text(final_text, parse_mode="Markdown", disable_web_page_preview=True)
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "📱 Open Deal in Mini App",
+                web_app=WebAppInfo(
+                    url=f"{base_url}/miniapp?view=approval&dealId=deal-diwali-2026-01"
+                ),
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "⚡ Live Rounds Dashboard",
+                url=f"{base_url}/negotiations?tab=timeline&autoSim=true&taskId={task_id}",
+            ),
+            InlineKeyboardButton(
+                "🤝 A2A Inspector",
+                url=f"{base_url}/negotiations?tab=a2a",
+            ),
+        ],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await msg.edit_text(
+        final_text,
+        reply_markup=reply_markup,
+        parse_mode="Markdown",
+        disable_web_page_preview=True,
+    )

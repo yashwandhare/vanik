@@ -2,8 +2,10 @@
 
 import asyncio
 
-from telegram import Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
 from telegram.ext import ContextTypes
+
+from bot.handlers.miniapp import resolve_base_url
 
 
 async def auth_deal_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -32,6 +34,8 @@ async def auth_deal_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     await asyncio.sleep(0.5)
 
+    base_url = resolve_base_url(context)
+
     auth_text = (
         f"✅ *DEAL LOCKED & PAYMENT AUTHORIZED!*\n\n"
         f"• *Deal Reference:* `{deal_id}`\n"
@@ -51,9 +55,34 @@ async def auth_deal_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         f"• *Seller Principal:* Suresh Agarwal (Kisan Wholesale Traders)\n"
         f"  📞 `+91 94225 88124` | 📦 Godown 12, APMC Market Yard, Pune\n"
         f"  _(Parties can coordinate physical logistics directly, or let AI settle payments)_\n\n"
-        f"👉 [Inspect Seller in Live Rankings](http://localhost:3000/catalogue?tab=rankings)\n"
-        f"👉 [Inspect Seller Agent Passport](http://localhost:3000/agents?agentId=agent-kisan-01)\n"
-        f"👉 [View Deal Replay in Dashboard](http://localhost:3000/negotiations?tab=comparison)"
+        f"👉 [Inspect Seller in Live Rankings]({base_url}/catalogue?tab=rankings)\n"
+        f"👉 [Inspect Seller Agent Passport]({base_url}/agents?agentId=agent-kisan-01)\n"
+        f"👉 [View Deal Replay in Dashboard]({base_url}/negotiations?tab=comparison)"
     )
 
-    await init_msg.edit_text(auth_text, parse_mode="Markdown", disable_web_page_preview=True)
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "📱 View Receipt in Mini App",
+                web_app=WebAppInfo(url=f"{base_url}/miniapp?view=approval&dealId={deal_id}"),
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "🏆 Mandi Seller Rankings",
+                url=f"{base_url}/catalogue?tab=rankings",
+            ),
+            InlineKeyboardButton(
+                "🛡️ Counterparty Passport",
+                url=f"{base_url}/agents?agentId=agent-kisan-01",
+            ),
+        ],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await init_msg.edit_text(
+        auth_text,
+        reply_markup=reply_markup,
+        parse_mode="Markdown",
+        disable_web_page_preview=True,
+    )

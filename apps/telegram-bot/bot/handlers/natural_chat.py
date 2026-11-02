@@ -3,6 +3,8 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 
+from bot.handlers.miniapp import resolve_base_url
+
 
 def is_hindi_or_hinglish(text: str) -> bool:
     """Detects if message is in Hindi (Devanagari) or conversational Hinglish."""
@@ -51,6 +53,7 @@ async def natural_chat_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     raw_text = update.effective_message.text.strip()
     query = raw_text.lower()
     in_hindi = is_hindi_or_hinglish(raw_text)
+    base_url = resolve_base_url(context)
 
     # 1. Reset / Disconnect / Restart
     if any(k in query for k in ["disconnect", "reset", "restart", "shuru se", "fir se", "clear"]):
@@ -117,7 +120,7 @@ async def natural_chat_handler(update: Update, context: ContextTypes.DEFAULT_TYP
                 "• *बजट सीमा:* ₹85,000.00 की अधिकतम सीमा से अधिक खर्च नहीं हो सकता\n"
                 "• *मंडी प्रतिष्ठा (Reputation):* पिछले पूरे हुए सौदों के आधार पर स्टार रेटिंग\n\n"
                 "👉 अपना एजेंट बनाने के लिए `/ganesh_agent` भेजें, या "
-                "[वेब डैशबोर्ड में पासपोर्ट देखें](http://localhost:3000/agents)!"
+                f"[वेब डैशबोर्ड में पासपोर्ट देखें]({base_url}/agents)!"
             )
         else:
             response = (
@@ -128,7 +131,7 @@ async def natural_chat_handler(update: Update, context: ContextTypes.DEFAULT_TYP
                 "• *Authority Bounds:* Spend ceiling (e.g. ₹85,000 max)\n"
                 "• *Reputation Score:* Dynamic star rating based on settled trade memory\n\n"
                 "👉 Send `/ganesh_agent` to mint your live agent passport, or inspect "
-                "[Agent Passports in Dashboard](http://localhost:3000/agents)!"
+                f"[Agent Passports in Dashboard]({base_url}/agents)!"
             )
 
     # 4. Negotiations / Deals / SKUs / Bargaining
@@ -145,7 +148,7 @@ async def natural_chat_handler(update: Update, context: ContextTypes.DEFAULT_TYP
                 "4. वॉल्यूम का फायदा उठाकर सप्लायर्स से बेहतर रेट की मांग करता है\n"
                 "5. बेस्ट डील (कीमत, डिलीवरी समय, क्रेडिट) की सिफारिश करता है\n\n"
                 "👉 नेगोशिएशन शुरू करने के लिए `/task` भेजें, या "
-                "[लाइव नेगोशिएशन डेक देखें](http://localhost:3000/negotiations?tab=timeline)!"
+                f"[लाइव नेगोशिएशन डेक देखें]({base_url}/negotiations?tab=timeline)!"
             )
         else:
             response = (
@@ -157,7 +160,7 @@ async def natural_chat_handler(update: Update, context: ContextTypes.DEFAULT_TYP
                 "4. Issues multi-round automated counter-offers leveraging basket volume\n"
                 "5. Recommends the optimal deal (Price 40%, Reliability 25%, Delivery 20%)\n\n"
                 "👉 Send `/task` to watch parallel rounds converge, or view the "
-                "[Live Negotiation Workspace](http://localhost:3000/negotiations?tab=timeline)!"
+                f"[Live Negotiation Workspace]({base_url}/negotiations?tab=timeline)!"
             )
 
     # 5. Malicious / Fake Discounts / Security / Prompt Injection

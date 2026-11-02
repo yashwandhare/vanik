@@ -1,38 +1,37 @@
 # Shared Schemas
 
-Main owns shared contracts. Teammate B consumes published versions and proposes changes before relying on new fields.
+Version-controlled JSON schema definitions and wire contract fixtures for VANIK.
 
-## Version 1 identity contract pack
+---
 
-The Pydantic sources live in `apps/api/app/contracts/`. The exported JSON Schema files and synthetic examples live in `v1/` and `v1/fixtures/`.
+## 1. Overview
 
-The initial pack includes:
+This package defines shared contracts between the backend API, frontend web portal, and Telegram bot clients:
 
-- Health and readiness responses.
-- Standard error envelope.
-- Registration and login requests.
-- User and session responses.
-- Principal creation and principal response.
-- Agent creation, Agent Passport and agent-list responses.
-- Synthetic business-identifier requests and responses.
-- Clearly labeled demo-verification responses.
-- Telegram link start, completion and response contracts.
+- Pydantic models define source contracts in `apps/api/app/contracts/`.
+- Exported JSON Schema specifications are committed in `v1/`.
+- Synthetic test fixtures validate against committed schemas in `v1/fixtures/`.
 
-The `v1` directory is a contract namespace, not an implemented negotiation protocol. Mandate, offer, deal and signed-message wire contracts remain proposed until Main publishes their complete schemas.
+---
 
-## Export and verify
+## 2. Included Contracts
 
-From the repository root:
+- **Health & Readiness:** Service status and database connection envelopes.
+- **Error Envelopes:** Standardized `ErrorResponse` with request correlation IDs and validation details.
+- **Identity & Membership:** Registration, login, principal profiles, and business identifiers (GSTIN, PAN).
+- **Agent Lifecycle:** Agent creation, Agent Passports, Ed25519 public key fingerprints, and capability scopes.
+- **Telegram Linking:** Token generation and bi-directional user binding.
+
+---
+
+## 3. Export and Validation
+
+Run commands from the repository root:
 
 ```bash
+# Export updated schemas from Python contract models
 make contracts
+
+# Verify that committed schemas and fixtures match Python definitions
 make test
 ```
-
-Tests verify that committed schemas match the Python definitions and that fixtures validate against those definitions.
-
-Use `.schema.json` files for client validation or type generation. Use fixtures for clearly labeled mock views. Never use their synthetic passwords, CSRF tokens or public test-vector keys as live credentials.
-
-Response schemas describe JSON serialization. Decimal response values use strings to avoid JavaScript precision loss. Validation schemas describe request bodies. Unknown object fields are rejected.
-
-See [API conventions](../../docs/engineering/API_CONVENTIONS.md), [protocol and API](../../docs/engineering/PROTOCOL_AND_API.md) and [B handoff](../../teammateB/PHASE_0_HANDOFF.md).

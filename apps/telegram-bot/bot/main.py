@@ -4,7 +4,7 @@ import logging
 import sys
 from typing import Any
 
-from telegram import BotCommand, MenuButtonCommands
+from telegram import BotCommand, MenuButtonWebApp, WebAppInfo
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
 from bot.client import BackendClient
@@ -16,7 +16,7 @@ from bot.handlers.disconnect import disconnect_handler
 from bot.handlers.ganesh_onboarding import ganesh_agent_handler, ganesh_kirana_handler
 from bot.handlers.help import help_handler
 from bot.handlers.link import link_handler
-from bot.handlers.miniapp import miniapp_handler
+from bot.handlers.miniapp import miniapp_handler, resolve_base_url
 from bot.handlers.natural_chat import natural_chat_handler
 from bot.handlers.sale import sale_handler
 from bot.handlers.start import start_handler
@@ -88,8 +88,14 @@ async def start_worker(application: Application[Any, Any, Any, Any, Any, Any]) -
             BotCommand("help", "Architecture details & all commands"),
         ]
         await application.bot.set_my_commands(commands)
-        await application.bot.set_chat_menu_button(menu_button=MenuButtonCommands())
-        logger.info("Configured slash commands and chat menu button")
+        base_url = resolve_base_url(None)
+        await application.bot.set_chat_menu_button(
+            menu_button=MenuButtonWebApp(
+                text="📱 Mini App",
+                web_app=WebAppInfo(url=f"{base_url}/miniapp"),
+            )
+        )
+        logger.info("Configured slash commands and Mini App chat menu button")
     except Exception as exc:
         logger.warning("Could not set bot commands: %s", exc)
 

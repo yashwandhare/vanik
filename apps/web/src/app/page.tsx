@@ -38,7 +38,7 @@ export default function HomePage() {
         {/* Pill Tag */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#DDD0B8] bg-[#FFFDF9] text-[#262022] text-xs font-mono font-semibold uppercase tracking-wider shadow-2xs">
           <span className="w-2 h-2 rounded-full bg-[#0F5B57] inline-block animate-pulse" />
-          <span>AI-02 Track • Autonomous B2B Marketplace</span>
+          <span>Agent-to-Agent Commerce • Autonomous B2B Marketplace</span>
         </div>
 
         {/* Monumental Headline */}

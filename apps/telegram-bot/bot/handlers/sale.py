@@ -1,7 +1,9 @@
 """Handler for the /sale command (Seller puts inventory on sale)."""
 
-from telegram import Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
+
+from bot.handlers.miniapp import resolve_base_url
 
 
 async def sale_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -31,16 +33,36 @@ async def sale_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         except ValueError:
             quantity = 500
 
+    base_url = resolve_base_url(context)
+
     text = (
         "✅ *Flash Sale Live on VANIK Marketplace!*\n\n"
         f"• *SKU:* `{sku}` ({product_name})\n"
         f"• *Sale Unit Price:* `₹{price:.2f}` _(Benchmark: ₹{benchmark:.2f})_\n"
         f"• *Available Stock:* `{quantity} units`\n"
         "• *Listing Visibility:* Active across all buyer discovery queries\n\n"
-        "👉 [View in Live Mandi Catalogue](http://localhost:3000/catalogue)\n"
-        "👉 [Inspect Seller Inventory Desk](http://localhost:3000/seller)"
+        f"👉 [View in Live Mandi Catalogue]({base_url}/catalogue)\n"
+        f"👉 [Inspect Seller Inventory Desk]({base_url}/seller)"
+    )
+
+    markup = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    "📦 Live Mandi Catalogue",
+                    url=f"{base_url}/catalogue",
+                ),
+                InlineKeyboardButton(
+                    "🏢 Seller Inventory Desk",
+                    url=f"{base_url}/seller",
+                ),
+            ]
+        ]
     )
 
     await update.effective_message.reply_text(
-        text, parse_mode="Markdown", disable_web_page_preview=True
+        text,
+        reply_markup=markup,
+        parse_mode="Markdown",
+        disable_web_page_preview=True,
     )

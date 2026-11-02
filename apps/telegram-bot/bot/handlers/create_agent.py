@@ -3,8 +3,10 @@
 import asyncio
 from uuid import uuid4
 
-from telegram import Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
 from telegram.ext import ContextTypes
+
+from bot.handlers.miniapp import resolve_base_url
 
 
 async def create_agent_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -48,6 +50,8 @@ async def create_agent_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     await asyncio.sleep(0.5)
 
     # Progressive live status updates
+    base_url = resolve_base_url(context)
+
     progress_text = (
         f"⚙️ *Minting AI Agent on VANIK Rails...*\n\n"
         f"✓ [1/4] 🏢 *Business Principal Authenticated:* `{business_name}`\n"
@@ -59,9 +63,30 @@ async def create_agent_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         f"      • *Permissions:* `request_quote`, `evaluate_offers`\n"
         f"      • *Allowed Tools:* `marketplace_search`, `benchmark_compare`\n\n"
         f"🎉 *Buyer Agent Live & Ready!*\n\n"
-        f"👉 [Inspect Passport in Dashboard](http://localhost:3000/agents?agentId={agent_id})\n"
-        f"👉 [Open in Mini App](http://localhost:3000/miniapp?view=passport&agentId={agent_id})\n\n"
+        f"👉 [Inspect Passport in Dashboard]({base_url}/agents?agentId={agent_id})\n"
+        f"👉 [Open in Mini App]({base_url}/miniapp?view=passport&agentId={agent_id})\n\n"
         f"🚀 *Next Step:* Send `/task <procurement mandate>` to start parallel negotiations!"
     )
 
-    await status_msg.edit_text(progress_text, parse_mode="Markdown", disable_web_page_preview=True)
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "🛡️ View Passport in Mini App",
+                web_app=WebAppInfo(url=f"{base_url}/miniapp?view=passport&agentId={agent_id}"),
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "🌐 Open Web Dashboard",
+                url=f"{base_url}/agents?agentId={agent_id}",
+            )
+        ],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await status_msg.edit_text(
+        progress_text,
+        reply_markup=reply_markup,
+        parse_mode="Markdown",
+        disable_web_page_preview=True,
+    )

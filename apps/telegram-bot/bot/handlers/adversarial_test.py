@@ -2,8 +2,10 @@
 
 import asyncio
 
-from telegram import Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
 from telegram.ext import ContextTypes
+
+from bot.handlers.miniapp import resolve_base_url
 
 
 async def adversarial_test_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -26,6 +28,8 @@ async def adversarial_test_handler(update: Update, context: ContextTypes.DEFAULT
 
     await asyncio.sleep(0.8)
 
+    base_url = resolve_base_url(context)
+
     incident_text = (
         "🚨 *SECURITY INCIDENT REPORT: Malicious Seller Attack Quarantined!*\n\n"
         "• *Counterparty:* *Synthetic Red Team Seller* (`seller-adversarial`)\n"
@@ -42,7 +46,28 @@ async def adversarial_test_handler(update: Update, context: ContextTypes.DEFAULT
         "• *Decision:* *TERMS REJECTED & TURNED DOWN*\n"
         "• *Audit Status:* Logged to immutable `audit_events` ledger\n"
         "• *Negotiation State:* Adversary quarantined; other seller threads running safely.\n\n"
-        "👉 [Inspect Security Audit in Web Dashboard](http://localhost:3000/negotiations?tab=security)"
+        f"👉 [Inspect Security Audit in Web Dashboard]({base_url}/negotiations?tab=security)"
     )
 
-    await init_msg.edit_text(incident_text, parse_mode="Markdown", disable_web_page_preview=True)
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "🛡️ Inspect Security Audit in Mini App",
+                web_app=WebAppInfo(url=f"{base_url}/miniapp?view=a2a"),
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "🌐 Security Audit Dashboard",
+                url=f"{base_url}/negotiations?tab=security",
+            )
+        ],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await init_msg.edit_text(
+        incident_text,
+        reply_markup=reply_markup,
+        parse_mode="Markdown",
+        disable_web_page_preview=True,
+    )

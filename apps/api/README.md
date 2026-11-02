@@ -1,108 +1,63 @@
 # VANIK API
 
-Main owns this application, database revisions and API contracts.
+FastAPI backend application providing core identity, agent lifecycle, catalogue, negotiation, and settlement services.
 
-## Implemented
+---
 
-- FastAPI application factory and resource lifecycle.
-- Environment-based settings with production secret and CORS checks.
-- Lazy PostgreSQL connection and request-scoped sessions.
-- Liveness and database-readiness endpoints.
-- Email/password registration with Argon2id password hashing.
-- Opaque HttpOnly sessions, session expiry, CSRF validation and logout.
-- Per-worker authentication-attempt limiting.
-- Principal creation with atomic owner membership.
-- Principal reads restricted to active members.
-- Synthetic identifier storage using keyed digests and display-safe masks.
-- Explicitly labeled demo verification for owner/admin members.
-- Single-use Telegram link codes, Bot-authenticated completion, relinking and unlinking.
-- Persistent buyer/seller agents, public Passports and member-only roster lists.
-- Owner/admin lifecycle management and key rotation.
-- Encrypted Ed25519 keys and principal permission ceilings.
-- Append-only agent lifecycle audit rows.
-- Persistent catalogue, seller discovery, public inventory and member-authorized stock updates.
-- Safe idempotent seed command: 40 products, one buyer/four seller agents and synthetic owner accounts.
-- Standard error responses and server-generated request IDs.
-- Alembic identity schema migration.
-- Versioned identity contracts, JSON schemas and synthetic fixtures.
-- Backend, contract and PostgreSQL integration tests.
+## 1. Capabilities
 
-Telegram commands/notifications, task mandates, negotiation envelopes and settlement endpoints are not implemented. Identity signing primitives do not authorize a commercial action.
+- **Identity & Access:** Argon2id password hashing, opaque HttpOnly sessions, CSRF token validation, and rate limiting.
+- **Business Principals:** Principal entity registration, membership roles (`owner`, `admin`, `operator`, `viewer`), and synthetic business credentials (GSTIN, PAN).
+- **Agent Lifecycle:** Minting persistent Agent Passports, AES-GCM encrypted Ed25519 key storage, and public key fingerprint generation.
+- **Marketplace & Catalogue:** Standardized 40-SKU commodity catalogue, wholesale seller directory, and real-time inventory management.
+- **Autonomous Negotiations:** Concurrent multi-seller RFQ dispatch, deterministic quote evaluation, counter-offer rounds, and state machine enforcement.
+- **Trust & Security:** Benchmark price validation against fake discounts, prompt injection sanitization, replay attack protection, and append-only audit events.
+- **Cryptographic Settlement:** Canonical SHA-256 deal challenge generation and human authorization for simulated UPI, Escrow, and RTGS payment.
 
-## Setup
+---
 
-Run commands from the repository root. Install `uv` first.
+## 2. Tech Stack
+
+- **Framework:** FastAPI 0.115, Starlette, Pydantic v2
+- **Database:** PostgreSQL 16 (asyncpg, SQLAlchemy 2.0, Alembic migrations)
+- **Cache & Sessions:** Redis 7
+- **Cryptography:** PyNaCl (Ed25519 signatures), cryptography (AES-GCM encryption)
+- **Package Manager:** `uv`
+- **Testing:** Pytest, AnyIO
+
+---
+
+## 3. Setup and Execution
+
+Run commands from the repository root:
 
 ```bash
-uv python install 3.12.12
-make install
-make test
-make lint
-make typecheck
-```
+# Install dependencies
+uv --directory apps/api sync --locked
 
-The committed `apps/api/uv.lock` pins all resolved backend dependencies. The local API environment lives in `apps/api/.venv` and is ignored by Git.
-
-Copy `.env.example` to the root `.env` if you need to override local defaults. Never commit `.env`.
-
-Agent creation requires a high-entropy `AGENT_KEY_ENCRYPTION_SECRET` of at least 32 characters. Generate one with `python -c 'import secrets; print(secrets.token_urlsafe(32))'`. The placeholder is rejected for key creation; never use this secret in frontend configuration.
-
-Before `make seed`, configure an uncommitted `DEMO_ACCOUNT_PASSWORD` of at least 12 characters. Seeding creates only missing fixtures; it never resets passwords, revoked identities or reservations. See [marketplace handoff](../../teammateB/MARKETPLACE_HANDOFF.md) for the account emails and API contracts.
-
-## Run locally
-
-Start PostgreSQL and Redis if Docker is available:
-
-```bash
+# Start infrastructure (PostgreSQL & Redis via Docker/Podman)
 make infra
+
+# Apply database migrations
 make migrate
-make dev
+
+# Seed 40-SKU catalogue, sellers, and test agents
+make seed
+
+# Run FastAPI development server on port 8000
+make dev-api
+
+# Run test suite
+make test-api
+
+# Run linter and formatting checks
+make lint-api
 ```
 
-Open:
+---
 
-- `http://localhost:8000/health`
-- `http://localhost:8000/health/ready`
-- `http://localhost:8000/docs`
+## 4. Endpoints and Inspection
 
-Liveness does not need a database. Readiness executes `SELECT 1` and returns `503` if PostgreSQL is unavailable. It does not verify schema migrations, seller data or negotiation readiness.
-
-## Contracts
-
-The Pydantic source is `app/contracts/`. Export its wire schemas with:
-
-```bash
-make contracts
-make test
-```
-
-Generated schemas and synthetic examples are checked in under [`packages/shared-schemas/v1`](../../packages/shared-schemas/v1). They are intentional public contract artifacts, not application build output.
-
-## Database revisions
-
-Alembic reads the same `DATABASE_URL` as the API. Apply the identity schema with:
-
-```bash
-make migrate
-```
-
-Do not run a destructive downgrade or demo reset without explicit approval.
-
-## Test boundaries
-
-Unit tests check the database-query path with an isolated SQLite connection and simulate PostgreSQL failures. Two real PostgreSQL tests are skipped unless `RUN_POSTGRES_INTEGRATION=1`.
-
-After `make infra`, run those tests with:
-
-```bash
-RUN_POSTGRES_INTEGRATION=1 make test
-```
-
-The GitHub Actions API workflow provides PostgreSQL and enables those checks. Adding the workflow is not proof that CI has run; its result must be checked after the branch is pushed.
-
-## Related documents
-
-- [Architecture](../../docs/engineering/ARCHITECTURE.md)
-- [Technology baseline](../../docs/engineering/TECHNOLOGY_BASELINE.md)
-- [API conventions](../../docs/engineering/API_CONVENTIONS.md)
-- [Identity contract handoff](../../teammateB/PHASE_0_HANDOFF.md)
+- Service Health: `http://localhost:8000/health`
+- Database Readiness: `http://localhost:8000/health/ready`
+- Interactive OpenAPI Docs: `http://localhost:8000/docs`
