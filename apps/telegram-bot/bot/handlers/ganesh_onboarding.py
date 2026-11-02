@@ -2,8 +2,10 @@
 
 import asyncio
 
-from telegram import Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
 from telegram.ext import ContextTypes
+
+from bot.handlers.miniapp import resolve_base_url
 
 
 async def ganesh_kirana_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -67,6 +69,8 @@ async def ganesh_agent_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
     await asyncio.sleep(0.5)
 
+    base_url = resolve_base_url(context)
+
     progress_text = (
         "🛡️ *VANIK Cryptographic Agent Passport Minting*\n\n"
         "• *Agent:* `Diwali Kirana Buyer Agent`\n"
@@ -82,9 +86,30 @@ async def ganesh_agent_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         "      • *Allowed Tools:* `marketplace_search`, `benchmark_compare`\n"
         "      • *Budget Ceiling:* `INR ₹85,000.00`\n\n"
         "🎉 *Buyer Agent Live & Visible on Dashboard & Mini App!*\n\n"
-        f"👉 [Inspect Passport in Dashboard](http://localhost:3000/agents?agentId={agent_id})\n"
-        f"👉 [Open in Mini App](http://localhost:3000/miniapp?view=passport&agentId={agent_id})\n\n"
+        f"👉 [Inspect Passport in Dashboard]({base_url}/agents?agentId={agent_id})\n"
+        f"👉 [Open in Mini App]({base_url}/miniapp?view=passport&agentId={agent_id})\n\n"
         "🚀 *Next Step:* Send `/task` to dispatch parallel negotiations across wholesale sellers!"
     )
 
-    await msg.edit_text(progress_text, parse_mode="Markdown", disable_web_page_preview=True)
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "🛡️ View Agent Passport in Mini App",
+                web_app=WebAppInfo(url=f"{base_url}/miniapp?view=passport&agentId={agent_id}"),
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "🌐 Open Web Dashboard",
+                url=f"{base_url}/agents?agentId={agent_id}",
+            )
+        ],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await msg.edit_text(
+        progress_text,
+        reply_markup=reply_markup,
+        parse_mode="Markdown",
+        disable_web_page_preview=True,
+    )

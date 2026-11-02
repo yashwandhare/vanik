@@ -2,6 +2,7 @@
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Script from 'next/script';
 import { apiClient } from '../../lib/api-client';
 
 type MiniAppTab = 'mandate' | 'passport' | 'timeline' | 'comparison' | 'approval' | 'a2a';
@@ -23,9 +24,18 @@ function MiniAppContent() {
   const [approved, setApproved] = useState(false);
   const [submittingApproval, setSubmittingApproval] = useState(false);
 
-  // Attempt session restoration on mount
+  // Attempt session restoration on mount and initialize Telegram WebApp SDK
   useEffect(() => {
     apiClient.getSession().catch(() => {});
+    if (typeof window !== 'undefined' && (window as unknown as { Telegram?: { WebApp?: { ready: () => void; expand: () => void } } }).Telegram?.WebApp) {
+      try {
+        const tg = (window as unknown as { Telegram: { WebApp: { ready: () => void; expand: () => void } } }).Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+      } catch {
+        // Ignore if outside Telegram environment
+      }
+    }
   }, []);
 
   const handleApprove = async () => {
@@ -521,15 +531,21 @@ function MiniAppContent() {
 
 export default function MiniAppPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="vanik-container py-16 text-center font-mono text-xs text-[#5E4E40]">
-          <span className="inline-block w-4 h-4 border-2 border-[#0F5B57] border-t-transparent rounded-full animate-spin mr-2" />
-          Loading Telegram Mini App...
-        </div>
-      }
-    >
-      <MiniAppContent />
-    </Suspense>
+    <>
+      <Script
+        src="https://telegram.org/js/telegram-web-app.js"
+        strategy="afterInteractive"
+      />
+      <Suspense
+        fallback={
+          <div className="vanik-container py-16 text-center font-mono text-xs text-[#5E4E40]">
+            <span className="inline-block w-4 h-4 border-2 border-[#0F5B57] border-t-transparent rounded-full animate-spin mr-2" />
+            Loading Telegram Mini App...
+          </div>
+        }
+      >
+        <MiniAppContent />
+      </Suspense>
+    </>
   );
 }

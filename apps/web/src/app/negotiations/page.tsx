@@ -1511,7 +1511,7 @@ function NegotiationsContent() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-xs uppercase tracking-widest text-[#0F5B57] font-bold">
-                    [ AI-02 FRONTIER PROTOCOL ]
+                    [ FRONTIER A2A PROTOCOL ]
                   </span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#C5EDB1] text-[#0F5B57] border border-[#0F5B57] font-bold">
                     RFC-8785 CANONICAL A2A

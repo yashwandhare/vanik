@@ -1,7 +1,9 @@
 """Handler for the /start command."""
 
-from telegram import Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
 from telegram.ext import ContextTypes
+
+from bot.handlers.miniapp import resolve_base_url
 
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -10,6 +12,8 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     """
     if not update.effective_message:
         return
+
+    base_url = resolve_base_url(context)
 
     # Check for deep link argument in /start <payload>
     if context.args and len(context.args) > 0:
@@ -28,10 +32,25 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                 "2️⃣ *Mandi Smart Escrow* (Delivery Locked)\n"
                 "3️⃣ *RTGS Wholesale Credit*\n\n"
                 f"👉 Send `/auth_deal {deal_id} upi` to sign payment and rate seller\n"
-                f"👉 [Open Deal in Mini App](http://localhost:3000/miniapp?view=approval&dealId={deal_id})"
+                f"👉 [Open Deal in Mini App]({base_url}/miniapp?view=approval&dealId={deal_id})"
+            )
+            markup = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "📱 Open Deal in Mini App",
+                            web_app=WebAppInfo(
+                                url=f"{base_url}/miniapp?view=approval&dealId={deal_id}"
+                            ),
+                        )
+                    ]
+                ]
             )
             await update.effective_message.reply_text(
-                text, parse_mode="Markdown", disable_web_page_preview=True
+                text,
+                reply_markup=markup,
+                parse_mode="Markdown",
+                disable_web_page_preview=True,
             )
             return
 
@@ -42,10 +61,25 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                 f"• *Task Reference:* `{task_id}`\n"
                 "• *Status:* Active parallel negotiation\n\n"
                 "View commodity mandate and real-time seller rounds in the Mini App:\n"
-                f"👉 [Open Task in Mini App](http://localhost:3000/miniapp?view=mandate&taskId={task_id})"
+                f"👉 [Open Task in Mini App]({base_url}/miniapp?view=mandate&taskId={task_id})"
+            )
+            markup = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "📋 View Mandate in Mini App",
+                            web_app=WebAppInfo(
+                                url=f"{base_url}/miniapp?view=mandate&taskId={task_id}"
+                            ),
+                        )
+                    ]
+                ]
             )
             await update.effective_message.reply_text(
-                text, parse_mode="Markdown", disable_web_page_preview=True
+                text,
+                reply_markup=markup,
+                parse_mode="Markdown",
+                disable_web_page_preview=True,
             )
             return
 
@@ -56,10 +90,25 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                 "⚡ *VANIK Parallel Negotiation Rounds*\n\n"
                 f"• *Task Reference:* `{task_id}`\n\n"
                 "Track parallel seller responses and cryptographic Ed25519 signatures:\n"
-                f"👉 [Track Rounds in Mini App](http://localhost:3000/miniapp?view=timeline&taskId={task_id})"
+                f"👉 [Track Rounds in Mini App]({base_url}/miniapp?view=timeline&taskId={task_id})"
+            )
+            markup = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "⚡ View Rounds in Mini App",
+                            web_app=WebAppInfo(
+                                url=f"{base_url}/miniapp?view=timeline&taskId={task_id}"
+                            ),
+                        )
+                    ]
+                ]
             )
             await update.effective_message.reply_text(
-                text, parse_mode="Markdown", disable_web_page_preview=True
+                text,
+                reply_markup=markup,
+                parse_mode="Markdown",
+                disable_web_page_preview=True,
             )
             return
 
@@ -69,10 +118,26 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                 "🛡️ *VANIK Agent Passport Verification*\n\n"
                 f"• *Agent Reference:* `{agent_id}`\n\n"
                 "Inspect cryptographic keys, capabilities, and authority bounds:\n"
-                f"👉 [Inspect Passport in Mini App](http://localhost:3000/miniapp?view=passport&agentId={agent_id})"
+                f"👉 [Inspect Passport in Mini App]("
+                f"{base_url}/miniapp?view=passport&agentId={agent_id})"
+            )
+            markup = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "🛡️ View Passport in Mini App",
+                            web_app=WebAppInfo(
+                                url=f"{base_url}/miniapp?view=passport&agentId={agent_id}"
+                            ),
+                        )
+                    ]
+                ]
             )
             await update.effective_message.reply_text(
-                text, parse_mode="Markdown", disable_web_page_preview=True
+                text,
+                reply_markup=markup,
+                parse_mode="Markdown",
+                disable_web_page_preview=True,
             )
             return
 
@@ -80,11 +145,23 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             text = (
                 "ℹ️ *VANIK Notification & Bot Status*\n\n"
                 "• *Worker:* Active & Monitoring\n"
-                "• *Portal:* `http://localhost:3000`\n"
-                "• *Mini App:* `http://localhost:3000/miniapp`\n\n"
+                f"• *Portal:* `{base_url}`\n"
+                f"• *Mini App:* `{base_url}/miniapp`\n\n"
                 "Use `/status` for user ID and linking status."
             )
-            await update.effective_message.reply_text(text, parse_mode="Markdown")
+            markup = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "📱 Open Mini App",
+                            web_app=WebAppInfo(url=f"{base_url}/miniapp"),
+                        )
+                    ]
+                ]
+            )
+            await update.effective_message.reply_text(
+                text, reply_markup=markup, parse_mode="Markdown"
+            )
             return
 
     # Standard onboarding welcome message with interactive questions
@@ -101,7 +178,17 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         "Send `/ganesh_kirana` to instantly feed the pre-seeded character for "
         "*Shree Ganesh Kirana Store (Market Yard, Pune)*!\n\n"
         "🔗 *Account Linking:* If you already have a code, reply with `/link <YOUR_CODE>`.\n"
-        "📱 *Mini App:* Access structured deals at `http://localhost:3000/miniapp`.\n\n"
+        f"📱 *Mini App:* Access structured deals at `{base_url}/miniapp`.\n\n"
         "💬 *You can also ask me anything about VANIK, agent passports, or mandi trading!*"
     )
-    await update.effective_message.reply_text(text, parse_mode="Markdown")
+    markup = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    "📱 Open Mini App (Interactive Mandi UI)",
+                    web_app=WebAppInfo(url=f"{base_url}/miniapp"),
+                )
+            ]
+        ]
+    )
+    await update.effective_message.reply_text(text, reply_markup=markup, parse_mode="Markdown")

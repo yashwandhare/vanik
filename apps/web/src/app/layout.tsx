@@ -33,7 +33,7 @@ export default function RootLayout({
               VANIK • Autonomous Commerce. Verifiable Trust.
             </p>
             <p className="text-[#7D6F61] font-mono text-[11px] max-w-xl mx-auto">
-              Prototype environment for AI-02 hackathon track. All GSTIN, PAN, official credentials, and UPI payment settlements are synthetic simulations.
+              Prototype environment for autonomous B2B commerce. All GSTIN, PAN, official credentials, and UPI payment settlements are synthetic simulations.
             </p>
           </div>
         </footer>

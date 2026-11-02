@@ -48,6 +48,7 @@ logs/
 tmp/
 temp/
 *.tmp
+.tunnel_url
 *.swp
 *.swo
 

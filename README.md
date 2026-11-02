@@ -1,121 +1,137 @@
 # VANIK
 
+> Made as part of a 24-hour hackathon.
+
 **Autonomous commerce. Verifiable trust.**
 
-VANIK is an agentic B2B marketplace where verified businesses create and manage AI agents that discover counterparties, negotiate commercial terms, compare offers and prepare transactions for human approval.
+VANIK is an agentic B2B marketplace for wholesale trade. Verified businesses deploy persistent AI agents that discover suppliers, negotiate prices and credit terms concurrently, and prepare transactions for human cryptographic approval.
 
-The product has three first-class surfaces:
+---
 
-- **Marketplace Web App:** the visual marketplace and command centre for discovering businesses and agents, inspecting catalogues, watching live activity, comparing offers, viewing rankings and managing deals.
-- **Telegram Bot:** conversational access for instructions, task creation, proactive alerts, progress updates and approvals.
-- **Telegram Mini App:** focused structured workflows for registration handoff, agent passports, task mandates, offer comparison and approval.
+## Visual Tour
 
-All surfaces use the same backend, identity system, marketplace registry, negotiation engine, trust layer and event history.
+| Marketplace Portal | Parallel Multi-Agent Bargaining |
+|---|---|
+| ![Marketplace Portal](docs/assets/webui-landing.png) | ![Negotiation Timeline](docs/assets/negotiations-timeline.png) |
 
-## Repository status
+| Telegram Mini App Interface | 40-SKU Mandi Catalogue |
+|---|---|
+| ![Telegram Mini App](docs/assets/miniapp-view.png) | ![Mandi Catalogue](docs/assets/catalogue-mandi.png) |
 
-The repository includes real identity/Agent Passport services, a persisted 40-SKU catalogue, seller discovery, public inventory and authorized stock updates. The web/Bot foundation and identity integration are merged. It is **not a completed marketplace implementation**: task routes, negotiation, deals, memory/proactivity and deterministic reset remain pending.
+---
 
-## Core hierarchy
+## Core Capabilities
 
-`Human account → Business principal → Agent Passports → Task mandates → Negotiations → Deals`
+- **Cryptographic Agent Passports:** Every agent receives an immutable Ed25519 keypair, public key fingerprint (`sha256:...`), and scoped delegation permissions.
+- **Parallel Multi-Agent Bargaining:** A buyer agent broadcasts Requests for Quote (RFQs) and negotiates with multiple wholesale seller agents in parallel.
+- **Strategic Seller Personas:** Sellers pursue independent commercial strategies (Margin Maximizer, Inventory Clearance, Payment-Risk Minimizer).
+- **RFC-8785 A2A Protocol:** Agents communicate via canonical JSON envelopes signed with Ed25519 keys and protected by nonces against replay attacks.
+- **Deterministic Guardrails:** The trust engine validates quotes against trusted Mandi benchmark prices to catch fake discounts. Free-text seller notes are quarantined to prevent prompt injection.
+- **Human Approval & Settlement:** Human principals review line-item comparison matrices and sign approval challenges before simulated UPI, Mandi Escrow, or RTGS fund release.
+- **Unified Interfaces:** Access the marketplace through the Next.js Web Dashboard, Telegram Bot (`@vanik33_bot`), or the interactive Telegram Mini App.
 
-A business registers and verifies once, connects Telegram, then creates one or more buyer and/or seller agents. Each agent has a unique ID and cryptographic signing identity. Multiple agents owned by the same business remain associated with the same principal and must not be treated as independent businesses for reputation or collusion analysis.
+---
 
-## Hackathon P0
+## System Architecture
 
-- Business registration portal with simulated official-ID/business verification.
-- Telegram account linking.
-- Marketplace web app: seller discovery, profiles, catalogues, rankings, activity, negotiation workspace, deals and Decision Replay.
-- Telegram Bot and a focused Mini App.
-- Persistent Agent Passports and task-scoped mandates.
-- One buyer agent negotiating in parallel with at least three independent seller principals.
-- 40 distinct SKU Diwali restock basket.
-- Seller strategies for margin, inventory clearance and payment risk.
-- Structured A2A-style protocol and Ed25519 message signatures.
-- Prompt-injection defence, reference-price fake-discount checks and basic collusion signals.
-- Proactive stock/deadline alert and persistent supplier-performance memory.
-- Human approval and simulated UPI settlement.
-- Auditable events and deterministic demo reset.
+```
+Human Account ──► Business Principal ──► Agent Passport (Ed25519)
+                                                │
+Deal Settlement ◄── Human Approval ◄── A2A Parallel Rounds
+```
 
-## Deliberately simulated
+For detailed specifications, see:
+- [**Agent Architecture & A2A Protocol**](AGENT.md)
+- [**Product Requirements Document (PRD)**](docs/PRD.md)
+- [**System Architecture & Trust Model**](docs/ARCHITECTURE.md)
+- [**API Reference**](docs/API.md)
+- [**Data Model**](docs/DATA_MODEL.md)
 
-Official identity checks, financial/AA credentials, UPI settlement and historical supplier data are synthetic demo data. Do not collect real Aadhaar/PAN documents or imply government verification. No real money moves.
+---
 
-## Documentation
+## Monorepo Layout
 
-Start with the [documentation index](docs/README.md).
+```
+VANIK/
+├── apps/
+│   ├── api/             # FastAPI backend service (port 8000)
+│   ├── web/             # Next.js marketplace web app (port 3000)
+│   └── telegram-bot/    # Telegram Bot worker and Mini App integration
+├── packages/
+│   └── shared-schemas/  # Shared Pydantic contracts and JSON Schemas
+├── docs/                # Architecture, PRD, API, and Data Model specifications
+│   └── assets/          # Application screenshots and diagrams
+├── scripts/             # Orchestration and health inspection scripts
+├── AGENT.md             # Autonomous agent protocol specification
+└── Makefile             # Universal build and execution targets
+```
 
-- [Product brief](docs/product/PRODUCT_BRIEF.md)
-- [Product requirements](docs/product/PRD.md)
-- [Architecture](docs/engineering/ARCHITECTURE.md)
-- [Data model](docs/engineering/DATA_MODEL.md)
-- [Technology baseline](docs/engineering/TECHNOLOGY_BASELINE.md)
-- [API conventions](docs/engineering/API_CONVENTIONS.md)
-- [Protocol and API contracts](docs/engineering/PROTOCOL_AND_API.md)
-- [Trust and security](docs/engineering/TRUST_AND_SECURITY.md)
-- [Decision log](docs/decisions/DECISIONS.md)
-- [Implementation plan](docs/delivery/IMPLEMENTATION_PLAN.md)
-- [Team execution plan](docs/delivery/TEAM_EXECUTION_PLAN.md)
-- [Project TODO](docs/delivery/PROJECT_TODO.md)
-- [Demo runbook](docs/delivery/DEMO_RUNBOOK.md)
-- [Teammate B workspace](teammateB/README.md)
+---
 
-## Selected stack
+## Quick Start
 
-- Backend: Python 3.12.12, FastAPI, Pydantic v2, SQLAlchemy and Alembic.
-- Database: PostgreSQL 16; Redis 7 is optional for coordination.
-- Web: Node.js 22.23.1, Next.js, React, TypeScript and Tailwind CSS.
-- Telegram: Python Telegram Bot; Mini App served by the web app.
-- Signing: Ed25519 and AES-GCM through `cryptography`; private material stays server-side.
-- Local services: Docker Compose.
+### Prerequisites
 
-See the [technology baseline](docs/engineering/TECHNOLOGY_BASELINE.md) for exact versions and implementation status.
+- Python 3.12+ and [`uv`](https://docs.astral.sh/uv/)
+- Node.js 22+ and `npm`
+- Docker or Podman (for PostgreSQL and Redis)
 
-## Backend quick start
-
-Install Git and `uv`. Docker is required only to start local PostgreSQL and Redis.
-
-From the repository root:
+### 1. Installation
 
 ```bash
-uv python install 3.12.12
+# Clone the repository
+git clone git@github.com:yashwandhare/vanik.git
+cd VANIK
+
+# Install all backend, frontend, and bot dependencies
 make install
+```
+
+### 2. Launch All Services
+
+```bash
+# Starts PostgreSQL, Redis, database migrations, seed data,
+# FastAPI backend (port 8000), Next.js web portal (port 3000),
+# and the Telegram bot worker in one command:
+make run
+```
+
+### 3. Verify System Health
+
+```bash
+make health
+```
+
+### 4. Run Test Suites
+
+```bash
+# Run all tests across backend, bot, and frontend
 make test
-make lint
-make typecheck
+
+# Or run tests per component
+make test-api
+make test-bot
+make test-web
 ```
 
-To start the API and local database:
+### 5. Reset Demonstration State
 
 ```bash
-make infra
-make migrate
-make dev
+# Resets the database and reseeds standard 40-SKU inventory and sellers
+make reset-db
 ```
 
-The API runs at `http://localhost:8000`. `/health` checks process liveness; `/health/ready` checks database connectivity. `/docs` lists only implemented endpoints.
+---
 
-Copy `.env.example` to `.env` if you need to override development defaults. Never commit `.env`.
+## Telegram Bot Interaction
 
-Application Make targets cover the API, web and Bot. `make migrate` applies the current schema. Configure `AGENT_KEY_ENCRYPTION_SECRET` and `DEMO_ACCOUNT_PASSWORD` in `.env`, then run `make seed` to create missing synthetic records without resetting permissions, lifecycle or reservations. `demo` and `reset-demo` remain unimplemented.
+VANIK includes a Telegram Bot (`@vanik33_bot`) with slash commands:
 
-See [API setup](apps/api/README.md) and the [Phase 1 B handoff](teammateB/PHASE_1_IDENTITY_HANDOFF.md) for the next steps.
-
-## Useful commands
-
-```bash
-docker compose up -d             # start local infrastructure
-docker compose down              # stop local infrastructure
-docker compose down -v           # stop and delete local database volumes
-docker compose logs -f           # follow service logs
-```
-
-## Safety boundaries
-
-- LLM output never directly authorises payment or changes business permissions.
-- All commercial constraints and state transitions are checked server-side.
-- Approval is bound to an exact deal version, amount, seller, buyer, currency, expiry and one-time nonce.
-- Any material deal change invalidates previous approval.
-- Seller-provided text is untrusted input.
-- Private signing keys are never exposed to other agents or frontend clients.
+- `/start` — Business onboarding guide and deep link handler
+- `/ganesh_kirana` — Quick-load Shree Ganesh Kirana Store persona
+- `/ganesh_agent` — Spawn verified Kirana Buyer Agent with Ed25519 keys
+- `/task` — Deploy 40-SKU procurement mandate across wholesale sellers
+- `/miniapp` — Launch interactive Telegram Mini App
+- `/auth_deal` — Cryptographically authorize winning deal and submit seller rating
+- `/test` — Simulate adversarial seller attack and observe defenses
+- `/disconnect` — Reset session state to rerun demonstration from scratch

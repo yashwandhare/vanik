@@ -2,9 +2,9 @@
 
 **Version:** 2.0
 
-**Status:** Scope baseline for implementation
+**Status:** Approved Specification
 
-**Track:** AI-02 — Agent-to-Agent Commerce on India's Open Rails
+**System:** Autonomous B2B Agentic Commerce Platform
 
 ## 1. Executive summary
 
@@ -34,7 +34,7 @@ VANIK addresses these risks through verified business principals, persistent age
 - Require human approval before mock settlement.
 - Make material actions replayable and auditable.
 
-## 4. Non-goals for the hackathon
+## 4. Out of Scope
 
 - Real KYC, Aadhaar/PAN document processing or government database verification.
 - Real UPI payments, escrow or custody of funds.
@@ -81,7 +81,7 @@ Maintains demo data, reviews security events and resets the demo.
 - Capture legal/trade name, business type, address, contact details and business roles.
 - Support buyer, seller or both.
 - Support identifier types appropriate to the business, such as PAN, GSTIN, Udyam Registration Number, CIN/LLPIN where applicable.
-- Store only synthetic values in the hackathon demo.
+- Store only synthetic values in the demonstration environment.
 
 ### FR-REG-03 — Simulated verification (P0)
 
@@ -147,7 +147,7 @@ Each Passport includes:
 ### FR-AG-05 — Buyer and seller agent multiplicity
 
 - Product model supports multiple agents for both roles.
-- Hackathon orchestration only needs one active buyer agent for the primary demo.
+- System orchestration supports one or more concurrent buyer agents for negotiation.
 - Seller demo uses at least three legitimate seller agents under distinct principals and may include a fourth adversarial seller.
 - Additional buyer agents are represented in the management UI but do not need autonomous orchestration in P0.
 
